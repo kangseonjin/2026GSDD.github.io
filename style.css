@@ -1,4 +1,6 @@
-
+/* ===========================================================
+   1. CSS 변수 (공통 CSS 담당자는 여기만 수정하면 전체 디자인 변경 가능)
+=========================================================== */
 :root {
     /* 컬러 아이덴티티 */
     --color-primary: #0088cc;
@@ -11,17 +13,29 @@
     --grid-container: 1200px;
     --grid-gap: 24px;
     
-    /* 폰트 (임시) */
+    /* 폰트 서체 (프리텐다드 통일) */
     --font-family: 'Pretendard', sans-serif;
+
+    /* 📏 폰트 시스템 (5단계 통합) */
+    --text-title: 120px; /* 포인트 타이틀 (메인 GSDD 2026) */
+    --text-lg: 32px;     /* 대제목 (로고, 뒤로가기 버튼, 아카이브 연도) */
+    --text-md: 24px;     /* 중제목 (상세 작품명, 메인 서브 타이틀, 아카이브 전시명) */
+    --text-sm: 18px;     /* 본문 강조 (GNB 메뉴, 카테고리 필터, 썸네일 작품명) */
+    --text-base: 16px;   /* 본문 기본 (상세 설명, 작가 이름, 아카이브 설명, 드롭다운) */
 }
 
-
+/* ===========================================================
+   2. 기본 리셋 (Base Reset)
+=========================================================== */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
 body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; }
 ul, ol { list-style: none; }
 
+/* ===========================================================
+   3. 공통 레이아웃 (Common Layout)
+=========================================================== */
 .container {
     max-width: var(--grid-container);
     margin: 0 auto;
@@ -34,7 +48,9 @@ ul, ol { list-style: none; }
 .page-section { display: none; }
 .page-section.active { display: grid; }
 
-
+/* ===========================================================
+   4. 헤더 및 네비게이션 (Header & Nav)
+=========================================================== */
 .global-header {
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
@@ -52,9 +68,11 @@ ul, ol { list-style: none; }
     align-items: center;
     height: 90px;
 }
-.nav-logo { grid-column: span 3; font-size: 28px; font-weight: 800; cursor: pointer; }
+/* 변수 적용: 32px (대제목), 두께 800 */
+.nav-logo { grid-column: span 3; font-size: var(--text-lg); font-weight: 800; cursor: pointer; }
 .nav-menu { grid-column: 5 / 13; display: flex; justify-content: flex-end; gap: 40px; }
-.nav-link { font-size: 18px; font-weight: 600; transition: color 0.2s; }
+/* 변수 적용: 18px (본문 강조), 두께 600 */
+.nav-link { font-size: var(--text-sm); font-weight: 600; transition: color 0.2s; }
 .nav-link:hover, .nav-link.active { color: var(--color-primary); }
 
 /* Archive Hover Dropdown */
@@ -75,21 +93,29 @@ ul, ol { list-style: none; }
     content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 30px; background: transparent;
 }
 .nav-item-archive:hover .archive-dropdown-list { display: flex; }
-.archive-dropdown-item { padding: 10px; cursor: pointer; font-size: 14px; text-align: center; }
+/* 변수 적용: 16px (본문 기본), 두께 400(기본) */
+.archive-dropdown-item { padding: 10px; cursor: pointer; font-size: var(--text-base); text-align: center; }
 .archive-dropdown-item:hover { background-color: #f5f5f5; color: var(--color-primary); }
 
-
+/* ===========================================================
+   5. 각 페이지별 고유 스타일
+=========================================================== */
 
 /* --- 메인 페이지 (.main-) --- */
 .main-content { grid-column: span 12; text-align: center; padding-top: 150px; }
-.main-suptitle { font-size: 18px; line-height: 1.6; margin-bottom: 20px; color: var(--color-text-sub); }
-.main-title { font-size: 120px; font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
-.main-subtitle { font-size: 22px; font-weight: 600; margin-bottom: 50px; }
-.main-info { font-size: 18px; line-height: 1.8; color: var(--color-text-sub); }
+/* 변수 적용: 18px (본문 강조) */
+.main-suptitle { font-size: var(--text-sm); line-height: 1.6; margin-bottom: 20px; color: var(--color-text-sub); }
+/* 변수 적용: 120px (포인트 타이틀), 두께 900 */
+.main-title { font-size: var(--text-title); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
+/* 변수 적용: 24px (중제목), 두께 600 */
+.main-subtitle { font-size: var(--text-md); font-weight: 600; margin-bottom: 50px; }
+/* 변수 적용: 18px (본문 강조) */
+.main-info { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text-sub); }
 
 /* --- Works 리스트 페이지 (.works-) --- */
 .works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 50px; }
-.works-filter-btn { font-size: 18px; font-weight: 700; color: #aaaaaa; transition: color 0.2s; }
+/* 변수 적용: 18px (본문 강조), 두께 700 */
+.works-filter-btn { font-size: var(--text-sm); font-weight: 700; color: #aaaaaa; transition: color 0.2s; }
 .works-filter-btn.active { color: var(--color-text-main); }
 
 .works-grid-list { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
@@ -103,15 +129,21 @@ ul, ol { list-style: none; }
     color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; border-radius: 4px;
 }
 .works-meta { margin-top: 18px; }
-.works-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-.works-author { font-size: 14px; color: var(--color-text-sub); }
+/* 변수 적용: 18px (본문 강조), 두께 700 */
+.works-title { font-size: var(--text-sm); font-weight: 700; margin-bottom: 6px; }
+/* 변수 적용: 16px (본문 기본) */
+.works-author { font-size: var(--text-base); color: var(--color-text-sub); }
 
 /* --- Works 상세 페이지 (.detail-) --- */
 .detail-text-area { grid-column: span 4; position: sticky; top: 110px; height: fit-content; padding-right: 20px; }
-.detail-back-btn { font-size: 32px; font-weight: 300; margin-bottom: 30px; display: block; text-align: left; }
-.detail-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-.detail-author { font-size: 16px; color: var(--color-text-sub); margin-bottom: 30px; }
-.detail-desc { font-size: 15px; line-height: 1.8; color: var(--color-text-main); }
+/* 변수 적용: 32px (대제목), 두께 300(얇게) */
+.detail-back-btn { font-size: var(--text-lg); font-weight: 300; margin-bottom: 30px; display: block; text-align: left; }
+/* 변수 적용: 24px (중제목), 두께 800 */
+.detail-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 8px; }
+/* 변수 적용: 16px (본문 기본) */
+.detail-author { font-size: var(--text-base); color: var(--color-text-sub); margin-bottom: 30px; }
+/* 변수 적용: 16px (본문 기본), 줄간격 1.8 */
+.detail-desc { font-size: var(--text-base); line-height: 1.8; color: var(--color-text-main); }
 
 .detail-image-area { grid-column: 7 / 13; display: flex; flex-direction: column; gap: 30px; }
 .detail-img-placeholder {
@@ -123,7 +155,8 @@ ul, ol { list-style: none; }
 
 /* --- Archive 페이지 (.archive-) --- */
 .archive-visual-area { grid-column: span 5; display: flex; flex-direction: column; }
-.archive-year-display { font-size: 36px; font-weight: 800; margin-bottom: 25px; }
+/* 변수 적용: 32px (대제목), 두께 800 */
+.archive-year-display { font-size: var(--text-lg); font-weight: 800; margin-bottom: 25px; }
 .archive-poster {
     width: 100%; aspect-ratio: 1 / 1.414;
     background-color: #d0d0d0; border-radius: 4px; overflow: hidden; cursor: pointer;
@@ -132,17 +165,20 @@ ul, ol { list-style: none; }
 .archive-poster img { width: 100%; height: 100%; object-fit: cover; }
 
 .archive-controls { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 20px; }
-.archive-btn { font-size: 24px; font-weight: bold; }
+/* 변수 적용: 24px (중제목) */
+.archive-btn { font-size: var(--text-md); font-weight: bold; }
 .archive-dots { display: flex; gap: 8px; }
 .archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; cursor: pointer; }
 .archive-dot.active { background-color: var(--color-text-main); }
 
 .archive-text-area { grid-column: 7 / 12; padding-top: 80px; }
-.archive-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-.archive-desc { font-size: 16px; line-height: 1.8; }
+/* 변수 적용: 24px (중제목), 두께 800 */
+.archive-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 20px; }
+/* 변수 적용: 16px (본문 기본) */
+.archive-desc { font-size: var(--text-base); line-height: 1.8; }
 
 /* ===========================================================
-   반응형 미디어 쿼리 (Mobile Responsive)
+   6. 반응형 미디어 쿼리 (Mobile Responsive)
 =========================================================== */
 @media screen and (max-width: 768px) {
     .container { 
@@ -155,7 +191,10 @@ ul, ol { list-style: none; }
         padding-right: 20px;
     }
     .nav-menu { display: none; }
+    
+    /* 모바일에서는 120px 타이틀을 60px로 강제 축소 */
     .main-title { font-size: 60px; }
+    
     .works-item { grid-column: span 4; }
     .detail-text-area { grid-column: span 4; position: static; margin-bottom: 40px; }
     .detail-image-area { grid-column: span 4; }
