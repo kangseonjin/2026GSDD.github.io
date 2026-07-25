@@ -1,0 +1,164 @@
+
+:root {
+    /* 컬러 아이덴티티 */
+    --color-primary: #0088cc;
+    --color-background: #ffffff;
+    --color-text-main: #000000;
+    --color-text-sub: #555555;
+    --color-placeholder: #e0e0e0;
+    
+    /* 그리드 및 레이아웃 */
+    --grid-container: 1200px;
+    --grid-gap: 24px;
+    
+    /* 폰트 (임시) */
+    --font-family: 'Pretendard', sans-serif;
+}
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
+body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+.container {
+    max-width: var(--grid-container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap);
+    padding-top: 60px;
+    padding-bottom: 120px;
+}
+.page-section { display: none; }
+.page-section.active { display: grid; }
+
+
+.global-header {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #eeeeee;
+}
+.nav-wrapper {
+    max-width: var(--grid-container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap);
+    align-items: center;
+    height: 90px;
+}
+.nav-logo { grid-column: span 3; font-size: 28px; font-weight: 800; cursor: pointer; }
+.nav-menu { grid-column: 5 / 13; display: flex; justify-content: flex-end; gap: 40px; }
+.nav-link { font-size: 18px; font-weight: 600; transition: color 0.2s; }
+.nav-link:hover, .nav-link.active { color: var(--color-primary); }
+
+/* Archive Hover Dropdown */
+.nav-item-archive { position: relative; }
+.archive-dropdown-list {
+    display: none;
+    position: absolute;
+    top: 40px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-background);
+    border: 1px solid #eeeeee;
+    flex-direction: column;
+    width: 90px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.archive-dropdown-list::before {
+    content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 30px; background: transparent;
+}
+.nav-item-archive:hover .archive-dropdown-list { display: flex; }
+.archive-dropdown-item { padding: 10px; cursor: pointer; font-size: 14px; text-align: center; }
+.archive-dropdown-item:hover { background-color: #f5f5f5; color: var(--color-primary); }
+
+
+
+/* --- 메인 페이지 (.main-) --- */
+.main-content { grid-column: span 12; text-align: center; padding-top: 150px; }
+.main-suptitle { font-size: 18px; line-height: 1.6; margin-bottom: 20px; color: var(--color-text-sub); }
+.main-title { font-size: 120px; font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
+.main-subtitle { font-size: 22px; font-weight: 600; margin-bottom: 50px; }
+.main-info { font-size: 18px; line-height: 1.8; color: var(--color-text-sub); }
+
+/* --- Works 리스트 페이지 (.works-) --- */
+.works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 50px; }
+.works-filter-btn { font-size: 18px; font-weight: 700; color: #aaaaaa; transition: color 0.2s; }
+.works-filter-btn.active { color: var(--color-text-main); }
+
+.works-grid-list { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
+.works-item { grid-column: span 4; cursor: pointer; margin-bottom: 50px; transition: opacity 0.2s; }
+.works-item:hover { opacity: 0.8; }
+
+.works-thumb {
+    width: 100%; aspect-ratio: 1 / 1;
+    background-color: var(--color-placeholder);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; border-radius: 4px;
+}
+.works-meta { margin-top: 18px; }
+.works-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.works-author { font-size: 14px; color: var(--color-text-sub); }
+
+/* --- Works 상세 페이지 (.detail-) --- */
+.detail-text-area { grid-column: span 4; position: sticky; top: 110px; height: fit-content; padding-right: 20px; }
+.detail-back-btn { font-size: 32px; font-weight: 300; margin-bottom: 30px; display: block; text-align: left; }
+.detail-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.detail-author { font-size: 16px; color: var(--color-text-sub); margin-bottom: 30px; }
+.detail-desc { font-size: 15px; line-height: 1.8; color: var(--color-text-main); }
+
+.detail-image-area { grid-column: 7 / 13; display: flex; flex-direction: column; gap: 30px; }
+.detail-img-placeholder {
+    width: 100%; height: 1000px;
+    background-color: var(--color-placeholder);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-sub); border-radius: 4px;
+}
+
+/* --- Archive 페이지 (.archive-) --- */
+.archive-visual-area { grid-column: span 5; display: flex; flex-direction: column; }
+.archive-year-display { font-size: 36px; font-weight: 800; margin-bottom: 25px; }
+.archive-poster {
+    width: 100%; aspect-ratio: 1 / 1.414;
+    background-color: #d0d0d0; border-radius: 4px; overflow: hidden; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.archive-poster img { width: 100%; height: 100%; object-fit: cover; }
+
+.archive-controls { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+.archive-btn { font-size: 24px; font-weight: bold; }
+.archive-dots { display: flex; gap: 8px; }
+.archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; cursor: pointer; }
+.archive-dot.active { background-color: var(--color-text-main); }
+
+.archive-text-area { grid-column: 7 / 12; padding-top: 80px; }
+.archive-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+.archive-desc { font-size: 16px; line-height: 1.8; }
+
+/* ===========================================================
+   반응형 미디어 쿼리 (Mobile Responsive)
+=========================================================== */
+@media screen and (max-width: 768px) {
+    .container { 
+        grid-template-columns: repeat(4, 1fr); 
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .nav-wrapper {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .nav-menu { display: none; }
+    .main-title { font-size: 60px; }
+    .works-item { grid-column: span 4; }
+    .detail-text-area { grid-column: span 4; position: static; margin-bottom: 40px; }
+    .detail-image-area { grid-column: span 4; }
+    .archive-visual-area { grid-column: span 4; }
+    .archive-text-area { grid-column: span 4; padding-top: 40px; }
+}

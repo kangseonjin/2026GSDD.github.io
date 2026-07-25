@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 GSDD</title>
+    <!-- 외부 CSS 파일 연결 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 헤더 영역 -->
+    <header class="global-header">
+        <div class="nav-wrapper">
+            <h1 class="nav-logo" onclick="navigateToPage('main')">GSDD 2026</h1>
+            <nav class="nav-menu">
+                <a class="nav-link" onclick="navigateToPage('about')" id="link-about">About</a>
+                <a class="nav-link" onclick="navigateToPage('works')" id="link-works">Works</a>
+                <a class="nav-link" onclick="navigateToPage('designers')" id="link-designers">Designers</a>
+                <div class="nav-item-archive">
+                    <a class="nav-link" onclick="navigateToPage('archive')" id="link-archive">Archive</a>
+                    <ul class="archive-dropdown-list" id="archive-dropdown-list">
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main>
+        
+        <!-- Main Section -->
+        <section id="section-main" class="container page-section active">
+            <article class="main-content">
+                <p class="main-suptitle">졸업 전시 메인 타이틀<br>혹은 GSDD2026</p>
+                <h2 class="main-title">GSDD 2026</h2>
+                <p class="main-subtitle">동양대학교 디자인학부 졸업전시회</p>
+                <p class="main-info">2026. 전시 날짜 ~ 2026. 전시 날짜<br>마루아트센터</p>
+            </article>
+        </section>
+
+        <!-- Works List Section -->
+        <section id="section-works" class="container page-section">
+            <nav class="works-filter-group">
+                <button class="works-filter-btn active" onclick="filterWorksByCategory('All')" id="filter-all">All</button>
+                <button class="works-filter-btn" onclick="filterWorksByCategory('Visual')" id="filter-visual">Visual</button>
+                <button class="works-filter-btn" onclick="filterWorksByCategory('Space')" id="filter-space">Space</button>
+            </nav>
+            <ul class="works-grid-list" id="works-list-grid">
+            </ul>
+        </section>
+
+        <!-- Works Detail Section -->
+        <section id="section-detail" class="container page-section">
+            <aside class="detail-text-area">
+                <button class="detail-back-btn" onclick="navigateToPage('works')">←</button>
+                <h2 class="detail-title" id="detail-project-title">Project Title</h2>
+                <p class="detail-author" id="detail-author-name">Author Name</p>
+                <p class="detail-desc" id="detail-description-text">작품 설명글 영역입니다</p>
+            </aside>
+            <div class="detail-image-area" id="detail-images-list">
+            </div>
+        </section>
+
+        <!-- Archive Section -->
+        <section id="section-archive" class="container page-section">
+            <div class="archive-visual-area">
+                <p class="archive-year-display" id="archive-display-year">2025</p>
+                <figure class="archive-poster" id="archive-poster-container" onclick="openArchiveExternalLink()">
+                </figure>
+                <nav class="archive-controls">
+                    <button class="archive-btn" onclick="moveArchiveSlide(-1)">❮</button>
+                    <div class="archive-dots" id="archive-dots-container"></div>
+                    <button class="archive-btn" onclick="moveArchiveSlide(1)">❯</button>
+                </nav>
+            </div>
+            <article class="archive-text-area">
+                <h2 class="archive-title" id="archive-title-text">Graduation Exhibition Title</h2>
+                <p class="archive-desc" id="archive-description-text">해당 년도의 전시 설명 내용...</p>
+            </article>
+        </section>
+        
+        <!-- Placeholder Sections -->
+        <section id="section-about" class="container page-section"><article style="grid-column: span 12; text-align:center;">About Page 임시 페이지</article></section>
+        <section id="section-designers" class="container page-section"><article style="grid-column: span 12; text-align:center;">Designers Page 임시 페이지</article></section>
+
+    </main>
+
+    <!-- 외부 JavaScript 파일 연결 -->
+    <script src="script.js"></script>
+</body>
+</html>
