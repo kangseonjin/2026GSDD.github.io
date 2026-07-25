@@ -1,1 +1,1 @@
-# kangseonjin.github.io
+# 2026 GSDD.github.io
