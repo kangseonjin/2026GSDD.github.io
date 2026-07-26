@@ -246,6 +246,70 @@ function navigateToPage(pageName) {
 
     window.scrollTo(0, 0);
 }
+/* 기존 데이터 배열과 렌더링 함수들은 이 위에 그대로 두기 */
+
+// ... (기존 worksDataset, archiveDataset, renderWorksGrid, 등등 그대로 유지) ...
+
+/* -----------------------------------------------------------
+   모바일 햄버거 메뉴 제어 로직 (X 버튼 변환 추가)
+----------------------------------------------------------- */
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    
+    navMenu.classList.toggle('active');
+
+    // 메뉴가 열려있으면 X로, 닫히면 다시 햄버거로 변경
+    if (navMenu.classList.contains('active')) {
+        hamburgerBtn.innerText = '✕';
+        document.body.style.overflow = 'hidden'; // 메뉴 열렸을 때 배경 스크롤 방지
+    } else {
+        hamburgerBtn.innerText = '☰';
+        document.body.style.overflow = 'auto'; // 스크롤 복구
+    }
+}
+
+/* -----------------------------------------------------------
+   페이지 네비게이션 로직 (메뉴 닫기 기능 강화)
+----------------------------------------------------------- */
+function navigateToPage(pageName) {
+    const sections = document.querySelectorAll('.page-section');
+    sections.forEach(sec => sec.classList.remove('active'));
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.classList.remove('active'));
+
+    const targetId = `section-${pageName}`;
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+
+    const targetNavId = `link-${pageName}`;
+    const targetNavLink = document.getElementById(targetNavId);
+    if (targetNavLink) {
+        targetNavLink.classList.add('active');
+    }
+
+    if (pageName === 'detail' || pageName === 'works') {
+        document.getElementById('link-works').classList.add('active');
+    }
+if (pageName === 'archive') {
+        archiveIndex = 0;
+        updateArchiveView();
+    }
+    // 모바일에서 링크를 클릭하면 열려있던 메뉴 닫고 버튼도 ☰로 복구
+    const navMenu = document.getElementById('nav-menu');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    
+    if (navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        hamburgerBtn.innerText = '☰';
+        document.body.style.overflow = 'auto';
+    }
+
+    window.scrollTo(0, 0);
+}
 
 /* -----------------------------------------------------------
    초기화 (Init)

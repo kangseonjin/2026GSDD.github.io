@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 GSDD</title>
-    <!-- 외부 CSS 파일 연결 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 헤더 영역 -->
     <header class="global-header">
         <div class="nav-wrapper">
             <h1 class="nav-logo" onclick="navigateToPage('main')">GSDD 2026</h1>
-            <nav class="nav-menu">
+            
+            <!-- 모바일용 햄버거 버튼 추가 -->
+            <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
                 <a class="nav-link" onclick="navigateToPage('about')" id="link-about">About</a>
                 <a class="nav-link" onclick="navigateToPage('works')" id="link-works">Works</a>
                 <a class="nav-link" onclick="navigateToPage('designers')" id="link-designers">Designers</a>
@@ -26,9 +28,7 @@
         </div>
     </header>
 
-    <!-- 메인 콘텐츠 영역 -->
     <main>
-        
         <!-- Main Section -->
         <section id="section-main" class="container page-section active">
             <article class="main-content">
@@ -86,7 +86,6 @@
 
     </main>
 
-    <!-- 외부 JavaScript 파일 연결 -->
     <script src="script.js"></script>
 </body>
 </html>

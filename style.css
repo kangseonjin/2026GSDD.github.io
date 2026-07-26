@@ -1,31 +1,27 @@
 /* ===========================================================
-   1. CSS 변수 (공통 CSS 담당자는 여기만 수정하면 전체 디자인 변경 가능)
+   1. CSS 변수
 =========================================================== */
 :root {
-    /* 컬러 아이덴티티 */
     --color-primary: #0088cc;
     --color-background: #ffffff;
     --color-text-main: #000000;
     --color-text-sub: #555555;
     --color-placeholder: #e0e0e0;
     
-    /* 그리드 및 레이아웃 */
     --grid-container: 1200px;
     --grid-gap: 24px;
     
-    /* 폰트 서체 (프리텐다드 통일) */
     --font-family: 'Pretendard', sans-serif;
 
-    /* 📏 폰트 시스템 (5단계 통합) */
-    --text-title: 120px; /* 포인트 타이틀 (메인 GSDD 2026) */
-    --text-lg: 32px;     /* 대제목 (로고, 뒤로가기 버튼, 아카이브 연도) */
-    --text-md: 24px;     /* 중제목 (상세 작품명, 메인 서브 타이틀, 아카이브 전시명) */
-    --text-sm: 18px;     /* 본문 강조 (GNB 메뉴, 카테고리 필터, 썸네일 작품명) */
-    --text-base: 16px;   /* 본문 기본 (상세 설명, 작가 이름, 아카이브 설명, 드롭다운) */
+    --text-title: 120px;
+    --text-lg: 32px;
+    --text-md: 24px;
+    --text-sm: 18px;
+    --text-base: 16px;
 }
 
 /* ===========================================================
-   2. 기본 리셋 (Base Reset)
+   2. 기본 리셋
 =========================================================== */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
 body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; }
@@ -34,7 +30,7 @@ button { cursor: pointer; border: none; background: none; }
 ul, ol { list-style: none; }
 
 /* ===========================================================
-   3. 공통 레이아웃 (Common Layout)
+   3. 공통 레이아웃
 =========================================================== */
 .container {
     max-width: var(--grid-container);
@@ -49,7 +45,7 @@ ul, ol { list-style: none; }
 .page-section.active { display: grid; }
 
 /* ===========================================================
-   4. 헤더 및 네비게이션 (Header & Nav)
+   4. 헤더 및 네비게이션
 =========================================================== */
 .global-header {
     width: 100%;
@@ -68,12 +64,19 @@ ul, ol { list-style: none; }
     align-items: center;
     height: 90px;
 }
-/* 변수 적용: 32px (대제목), 두께 800 */
 .nav-logo { grid-column: span 3; font-size: var(--text-lg); font-weight: 800; cursor: pointer; }
 .nav-menu { grid-column: 5 / 13; display: flex; justify-content: flex-end; gap: 40px; }
-/* 변수 적용: 18px (본문 강조), 두께 600 */
 .nav-link { font-size: var(--text-sm); font-weight: 600; transition: color 0.2s; }
 .nav-link:hover, .nav-link.active { color: var(--color-primary); }
+
+/* 햄버거 버튼 (데스크탑에서는 숨김) */
+.hamburger-btn {
+    display: none;
+    font-size: 32px;
+    color: var(--color-text-main);
+    grid-column: 12 / 13;
+    text-align: right;
+}
 
 /* Archive Hover Dropdown */
 .nav-item-archive { position: relative; }
@@ -93,28 +96,19 @@ ul, ol { list-style: none; }
     content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 30px; background: transparent;
 }
 .nav-item-archive:hover .archive-dropdown-list { display: flex; }
-/* 변수 적용: 16px (본문 기본), 두께 400(기본) */
 .archive-dropdown-item { padding: 10px; cursor: pointer; font-size: var(--text-base); text-align: center; }
 .archive-dropdown-item:hover { background-color: #f5f5f5; color: var(--color-primary); }
 
 /* ===========================================================
    5. 각 페이지별 고유 스타일
 =========================================================== */
-
-/* --- 메인 페이지 (.main-) --- */
 .main-content { grid-column: span 12; text-align: center; padding-top: 150px; }
-/* 변수 적용: 18px (본문 강조) */
 .main-suptitle { font-size: var(--text-sm); line-height: 1.6; margin-bottom: 20px; color: var(--color-text-sub); }
-/* 변수 적용: 120px (포인트 타이틀), 두께 900 */
 .main-title { font-size: var(--text-title); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
-/* 변수 적용: 24px (중제목), 두께 600 */
 .main-subtitle { font-size: var(--text-md); font-weight: 600; margin-bottom: 50px; }
-/* 변수 적용: 18px (본문 강조) */
 .main-info { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text-sub); }
 
-/* --- Works 리스트 페이지 (.works-) --- */
 .works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 50px; }
-/* 변수 적용: 18px (본문 강조), 두께 700 */
 .works-filter-btn { font-size: var(--text-sm); font-weight: 700; color: #aaaaaa; transition: color 0.2s; }
 .works-filter-btn.active { color: var(--color-text-main); }
 
@@ -126,23 +120,16 @@ ul, ol { list-style: none; }
     width: 100%; aspect-ratio: 1 / 1;
     background-color: var(--color-placeholder);
     display: flex; align-items: center; justify-content: center;
-    color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; border-radius: 4px;
+    color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; 
 }
 .works-meta { margin-top: 18px; }
-/* 변수 적용: 18px (본문 강조), 두께 700 */
 .works-title { font-size: var(--text-sm); font-weight: 700; margin-bottom: 6px; }
-/* 변수 적용: 16px (본문 기본) */
 .works-author { font-size: var(--text-base); color: var(--color-text-sub); }
 
-/* --- Works 상세 페이지 (.detail-) --- */
 .detail-text-area { grid-column: span 4; position: sticky; top: 110px; height: fit-content; padding-right: 20px; }
-/* 변수 적용: 32px (대제목), 두께 300(얇게) */
 .detail-back-btn { font-size: var(--text-lg); font-weight: 300; margin-bottom: 30px; display: block; text-align: left; }
-/* 변수 적용: 24px (중제목), 두께 800 */
 .detail-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 8px; }
-/* 변수 적용: 16px (본문 기본) */
 .detail-author { font-size: var(--text-base); color: var(--color-text-sub); margin-bottom: 30px; }
-/* 변수 적용: 16px (본문 기본), 줄간격 1.8 */
 .detail-desc { font-size: var(--text-base); line-height: 1.8; color: var(--color-text-main); }
 
 .detail-image-area { grid-column: 7 / 13; display: flex; flex-direction: column; gap: 30px; }
@@ -150,54 +137,110 @@ ul, ol { list-style: none; }
     width: 100%; height: 1000px;
     background-color: var(--color-placeholder);
     display: flex; align-items: center; justify-content: center;
-    color: var(--color-text-sub); border-radius: 4px;
+    color: var(--color-text-sub); 
 }
 
-/* --- Archive 페이지 (.archive-) --- */
 .archive-visual-area { grid-column: span 5; display: flex; flex-direction: column; }
-/* 변수 적용: 32px (대제목), 두께 800 */
 .archive-year-display { font-size: var(--text-lg); font-weight: 800; margin-bottom: 25px; }
 .archive-poster {
     width: 100%; aspect-ratio: 1 / 1.414;
-    background-color: #d0d0d0; border-radius: 4px; overflow: hidden; cursor: pointer;
+    background-color: #d0d0d0;  overflow: hidden; cursor: pointer;
     display: flex; align-items: center; justify-content: center; text-align: center;
 }
 .archive-poster img { width: 100%; height: 100%; object-fit: cover; }
 
 .archive-controls { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 20px; }
-/* 변수 적용: 24px (중제목) */
 .archive-btn { font-size: var(--text-md); font-weight: bold; }
 .archive-dots { display: flex; gap: 8px; }
 .archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; cursor: pointer; }
 .archive-dot.active { background-color: var(--color-text-main); }
 
 .archive-text-area { grid-column: 7 / 12; padding-top: 80px; }
-/* 변수 적용: 24px (중제목), 두께 800 */
 .archive-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 20px; }
-/* 변수 적용: 16px (본문 기본) */
 .archive-desc { font-size: var(--text-base); line-height: 1.8; }
 
-/* ===========================================================
-   6. 반응형 미디어 쿼리 (Mobile Responsive)
-=========================================================== */
 @media screen and (max-width: 768px) {
     .container { 
         grid-template-columns: repeat(4, 1fr); 
         padding-left: 20px;
         padding-right: 20px;
+        padding-bottom: 60px; 
+        padding-top: 30px; /* ✨ 모바일 상단 여백 축소 (기존 60px -> 30px) */
     }
+    
+    /* ✨ 메인 페이지(GSDD 2026 타이틀 있는 곳) 상단 여백도 폰에 맞게 축소 */
+    .main-content { 
+        padding-top: 80px; 
+    }
+
     .nav-wrapper {
         padding-left: 20px;
         padding-right: 20px;
     }
-    .nav-menu { display: none; }
+
+    /* 네비게이션 로고 폰트 축소 및 1줄 강제 고정 */
+    .nav-logo {
+        font-size: 24px; 
+        white-space: nowrap; 
+    }
+
+    /* 햄버거 메뉴 버튼 보이기 */
+    .hamburger-btn { display: block; z-index: 1001; } /* 메뉴 위로 올라오게 z-index 추가 */
     
-    /* 모바일에서는 120px 타이틀을 60px로 강제 축소 */
+    /* 네비게이션 메뉴 모바일 전체화면 설정 */
+    .nav-menu { 
+        display: none; 
+        position: fixed; 
+        top: 0; /* 화면 끝까지 덮도록 수정 */
+        left: 0; 
+        width: 100%; 
+        height: 100vh; 
+        background: rgba(255, 255, 255, 0.98); 
+        flex-direction: column; 
+        justify-content: center; /* 중앙 정렬로 변경 */
+        align-items: center; 
+        gap: 40px; 
+        z-index: 1000;
+    }
+    .nav-menu.active { display: flex; } 
+    .nav-link { font-size: 24px; }
+    .archive-dropdown-list { position: relative; top: 10px; box-shadow: none; border: none; background: transparent; }
+
     .main-title { font-size: 60px; }
     
-    .works-item { grid-column: span 4; }
+ .works-filter-group { 
+        margin-bottom: 30px; 
+    }
+    .works-grid-list { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 16px; 
+    }
+    .works-item { grid-column: span 1; margin-bottom: 30px; }
     .detail-text-area { grid-column: span 4; position: static; margin-bottom: 40px; }
     .detail-image-area { grid-column: span 4; }
+    
+    /* ✨ Archive: 스크롤 없이 한눈에 꽉 차게 압축 */
     .archive-visual-area { grid-column: span 4; }
-    .archive-text-area { grid-column: span 4; padding-top: 40px; }
+    .archive-year-display { font-size: 28px; margin-bottom: 15px; } /* 크기/여백 축소 */
+    
+    /* 포스터 높이 제한을 걸어 화면 밖으로 벗어나지 않게 제어 */
+    .archive-poster { 
+        max-height: 45vh; 
+        width: auto; 
+        margin: 0 auto; 
+        aspect-ratio: auto; 
+        background-color: transparent; 
+    }
+    .archive-poster img { 
+        width: auto; 
+        height: 100%; 
+        max-height: 45vh; 
+        object-fit: contain; /* 찌그러지지 않고 비율 유지 */
+    }
+
+    .archive-controls { margin-top: 15px; }
+    
+    .archive-text-area { grid-column: span 4; padding-top: 20px; } /* 여백 대폭 축소 */
+    .archive-title { font-size: 20px; margin-bottom: 10px; }
+    .archive-desc { font-size: 14px; }
 }
