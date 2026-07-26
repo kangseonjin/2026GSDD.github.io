@@ -175,9 +175,9 @@ function initArchivePagination() {
         liYear.innerText = data.year;
         liYear.onclick = (e) => { 
             e.stopPropagation(); 
-            archiveIndex = index; 
-            updateArchiveView(); 
             navigateToPage('archive'); 
+            archiveIndex = index;      
+            updateArchiveView();       
         };
         dropdown.appendChild(liYear);
 
