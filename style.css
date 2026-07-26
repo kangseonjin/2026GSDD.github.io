@@ -213,28 +213,32 @@ ul, ol { list-style: none; }
     }
     .nav-menu.active { display: flex; } 
     .nav-link { font-size: 24px; }
-
-    .archive-dropdown-list { 
+.archive-dropdown-list { 
         display: none; 
         position: relative; 
         top: 0; 
         box-shadow: none; 
         border: none; 
         background: transparent; 
-        padding-top: 20px;
-        gap: 20px; 
+        padding-top: 10px;
+        gap: 0px; /* ✨ 태평양 같던 간격을 잔인하게 없애버렸습니다! */
     }
     
-
+    /* 2. 연도 글자 자체의 푹신한 쿠션도 모바일에 맞춰 납작하게 압축합니다 */
+    .archive-dropdown-item { 
+        padding: 5px; 
+    }
+    
+    /* 3. 열려라 참깨! 마법의 주문(.open)이 걸리면 나타납니다 */
     .archive-dropdown-list.open {
         display: flex; 
     }
     
-    
+    /* 4. 앙증맞은 화살표 디자인 */
     .archive-arrow { 
         display: inline-block; 
         margin-left: 8px; 
-        transition: transform 0.3s; /* 0.3초 동안 부드럽게 회전 */
+        transition: transform 0.3s; 
     }
     .archive-arrow::after { 
         content: '∨'; 
@@ -242,7 +246,7 @@ ul, ol { list-style: none; }
         color: #aaaaaa;
     }
     
-    
+    /* 5. 메뉴가 열리면 화살표가 위로 홱! 돌아갑니다 */
     #link-archive.open .archive-arrow { 
         transform: rotate(180deg); 
     }
