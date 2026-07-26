@@ -55,6 +55,7 @@ ul, ol { list-style: none; }
     z-index: 1000;
     border-bottom: 1px solid #eeeeee;
 }
+.archive-arrow { display: none; }
 .nav-wrapper {
     max-width: var(--grid-container);
     margin: 0 auto;
@@ -212,8 +213,39 @@ ul, ol { list-style: none; }
     }
     .nav-menu.active { display: flex; } 
     .nav-link { font-size: 24px; }
-    .archive-dropdown-list { position: relative; top: 10px; box-shadow: none; border: none; background: transparent; }
 
+    .archive-dropdown-list { 
+        display: none; 
+        position: relative; 
+        top: 0; 
+        box-shadow: none; 
+        border: none; 
+        background: transparent; 
+        padding-top: 20px;
+        gap: 20px; 
+    }
+    
+
+    .archive-dropdown-list.open {
+        display: flex; 
+    }
+    
+    
+    .archive-arrow { 
+        display: inline-block; 
+        margin-left: 8px; 
+        transition: transform 0.3s; /* 0.3초 동안 부드럽게 회전 */
+    }
+    .archive-arrow::after { 
+        content: '∨'; 
+        font-size: 18px; 
+        color: #aaaaaa;
+    }
+    
+    
+    #link-archive.open .archive-arrow { 
+        transform: rotate(180deg); 
+    }
     .main-title { font-size: 60px; }
     
  .works-filter-group { 
@@ -227,11 +259,11 @@ ul, ol { list-style: none; }
     .detail-text-area { grid-column: span 4; position: static; margin-bottom: 40px; }
     .detail-image-area { grid-column: span 4; }
     
-    /* ✨ Archive: 스크롤 없이 한눈에 꽉 차게 압축 */
-    .archive-visual-area { grid-column: span 4; }
-    .archive-year-display { font-size: 28px; margin-bottom: 15px; } /* 크기/여백 축소 */
     
-    /* 포스터 높이 제한을 걸어 화면 밖으로 벗어나지 않게 제어 */
+    .archive-visual-area { grid-column: span 4; }
+    .archive-year-display { font-size: 28px; margin-bottom: 15px; } 
+    
+
     .archive-poster { 
         max-height: 45vh; 
         width: auto; 

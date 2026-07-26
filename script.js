@@ -266,6 +266,10 @@ function toggleMobileMenu() {
     } else {
         hamburgerBtn.innerText = '☰';
         document.body.style.overflow = 'auto'; // 스크롤 복구
+    const archiveDropdown = document.getElementById('archive-dropdown-list');
+        const linkArchive = document.getElementById('link-archive');
+        if (archiveDropdown) archiveDropdown.classList.remove('open');
+        if (linkArchive) linkArchive.classList.remove('open');
     }
 }
 
@@ -311,6 +315,21 @@ if (pageName === 'archive') {
     window.scrollTo(0, 0);
 }
 
+
+function handleArchiveClick(event) {
+    if (window.innerWidth <= 768) {
+        // 모바일 화면일 땐 페이지 이동을 멈추고 메뉴만 스르륵 엽니다!
+        event.preventDefault(); 
+        const dropdown = document.getElementById('archive-dropdown-list');
+        const linkArchive = document.getElementById('link-archive');
+        
+        dropdown.classList.toggle('open');
+        linkArchive.classList.toggle('open');
+    } else {
+        // 데스크탑일 땐 평소처럼 아카이브 메인(2025년)으로 이동하죠!
+        navigateToPage('archive');
+    }
+}
 /* -----------------------------------------------------------
    초기화 (Init)
 ----------------------------------------------------------- */
