@@ -98,7 +98,7 @@ const worksDataset = [
 
 const archiveDataset = [
     { year: 2025, format: 'png', link: 'http://gsdd.org/2025/index.html', title: 'CUT! LAYER! PASTE!', desc: '2025년도 전시 설명 내용...' },
-    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수많은 도전과 학습을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.' },
+    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수 multi 도전을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.' },
     { year: 2023, format: 'png', link: 'http://gsdd.org/2023/index.html', title: 'PROJECT: FUTUREFORMING', desc: '퓨처포밍 프로젝트는 학생들이 각자 광활한 우주로 나아가 별을 찾고, 미래에 정착할 수 있도록 포밍(forming) 시키는 프로젝트다. 졸업 전시를 통해 각자의 미래를 준비하고 모습을 만들어 가는 것을 원석을 깎아 별 조각으로 만드는 것으로 비유하였으며, 별 조각이 대 학생들의 작업물이 하나로 합쳐져 완전한 별 형태를 이룬다. 이는 우리의 미래 가능성을 보여주는 코어로 재현된다. 프로젝트의 성공은 전시장에 포밍 완료된 별 조각 샘플을 채취하여 전시하는 것으로 증명한다.' },
     { year: 2022, format: 'jpeg', link: 'http://gsdd.org/2022/', title: 'NEXT LEVEL', desc: '대학교 4학년의 마지막을 장식하는 졸업전시회는 곧 우리가 사회에 한 걸음 내딛게 된다는 사실을 알려줍니다. 우리는 졸업이라는 과정을 거쳐 학생에서 사회인으로 발전하게 되고, 이렇게 사회 생활이라는 새로운 단계로 넘어가게 됩니다. 학생들은 개개인만의 개성과 능력으로 작품을 만들고, 주어진 다음 단계를 스스로 풀어나간다는 의미를 담았습니다.' },
     { year: 2021, format: 'png', link: 'http://gsdd.org/2021/', title: '2021', desc: '우리는 일상 속에서 디자인을 공부할 때 혹은 공책을 펴볼 때도 쉽게 행과 열을 찾아볼 수 있다. 각기 다른 행과 열이 뻗어 나가면 그 방향성이 모여 하나의 구조를 만들어내고 그 구조 안에는 다양한 가능성이 존재한다. 이는 우리와 닮아있다. 각자의 방식, 각자의 과정과 방법론이 모여 졸업전시회라는 구조를 만들어낸다.' },
@@ -279,7 +279,7 @@ function navigateToPage(pageName) {
 }
 
 /* -----------------------------------------------------------
-   모바일 햄버거 메뉴 제어 로직
+   모바일 햄버거 메뉴 제어 로직 (드롭다운 삭제 반영)
 ----------------------------------------------------------- */
 function toggleMobileMenu() {
     const navMenu = document.getElementById('nav-menu');
@@ -481,7 +481,7 @@ function renderFacesDOM() {
         wrapper.className = `preview-face-controller ${face.id === activeFaceId ? 'active' : ''}`;
         wrapper.style.pointerEvents = 'auto';
         
-        const baseSize = 250; 
+        const baseSize = 190; // 크기 축소 비율 반영 (250 -> 190)
         const currentSize = baseSize * face.scale;
         wrapper.style.width = `${currentSize}px`;
         wrapper.style.height = `${currentSize}px`;
@@ -569,7 +569,7 @@ function startScaleFace(e, id) {
         const currentDist = Math.hypot(event.clientX - cx, event.clientY - cy);
         face.scale = Math.max(0.2, Math.min(3.0, startScale * (currentDist / startDist)));
         
-        const baseSize = 250; 
+        const baseSize = 190; // 크기 축소 비율 반영 (250 -> 190)
         const currentSize = baseSize * face.scale;
         wrapper.style.width = `${currentSize}px`;
         wrapper.style.height = `${currentSize}px`;
@@ -755,7 +755,7 @@ function initPhysics() {
                 faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`;
                 faceImg.style.position = 'absolute'; 
                 
-                const faceWidth = 250 * f.scale * stageScale;
+                const faceWidth = 190 * f.scale * stageScale; // 크기 축소 비율 반영 (250 -> 190)
                 faceImg.style.width = `${faceWidth}px`; 
                 faceImg.style.height = `${faceWidth}px`;
                 faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`;
@@ -796,8 +796,8 @@ function initPhysics() {
     ];
 
     mainGraphics.forEach((image) => {
-        const minScale = 0.3;
-        const maxScale = 0.15;
+        const minScale = 0.25;
+        const maxScale = 0.1;
         const randomScale = Math.random() * (maxScale - minScale) + minScale;
 
         const hitBoxWidth = image.width * randomScale;
@@ -817,22 +817,23 @@ function initPhysics() {
 
     const typoScale = 0.3; 
     const typoGraphics = [
-        { src: 'typo-1.png', width: 3132, height: 398 },
+        { src: 'typo-1.png', width: 3132, height: 398, customScale: 0.15 },
         { src: 'typo-2.png', width: 925, height: 134 },
-        { src: 'typo-3.png', width: 1242, height: 350 },
+        { src: 'typo-3.png', width: 1242, height: 350, customScale: 0.15 },
         { src: 'typo-4.png', width: 884, height: 134 },
         { src: 'typo-5.png', width: 423, height: 134 }
     ];
 
     typoGraphics.forEach((typo, index) => {
-        const hitBoxWidth = typo.width * typoScale;
-        const hitBoxHeight = typo.height * typoScale;
+        const scale = typo.customScale || typoScale;
+        const hitBoxWidth = typo.width * scale;
+        const hitBoxHeight = typo.height * scale;
         const startX = randomXForWidth(hitBoxWidth);
         const startY = -300 - (index * 300); 
 
         const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
             restitution: 0.1, friction: 0.9, density: 0.05, chamfer: { radius: 4 }, 
-            render: { sprite: { texture: typo.src, xScale: typoScale, yScale: typoScale } }
+            render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } }
         });
         Composite.add(world, typoBody);
     });
@@ -931,13 +932,14 @@ function initGuestbookPhysics() {
     const CARD_W = 282;
     const CARD_H = 352;
     const GAP = 24;
-    const TOP = 70;
 
     const getColumns = () => {
         if (window.innerWidth <= 768) return 2;
         if (window.innerWidth <= 1100) return 3;
         return 4;
     };
+
+    const getTopMargin = () => window.innerWidth <= 768 ? 100 : 150; 
 
     const getLayout = () => {
         const currentWidth = stage.clientWidth || window.innerWidth;
@@ -961,7 +963,7 @@ function initGuestbookPhysics() {
 
         const card = {
             x: layout.left + col * (layout.width + GAP),
-            y: TOP + row * (layout.height + GAP),
+            y: getTopMargin() + row * (layout.height + GAP), 
             w: layout.width,
             h: layout.height,
             scale: layout.scale
@@ -1081,7 +1083,7 @@ function initGuestbookPhysics() {
             img.alt = '';
 
             const faceScale = (characterSize / 850);
-            const faceSize = 250 * (Number(face.scale) || 1) * faceScale;
+            const faceSize = 190 * (Number(face.scale) || 1) * faceScale; // 크기 축소 비율 반영 (250 -> 190)
 
             img.style.width = `${faceSize}px`;
             img.style.height = `${faceSize}px`;
@@ -1247,6 +1249,7 @@ function initGuestbookPhysics() {
 
     window.addEventListener('resize', () => {
         layout = getLayout();
+        const currentTop = getTopMargin(); 
 
         cardStates.forEach((card, idx) => {
             const slot = idx + 1;
@@ -1254,7 +1257,7 @@ function initGuestbookPhysics() {
             const col = slot % layout.columns;
 
             card.x = layout.left + col * (layout.width + GAP);
-            card.y = TOP + row * (layout.height + GAP);
+            card.y = currentTop + row * (layout.height + GAP); 
             card.w = layout.width;
             card.h = layout.height;
             card.scale = layout.scale;
