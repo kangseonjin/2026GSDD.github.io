@@ -3,13 +3,14 @@
 =========================================================== */
 :root {
     --color-primary: #0088cc;
-    --color-background: #ffffff;
+    --color-background: #F6F6F6;
     --color-text-main: #000000;
     --color-text-sub: #555555;
     --color-placeholder: #e0e0e0;
     
     --grid-container: 1200px;
     --grid-gap: 24px;
+    --site-margin: 20px; 
     
     --font-family: 'Pretendard', sans-serif;
 
@@ -24,10 +25,14 @@
    2. 기본 리셋
 =========================================================== */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
-body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; word-break: keep-all;}
-a { text-decoration: none; color: inherit; }
-button { cursor: pointer; border: none; background: none; }
+body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; word-break: keep-all; cursor: none; }
+a { text-decoration: none; color: inherit; cursor: none; }
+button { border: none; background: none; cursor: none; }
+input { cursor: none; }
 ul, ol { list-style: none; }
+
+/* 커스텀 이미지 커서 */
+.custom-cursor { position: fixed; pointer-events: none; z-index: 99999; display: none; width: 50px; height: 50px; object-fit: contain; transform: translate(-50%, -50%); }
 
 /* ===========================================================
    3. 공통 레이아웃
@@ -38,235 +43,248 @@ ul, ol { list-style: none; }
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: var(--grid-gap);
-    padding-top: 60px;
+    padding-top: 120px;
     padding-bottom: 120px;
 }
 .page-section { display: none; }
 .page-section.active { display: grid; }
+/* specificity(우선순위)를 높여서 !important 대신 동작하도록 설정 */
+#section-detail.page-section.active { display: block; }
+#section-guestbook.page-section.active { display: block; }
 
 /* ===========================================================
    4. 헤더 및 네비게이션
 =========================================================== */
-.global-header {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid #eeeeee;
-}
-.archive-arrow { display: none; }
-.nav-wrapper {
-    max-width: var(--grid-container);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    align-items: center;
-    height: 90px;
-}
-.nav-logo { grid-column: span 3; font-size: var(--text-lg); font-weight: 800; cursor: pointer; }
-.nav-menu { grid-column: 5 / 13; display: flex; justify-content: flex-end; gap: 40px; }
-.nav-link { font-size: var(--text-sm); font-weight: 600; transition: color 0.2s; }
-.nav-link:hover, .nav-link.active { color: var(--color-primary); }
+.top-title-bar { position: fixed; top: 18px; left: 0; width: 100%; text-align: center; z-index: 1000; pointer-events: auto; }
+.top-title-img { height: 36px; object-fit: contain; }
 
-/* 햄버거 버튼 (데스크탑에서는 숨김) */
-.hamburger-btn {
-    display: none;
-    font-size: 32px;
-    color: var(--color-text-main);
-    grid-column: 12 / 13;
-    text-align: right;
+.global-header.bottom-nav { width: 100%; background: var(--color-background); position: fixed; top: auto; bottom: 0; z-index: 1000; border-top: 4.5px solid #111; border-bottom: none; }
+.nav-wrapper { max-width: calc(var(--grid-container) + (var(--site-margin) * 2)); padding: 0 var(--site-margin); margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 80px; }
+.nav-menu { display: flex; justify-content: space-between; width: 100%; max-width: 960px; gap: 20px; }
+
+/* 기본 상태 (서브 페이지에서 선택 안 된 메뉴)는 회색 */
+.nav-link { font-size: var(--text-md); font-weight: 700; color: #8a8a8a; display: inline-block; transform-origin: center; transition: color 0.2s; }
+.nav-link:hover { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }
+
+/* 선택된 페이지는 검정색 */
+.nav-link.active { color: #000; }
+
+/* 메인 페이지(body.is-main-page)일 때는 모든 메뉴가 검정색 */
+body.is-main-page .nav-link { color: #000; }
+
+@keyframes nav-wiggle {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
 }
 
-/* Archive Hover Dropdown */
-.nav-item-archive { position: relative; }
-.archive-dropdown-list {
-    display: none;
-    position: absolute;
-    top: 40px; 
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-background);
-    border: 1px solid #eeeeee;
-    flex-direction: column;
-    width: 90px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.archive-dropdown-list::before {
-    content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 30px; background: transparent;
-}
-.nav-item-archive:hover .archive-dropdown-list { display: flex; }
-.archive-dropdown-item { padding: 10px; cursor: pointer; font-size: var(--text-base); text-align: center; }
-.archive-dropdown-item:hover { background-color: #f5f5f5; color: var(--color-primary); }
+.hamburger-btn { display: none; font-size: 32px; color: var(--color-text-main); }
 
 /* ===========================================================
-   5. 각 페이지별 고유 스타일
+   5. 메인, 디자이너스 섹션
 =========================================================== */
-.main-content { grid-column: span 12; text-align: center; padding-top: 150px; }
-.main-suptitle { font-size: var(--text-sm); line-height: 1.6; margin-bottom: 20px; color: var(--color-text-sub); }
-.main-title { font-size: var(--text-title); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
-.main-subtitle { font-size: var(--text-md); font-weight: 600; margin-bottom: 50px; }
-.main-info { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text-sub); }
+.main-section-wrapper { position: relative; min-height: calc(100vh - 80px); padding-top: 0; }
+.physics-stage { position: absolute; top: 0; left: calc(50% - 50vw); width: 100vw; height: calc(100vh - 80px); z-index: 1; }
+.main-guestbook-stage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.main-content { grid-column: span 12; text-align: center; padding-top: 15vh; position: relative; z-index: 10; pointer-events: none; }
 
-.works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 50px; }
-.works-filter-btn { font-size: var(--text-sm); font-weight: 700; color: #aaaaaa; transition: color 0.2s; }
+.designers-container { grid-column: span 12; text-align: center; padding: 100px 0; }
+.designers-title { font-size: var(--text-md); margin-bottom: 20px; }
+
+/* ===========================================================
+   6. Works List Section
+=========================================================== */
+.works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+.works-filter-btn { font-size: var(--text-sm); font-weight: 700; color: #8a8a8a; padding: 5px 13px; line-height: 1; transition: color 0.2s; }
 .works-filter-btn.active { color: var(--color-text-main); }
+#filter-all.active { background-color: #009FE8; }
+#filter-visual.active { background-color: #ED83B2; }
+#filter-space.active { background-color: #F39800; }
 
 .works-grid-list { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
-.works-item { grid-column: span 4; cursor: pointer; margin-bottom: 50px; transition: opacity 0.2s; }
-.works-item:hover { opacity: 0.8; }
+.works-item { grid-column: span 3; margin-bottom: 50px; transition: opacity 0.2s; transform-origin: center; }
+.works-item:hover { opacity: 0.8; animation: work-wiggle 0.45s ease-in-out infinite alternate; }
 
-.works-thumb {
-    width: 100%; aspect-ratio: 1 / 1;
-    background-color: var(--color-placeholder);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; 
+@keyframes work-wiggle {
+    from { transform: rotate(-4deg); }
+    to { transform: rotate(4deg); }
 }
+
+.works-thumb { width: 100%; aspect-ratio: 282 / 352; background-color: var(--color-placeholder); display: flex; align-items: center; justify-content: center; color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; }
 .works-meta { margin-top: 18px; }
 .works-title { font-size: var(--text-sm); font-weight: 700; margin-bottom: 6px; }
 .works-author { font-size: var(--text-base); color: var(--color-text-sub); }
 
-.detail-text-area { grid-column: span 4; position: sticky; top: 110px; height: fit-content; padding-right: 20px; }
-.detail-back-btn { font-size: var(--text-lg); font-weight: 300; margin-bottom: 30px; display: block; text-align: left; }
-.detail-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 8px; }
-.detail-author { font-size: var(--text-base); color: var(--color-text-sub); margin-bottom: 30px; }
-.detail-desc { font-size: var(--text-base); line-height: 1.8; color: var(--color-text-main); }
+/* ===========================================================
+   7. Works Detail Section
+=========================================================== */
+#section-detail { display: none; }
+.detail-container { display: flex; gap: 40px; justify-content: center; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
+.detail-image-area { width: 588px; display: flex; flex-direction: column; flex-shrink: 0; }
+.detail-img-placeholder { width: 588px; min-height: 900px; background-color: #eaeaea; display: flex; align-items: center; justify-content: center; text-align: center; color: #555; font-size: 16px; margin-bottom: 20px; }
+.detail-img-placeholder img { width: 100%; height: auto; display: block; }
 
-.detail-image-area { grid-column: 7 / 13; display: flex; flex-direction: column; gap: 30px; }
-.detail-img-placeholder {
-    width: 100%; height: 1000px;
-    background-color: var(--color-placeholder);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--color-text-sub); 
-}
+.detail-text-area { flex: 1; max-width: 450px; position: sticky; top: 120px; }
+.detail-text-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 7px; }
+.detail-title { font-size: 24px; font-weight: 700; color: #000; margin: 0; }
+.detail-close-btn { font-size: 40px; font-weight: 300; color: #000; line-height: 1; margin-top: -5px; }
 
+.detail-author-info { margin-bottom: 35px; font-style: normal; }
+.detail-author { font-size: 20px; font-weight: 700; color: #000; margin-bottom: 8px; }
+.detail-contact { font-size: 16px; font-weight: 400; color: #000; margin-bottom: 4px; }
+.detail-desc { font-size: 16px; font-weight: 400; line-height: 1.6; color: #000; }
+
+/* ===========================================================
+   8. Archive Section
+=========================================================== */
 .archive-visual-area { grid-column: span 5; display: flex; flex-direction: column; }
 .archive-year-display { font-size: var(--text-lg); font-weight: 800; margin-bottom: 25px; }
-.archive-poster {
-    width: 100%; aspect-ratio: 1 / 1.414;
-    background-color: #d0d0d0;  overflow: hidden; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-}
+.archive-poster { width: 100%; aspect-ratio: 1 / 1.414; background-color: #d0d0d0; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; }
 .archive-poster img { width: 100%; height: 100%; object-fit: cover; }
-
 .archive-controls { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 20px; }
-.archive-btn { font-size: var(--text-md); font-weight: bold; }
+.archive-img-btn { padding: 5px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+.archive-img-btn:hover { transform: scale(1.1); }
+.archive-nav-icon { width: 50px; height: 50px; object-fit: contain; display: block; }
 .archive-dots { display: flex; gap: 8px; }
-.archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; cursor: pointer; }
+.archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; }
 .archive-dot.active { background-color: var(--color-text-main); }
-
 .archive-text-area { grid-column: 7 / 12; padding-top: 80px; }
 .archive-title { font-size: var(--text-md); font-weight: 800; margin-bottom: 20px; }
 .archive-desc { font-size: var(--text-base); line-height: 1.8; }
 
+/* ===========================================================
+   9. About Section
+=========================================================== */
+.about-container { grid-column: span 12; width: 100vw; margin-left: calc(50% - 50vw); display: flex; flex-direction: column; align-items: center; }
+.about-img { width: 100%; max-width: 1920px; display: block; }
+.about-img.auto-height { height: auto; }
+.about-video-wrapper { width: 100%; max-width: 995px; aspect-ratio: 16 / 9; background: #000; margin: 80px 0; position: relative; overflow: hidden; display: block; }
+.about-video-thumb { width: 100%; height: 100%; object-fit: cover; }
+.about-video-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); }
+.about-play-btn { width: 80px; height: 80px; background: rgba(255,255,255,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.about-play-btn span { font-size: 40px; color: #000; margin-left: 5px; }
+
+/* ===========================================================
+   10. Guestbook Section
+=========================================================== */
+.guestbook-page { position: relative; width: 100vw; height: calc(100vh - 80px); min-height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding: 0; padding-top: 60px; overflow: hidden; background: var(--color-background); display: none; }
+#guestbook-physics-stage, #guestbook-dom-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
+#guestbook-physics-stage { z-index: 1; pointer-events: auto; }
+#guestbook-physics-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background: transparent; pointer-events: auto; }
+#guestbook-dom-stage { z-index: 2; pointer-events: none; }
+
+.gb-fixed-frame { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #ffffff; overflow: hidden; pointer-events: none; z-index: 1; }
+.gb-frame-content-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.gb-content-item { position: absolute; box-sizing: border-box; pointer-events: none; user-select: none; z-index: 5; transform-origin: center center; will-change: transform, left, top; }
+
+.gb-character-content { display: block; }
+.gb-character-content .gb-content-shape, .gb-character-content .gb-content-face { position: absolute; object-fit: contain; pointer-events: none; }
+.gb-character-content .gb-content-shape { inset: 0; width: 100%; height: 100%; }
+
+.gb-content-name, .gb-content-message { color: #000; font-weight: 800; line-height: 1.2; display: flex; align-items: center; justify-content: center; text-align: center; white-space: nowrap; padding: 10px 18px; font-size: 14px; }
+.gb-content-message { white-space: normal; word-break: keep-all; }
+
+.guestbook-add-floating { position: absolute; left: calc(50% - 600px); top: 100px; width: 282px; height: 352px; z-index: 20; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; }
+.guestbook-add-floating img { width: 150px; height: 150px; object-fit: contain; transition: transform 0.2s ease; }
+.guestbook-add-floating:hover img { transform: scale(1.05); }
+
+/* ===========================================================
+   11. Guestbook Popup UI (직각 디자인)
+=========================================================== */
+.popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.popup-overlay.hidden { display: none; }
+
+.popup-content { background: #ffffff; width: 1247px; height: 898px; max-width: 95vw; max-height: 95vh; padding: 40px 60px; position: relative; border-radius: 0; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; }
+.popup-close-btn { position: absolute; top: 30px; right: 30px; font-size: 28px; color: #555; z-index: 100; }
+.popup-title { font-size: 22px; font-weight: 800; margin-bottom: 30px; color: #111; }
+
+.popup-preview-area { height: 480px; flex: none; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; border-radius: 0; }
+.popup-options { min-height: 180px; }
+
+.preview-character { position: relative; width: 450px; height: 450px; }
+.preview-character > img { position: absolute; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+.gb-faces-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.preview-face-controller { position: absolute; }
+.preview-face-controller.active { outline: 2px dashed #000; }
+.preview-face-controller img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+.move-handle { position: absolute; inset: 0; z-index: 5; }
+
+.face-handle { display: none; position: absolute; width: 26px; height: 26px; background: #000; color: #fff; border-radius: 50%; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.preview-face-controller.active .face-handle { display: flex; }
+.face-handle-delete { top: -13px; left: 50%; transform: translateX(-50%); } 
+.face-handle-resize { bottom: -13px; left: -13px; } 
+.face-handle-rotate { bottom: -13px; right: -13px; } 
+
+.popup-submit-btn { position: absolute; right: 30px; bottom: 30px; width: 100px; height: 100px; background: url('make.png') center/contain no-repeat; transition: transform 0.2s; z-index: 100; }
+.popup-submit-btn:hover { transform: scale(1.05); }
+
+.popup-tabs { display: flex; gap: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; }
+.tab-btn { font-size: 16px; font-weight: 600; color: #aaa; padding: 0; }
+.tab-btn .tab-text { display: inline-block; padding: 4px 10px; border-radius: 0; }
+.tab-btn.active .tab-text { background-color: #ffcc00; color: #000; font-weight: 800; }
+
+.gb-tab-panel { display: none; }
+.gb-tab-panel.active { display: block; }
+
+.color-palette { display: flex; gap: 12px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+.color-swatch { width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s; }
+.color-swatch:hover, .color-swatch.active { transform: scale(1.1); }
+.color-swatch.active { border-color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+
+.shape-picker, .face-picker { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+.shape-choice, .face-choice { width: 80px; height: 80px; flex-shrink: 0; border: 2px solid transparent; background: #fafafa; border-radius: 0; transition: all 0.2s; padding: 10px; }
+.shape-choice:hover, .face-choice:hover { background: #f0f0f0; }
+.shape-choice.active, .face-choice.active { border-color: #111; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.shape-choice img, .face-choice img { width: 100%; height: 100%; object-fit: contain; }
+
+.message-inputs { display: flex; flex-direction: column; gap: 30px; padding-top: 10px; }
+.message-inputs input { border: none; border-bottom: 1px solid #ccc; padding: 10px 5px; font-size: 16px; outline: none; border-radius: 0; }
+.message-inputs input:focus { border-bottom-color: #111; }
+
+/* ===========================================================
+   12. 반응형 모바일 (미디어 쿼리 통합)
+=========================================================== */
+@media screen and (max-width: 1100px) {
+    #section-guestbook.guestbook-page { overflow-y: auto; }
+}
+
 @media screen and (max-width: 768px) {
-
-    :root {
-        --text-md: 18px; 
-    }
-
-    .main-subtitle {
-        word-break: keep-all;
-    }
-    .container { 
-        grid-template-columns: repeat(4, 1fr); 
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-bottom: 60px; 
-        padding-top: 30px; /* ✨ 모바일 상단 여백 축소 (기존 60px -> 30px) */
-    }
+    :root { --text-md: 18px; }
     
-    /* ✨ 메인 페이지(GSDD 2026 타이틀 있는 곳) 상단 여백도 폰에 맞게 축소 */
-    .main-content { 
-        padding-top: 80px; 
-    }
-
-    .nav-wrapper {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    /* 네비게이션 로고 폰트 축소 및 1줄 강제 고정 */
-    .nav-logo {
-        font-size: 24px; 
-        white-space: nowrap; 
-    }
-.nav-logo {
-        font-size: 24px; 
-        white-space: nowrap; 
-    }
-
-   
-    .hamburger-btn { 
-        display: block; 
-        z-index: 1001; 
-    }
+    .container { grid-template-columns: repeat(4, 1fr); padding-left: 20px; padding-right: 20px; padding-bottom: 60px; padding-top: 30px; }
+    .main-content { padding-top: 80px; }
+    .main-subtitle { word-break: keep-all; }
     
+    .nav-wrapper { padding-left: 20px; padding-right: 20px; }
+    .top-title-bar { font-size: 24px; top: 14px; }
     
-    .nav-menu { 
-        display: none; 
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-        width: 100%; 
-        height: 100vh; 
-        background: rgba(255, 255, 255, 0.98); 
-        flex-direction: column; 
-        justify-content: flex-start; 
-        padding-top: 15vh; 
-        overflow-y: auto;
-        justify-content: center; 
-        align-items: center; 
-        gap: 40px; 
-        z-index: 1000;
-    }
+    .hamburger-btn { display: block; position: absolute; right: 20px; bottom: 20px; z-index: 1001; }
+    .nav-menu { display: none; position: fixed; bottom: 80px; left: 0; top: auto; width: 100%; height: auto; background: rgba(246, 246, 246, 0.98); border-top: 2px solid #111; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; gap: 30px; z-index: 1000; }
+    .nav-menu.active { display: flex; }
+    .nav-link { font-size: 24px; }
     
-    .nav-menu.active { 
-        display: flex; 
-    } 
-    
-    .nav-link { 
-        font-size: 24px; 
-    }
-   .archive-dropdown-list { 
-        display: none; 
-    }
-    .main-title { font-size: 60px; }
-    
- .works-filter-group { 
-        margin-bottom: 30px; 
-    }
-    .works-grid-list { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 16px; 
-    }
+    .works-filter-group { margin-bottom: 16px; }
+    .works-grid-list { grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .works-item { grid-column: span 1; margin-bottom: 30px; }
-    .detail-text-area { grid-column: span 4; position: static; margin-bottom: 40px; }
-    .detail-image-area { grid-column: span 4; }
     
+    .detail-container { flex-direction: column; }
+    .detail-text-area { max-width: 100%; position: static; margin-bottom: 40px; }
+    .detail-image-area { width: 100%; }
+    .detail-img-placeholder { width: 100%; }
     
     .archive-visual-area { grid-column: span 4; }
-    .archive-year-display { font-size: 28px; margin-bottom: 15px; } 
-    
-
-    .archive-poster { 
-        max-height: 45vh; 
-        width: auto; 
-        margin: 0 auto; 
-        aspect-ratio: auto; 
-        background-color: transparent; 
-    }
-    .archive-poster img { 
-        width: auto; 
-        height: 100%; 
-        max-height: 45vh; 
-        object-fit: contain; /* 찌그러지지 않고 비율 유지 */
-    }
-
+    .archive-year-display { font-size: 28px; margin-bottom: 15px; }
+    .archive-poster { max-height: 45vh; width: auto; margin: 0 auto; aspect-ratio: auto; background-color: transparent; }
+    .archive-poster img { width: auto; height: 100%; max-height: 45vh; object-fit: contain; }
     .archive-controls { margin-top: 15px; }
-    
-    .archive-text-area { grid-column: span 4; padding-top: 20px; } /* 여백 대폭 축소 */
+    .archive-text-area { grid-column: span 4; padding-top: 20px; }
     .archive-title { font-size: 20px; margin-bottom: 10px; }
     .archive-desc { font-size: 14px; }
+    
+    .guestbook-page { height: calc(100vh - 80px); min-height: calc(100vh - 80px); }
+    .gb-fixed-frame { border-width: 2px; }
+    .gb-content-name, .gb-content-message { font-size: 11px; padding: 8px 12px; }
+    .guestbook-add-floating { left: 20px; top: 30px; width: 150px; height: 150px; }
+    .guestbook-add-floating img { width: 100px; height: 100px; }
 }
