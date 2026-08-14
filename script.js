@@ -676,7 +676,7 @@ function initPhysics() {
     
     engine.positionIterations = 20; 
     engine.velocityIterations = 20; 
-    engine.world.gravity.y = 0.8;
+    engine.world.gravity.y = 1.2; // 중력을 살짝 올려서 떨어지는 속도 증가
     
     const stage = document.getElementById('physics-stage');
     const gbStage = document.getElementById('main-guestbook-stage');
@@ -729,8 +729,9 @@ function initPhysics() {
             const startX = randomXForWidth(hitBoxSize);
             const startY = -800 - (idx * 250); 
 
+            // 밀도, 탄성, 마찰, 공기저항 조절
             const gbBody = Bodies.rectangle(startX, startY, hitBoxSize, hitBoxSize, { 
-                restitution: 0.2, friction: 0.8, density: 0.05, chamfer: { radius: 10 }, render: { visible: false } 
+                restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 10 }, render: { visible: false } 
             });
             Composite.add(world, gbBody);
 
@@ -792,7 +793,7 @@ function initPhysics() {
         { src: 'maingraphic-10.png', width: 1259, height: 330 },
         { src: 'maingraphic-11.png', width: 1125, height: 875 },
         { src: 'maingraphic-12.png', width: 1338, height: 759 },
-        { src: 'maingraphic-13.png', width: 1000, height: 1000 } 
+        { src: 'maingraphic-13.png', width: 1000, height: 400 } 
     ];
 
     mainGraphics.forEach((image) => {
@@ -805,10 +806,13 @@ function initPhysics() {
         const startX = randomXForWidth(hitBoxWidth);
         const startY = (Math.random() * -1500) - 200; 
 
+        // 밀도, 탄성, 마찰, 공기저항 조절
         const graphic = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
-            restitution: 0.1,    
-            friction: 0.9,       
-            density: 0.05,
+            restitution: 0.01,    
+            friction: 1,       
+            frictionStatic: 10,
+            frictionAir: 0.02,
+            density: 2.0,
             chamfer: { radius: 4 }, 
             render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } }
         });
@@ -831,16 +835,17 @@ function initPhysics() {
         const startX = randomXForWidth(hitBoxWidth);
         const startY = -300 - (index * 300); 
 
+        // 밀도, 탄성, 마찰, 공기저항 조절
         const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
-            restitution: 0.1, friction: 0.9, density: 0.05, chamfer: { radius: 4 }, 
+            restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 4 }, 
             render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } }
         });
         Composite.add(world, typoBody);
     });
 
-    // Click 버튼 및 인터랙션 (드래그/클릭 꼬임 방지 적용됨)
+    // Click 버튼 및 인터랙션 
     const clickBody = Bodies.circle(stage.clientWidth / 2, -1200, 86, {
-        label: 'clickBtn', restitution: 0.05, friction: 0.9, frictionStatic: 0.9, frictionAir: 0.02, density: 0.05,
+        label: 'clickBtn', restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0,
         render: { sprite: { texture: 'Click1.png', xScale: 0.3, yScale: 0.3 } }
     });
     Composite.add(world, clickBody);
@@ -858,12 +863,10 @@ function initPhysics() {
 
         if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') {
             foundPhysics[0].render.sprite.texture = 'Click2.png';
-            render.canvas.style.cursor = 'pointer'; 
             isHoveringClick = true;
         }
         if (!isHoveringClick && clickBody.render.sprite.texture !== 'Click1.png') {
             clickBody.render.sprite.texture = 'Click1.png';
-            render.canvas.style.cursor = 'default';
         }
     });
 
@@ -893,6 +896,14 @@ function initPhysics() {
             }
             clickStartX = null;
         }
+    });
+
+    // 드래그 중 기본 커서 변경 방지
+    Events.on(mouseConstraint, 'startdrag', () => {
+        render.canvas.style.cursor = 'none';
+    });
+    Events.on(mouseConstraint, 'enddrag', () => {
+        render.canvas.style.cursor = 'none';
     });
 
     window.addEventListener('resize', () => {
@@ -1108,19 +1119,20 @@ function initGuestbookPhysics() {
         Body.setInertia(characterBody, Infinity);
         Body.setAngularVelocity(characterBody, 0);
 
-        // 2. 이름
+        // 2. 이름 (렌더링된 DOM 크기를 히트박스에 정확히 반영)
         const name = document.createElement('div');
         name.className = 'gb-content-item gb-content-name';
         name.textContent = entry.name || '';
         name.style.backgroundColor = entry.nameBg || '#ffcc00';
         name.style.fontSize = `${Math.max(12, 16 * card.scale)}px`;
-
-        const nameW = Math.min(card.w * 0.75, Math.max(90, 50 + String(entry.name || '').length * 16) * card.scale);
-        const nameH = Math.max(26, 32 * card.scale);
-
-        name.style.width = `${nameW}px`;
-        name.style.height = `${nameH}px`;
+        
+        name.style.width = 'max-content';
+        name.style.maxWidth = `${card.w * 0.8}px`; 
         contentLayer.appendChild(name);
+
+        // 실제 렌더링된 텍스트 박스의 크기를 가져옴
+        let nameW = name.offsetWidth || 80;
+        let nameH = name.offsetHeight || 30;
 
         const nameBody = makeContentBody(
             30 + nameW / 2,
@@ -1131,19 +1143,20 @@ function initGuestbookPhysics() {
         Body.setAngle(nameBody, (Math.random() * 12 - 6) * Math.PI / 180);
         registerContent(nameBody, name);
 
-        // 3. 메시지
+        // 3. 메시지 (렌더링된 DOM 크기를 히트박스에 정확히 반영)
         const message = document.createElement('div');
         message.className = 'gb-content-item gb-content-message';
         message.textContent = entry.message || '';
         message.style.backgroundColor = entry.msgBg || '#00a8e8';
         message.style.fontSize = `${Math.max(12, 16 * card.scale)}px`;
-
-        const messageW = Math.min(card.w - 24 * card.scale, Math.max(130 * card.scale, Math.min(250 * card.scale, 50 + String(entry.message || '').length * 9 * card.scale)));
-        const messageH = Math.max(30, 38 * card.scale);
-
-        message.style.width = `${messageW}px`;
-        message.style.height = `${messageH}px`;
+        
+        message.style.width = 'max-content';
+        message.style.maxWidth = `${card.w - 30 * card.scale}px`;
         contentLayer.appendChild(message);
+
+        // 실제 렌더링된 텍스트 박스의 크기를 가져옴
+        let messageW = message.offsetWidth || 130;
+        let messageH = message.offsetHeight || 40;
 
         const messageBody = makeContentBody(
             card.w - 30 - messageW / 2,
@@ -1186,14 +1199,15 @@ function initGuestbookPhysics() {
         Composite.add(engine.world, mouseConstraint);
         render.mouse = mouse;
 
+        // 드래그 중 커서 변경 방지
         Events.on(mouseConstraint, 'mousemove', () => {
-            render.canvas.style.cursor = mouseConstraint.body ? 'grabbing' : 'grab';
+            render.canvas.style.cursor = 'none';
         });
         Events.on(mouseConstraint, 'startdrag', () => {
-            render.canvas.style.cursor = 'grabbing';
+            render.canvas.style.cursor = 'none';
         });
         Events.on(mouseConstraint, 'enddrag', () => {
-            render.canvas.style.cursor = 'grab';
+            render.canvas.style.cursor = 'none';
         });
 
         Events.on(engine, 'afterUpdate', () => {
