@@ -107,6 +107,58 @@ const archiveDataset = [
 ];
 
 /* -----------------------------------------------------------
+   최초 진입 인트로 영상 (새로고침 시 항상 재생)
+----------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+    const introScreen = document.getElementById('intro-screen');
+    const introVideo = document.getElementById('intro-video');
+
+    if (introVideo) {
+        introVideo.currentTime = 0; 
+        introVideo.play().catch(error => {
+            console.log("Intro video autoplay blocked:", error);
+            if (introScreen) {
+                introScreen.classList.add('hidden');
+                setTimeout(() => introScreen.style.display = 'none', 800);
+            }
+            initMainApp(); 
+        });
+
+        introVideo.onended = () => {
+            if (introScreen) {
+                introScreen.classList.add('hidden');
+                setTimeout(() => introScreen.style.display = 'none', 800);
+            }
+            initMainApp(); 
+        };
+        
+        introVideo.onerror = () => {
+            if (introScreen) {
+                introScreen.classList.add('hidden');
+                setTimeout(() => introScreen.style.display = 'none', 800);
+            }
+            initMainApp(); 
+        };
+    } else {
+        initMainApp();
+    }
+});
+
+let isAppInitialized = false;
+function initMainApp() {
+    if (isAppInitialized) return;
+    isAppInitialized = true;
+
+    renderWorksGrid(worksDataset);
+    initArchiveSlider();
+    initGuestbookControls();
+    initPhysics();
+    
+    // 처음 실행 시 메인으로. 메인 로딩 스킵 (안전)
+    navigateToPage('main', true); 
+}
+
+/* -----------------------------------------------------------
    Works 렌더링 로직
 ----------------------------------------------------------- */
 function renderWorksGrid(data) {
@@ -139,91 +191,276 @@ function filterWorksByCategory(category) {
     renderWorksGrid(filteredData);
 }
 
-/* ===========================================================
-   Works Detail (상세 페이지 렌더링 로직)
-=========================================================== */
 function showWorkDetail(workId) {
     const work = worksDataset.find(w => w.id === workId);
     if (!work) return;
 
     navigateToPage('detail');
     
-    // 텍스트 정보 개별 업데이트
     document.getElementById('detail-project-title').innerText = work.title;
     document.getElementById('detail-author-name').innerText = work.designer;
     
-    // 이메일과 인스타를 개별 데이터셋에서 가져옴 (없으면 빈칸 처리)
     const emailEl = document.getElementById('detail-author-email');
     const instaEl = document.getElementById('detail-author-insta');
     if (emailEl) emailEl.innerText = work.email || '';
     if (instaEl) instaEl.innerText = work.insta || '';
     
-    // 작품 설명 (엔터를 줄바꿈 <br> 태그로 변환해서 출력)
     document.getElementById('detail-description-text').innerHTML = (work.desc || '').replace(/\n/g, '<br>');
     
     const imagesList = document.getElementById('detail-images-list');
     imagesList.innerHTML = ''; 
 
-    // 이미지 1장만 생성 (가로 588px 고정)
     const imgBox = document.createElement('figure');
     imgBox.className = 'detail-img-placeholder';
-    
-    // 현재는 회색 빈 박스 디자인 유지용 코드 (실제 이미지 시 imgBox.innerHTML = `<img src="..." />` 로 교체)
     imgBox.innerHTML = `작품 이미지<br><br>Width: 588px<br>(${work.detailPrefix}.png)`;
-    
     imagesList.appendChild(imgBox);
 }
 
 /* -----------------------------------------------------------
-   Archive 렌더링 로직
+   Archive 3D Slider 렌더링 로직 (통합)
 ----------------------------------------------------------- */
-let archiveIndex = 0;
+let archiveCurrentIndex = 0;
+window.updateArchiveSlider = null; 
 
-function initArchivePagination() {
-    const dotsContainer = document.getElementById('archive-dots-container');
-    
-    archiveDataset.forEach((data, index) => {
+function initArchiveSlider() {
+    const track = document.getElementById('archive-track');
+    const dotsContainer = document.getElementById('archive-dots');
+    const prevBtn = document.getElementById('archive-prev-btn');
+    const nextBtn = document.getElementById('archive-next-btn');
+
+    if (!track || !dotsContainer) return;
+
+    archiveCurrentIndex = archiveDataset.findIndex(item => item.year === 2025);
+    if (archiveCurrentIndex === -1) archiveCurrentIndex = archiveDataset.length - 1;
+
+    let startX = 0;
+
+    archiveDataset.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'archive-card';
+        card.dataset.index = index;
+        card.innerHTML = `
+            <div class="archive-card-poster">
+                <img src="${item.year}gsdd.${item.format}" alt="${item.year} 졸업전시 포스터" />
+            </div>
+            <div class="archive-card-base-info">
+                <span class="archive-card-year">${item.year}</span>
+                <span class="archive-card-theme-title">${item.title}</span>
+            </div>
+            <div class="archive-card-hover-desc">
+                <div class="hover-desc-inner">
+                    <span class="hover-year-tag">${item.year}</span>
+                    <h4 class="hover-theme-title">${item.title}</h4>
+                    <p class="hover-desc-text">${item.desc}</p>
+                </div>
+            </div>
+        `;
+        track.appendChild(card);
+
         const dot = document.createElement('div');
-        dot.className = index === 0 ? 'archive-dot active' : 'archive-dot';
-        dot.onclick = () => { archiveIndex = index; updateArchiveView(); };
+        dot.className = `archive-dot ${index === archiveCurrentIndex ? 'active' : ''}`;
+        dot.dataset.index = index;
         dotsContainer.appendChild(dot);
     });
-}
 
-function moveArchiveSlide(direction) {
-    archiveIndex += direction; 
-    if (archiveIndex < 0) archiveIndex = archiveDataset.length - 1;
-    if (archiveIndex >= archiveDataset.length) archiveIndex = 0;
-    updateArchiveView();
-}
-
-function updateArchiveView() {
-    const data = archiveDataset[archiveIndex];
-    
-    document.getElementById('archive-display-year').innerText = data.year;
-    document.getElementById('archive-title-text').innerText = data.title;
-    document.getElementById('archive-description-text').innerText = data.desc;
-    
-    const posterContainer = document.getElementById('archive-poster-container');
-    
-    posterContainer.innerHTML = `<img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster">`;
-
+    const cards = document.querySelectorAll('.archive-card');
     const dots = document.querySelectorAll('.archive-dot');
-    dots.forEach((dot, idx) => {
-        if (idx === archiveIndex) dot.classList.add('active');
-        else dot.classList.remove('active');
-    });
-}
 
-function openArchiveExternalLink() {
-    const url = archiveDataset[archiveIndex].link;
-    window.open(url, '_blank');
+    let mouseX = 0, mouseY = 0;
+    function updateHoverState() {
+        cards.forEach(c => c.classList.remove('hover-active'));
+        const element = document.elementFromPoint(mouseX, mouseY);
+        if (element) {
+            const card = element.closest('.archive-card');
+            if (card) card.classList.add('hover-active');
+        }
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        updateHoverState();
+    });
+
+    const container = document.getElementById('section-archive');
+    if (container) {
+        container.addEventListener('mouseleave', () => {
+            cards.forEach(c => c.classList.remove('hover-active'));
+        });
+    }
+
+    window.updateArchiveSlider = function updateSlider() {
+        cards.forEach((card, index) => {
+            const offset = index - archiveCurrentIndex;
+            const absOffset = Math.abs(offset);
+
+            if (offset === 0) {
+                card.style.transform = `translate(-50%, -50%) translate3d(0, 0, 0) scale(1) rotateY(0deg)`;
+                card.style.opacity = '1';
+                card.style.zIndex = '30';
+                card.classList.add('focused');
+            } else {
+                const direction = offset > 0 ? 1 : -1;
+                const isMobile = window.innerWidth <= 768;
+                const spacing = isMobile ? 180 : 380;
+                const shiftX = offset * spacing;
+                
+                const rotateY = direction * -12;
+                const scaleVal = Math.max(0.72, 1 - (absOffset * 0.08));
+                const opacityVal = Math.max(0.25, 1 - (absOffset * 0.28));
+
+                card.style.transform = `translate(-50%, -50%) translate3d(${shiftX}px, 0, ${-absOffset * 90}px) rotateY(${rotateY}deg) scale(${scaleVal})`;
+                card.style.opacity = opacityVal.toString();
+                card.style.zIndex = (20 - absOffset).toString();
+                card.classList.remove('focused');
+            }
+        });
+
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === archiveCurrentIndex);
+        });
+
+        updateHoverState();
+    };
+
+    function goToCard(index) {
+        if (index < 0 || index >= archiveDataset.length) return;
+        archiveCurrentIndex = index;
+        window.updateArchiveSlider();
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (archiveCurrentIndex > 0) goToCard(archiveCurrentIndex - 1);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (archiveCurrentIndex < archiveDataset.length - 1) goToCard(archiveCurrentIndex + 1);
+        });
+    }
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            goToCard(parseInt(dot.dataset.index));
+        });
+    });
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const idx = parseInt(card.dataset.index);
+            if (idx === archiveCurrentIndex) {
+                window.open(archiveDataset[idx].link, '_blank');
+            } else {
+                goToCard(idx);
+            }
+        });
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (document.getElementById('section-archive').classList.contains('active')) {
+            if (e.key === 'ArrowLeft') goToCard(archiveCurrentIndex - 1);
+            else if (e.key === 'ArrowRight') goToCard(archiveCurrentIndex + 1);
+        }
+    });
+
+    window.addEventListener('wheel', (e) => {
+        if (window.innerWidth > 768 && document.getElementById('section-archive').classList.contains('active')) {
+            e.preventDefault(); 
+            if (e.deltaY > 0) goToCard(archiveCurrentIndex + 1);
+            else if (e.deltaY < 0) goToCard(archiveCurrentIndex - 1);
+        }
+    }, { passive: false });
+
+    track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        if (Math.abs(diffX) > 50) {
+            if (diffX > 0) goToCard(archiveCurrentIndex + 1);
+            else goToCard(archiveCurrentIndex - 1);
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', window.updateArchiveSlider);
+    window.updateArchiveSlider();
 }
 
 /* -----------------------------------------------------------
-   페이지 네비게이션 로직
+   페이지 네비게이션 로직 (전환 로딩 영상 제어 완벽 수정)
 ----------------------------------------------------------- */
-function navigateToPage(pageName) {
+let isNavigating = false;
+let navigationFallbackTimeout = null;
+
+function navigateToPage(pageName, skipLoading = false) {
+    const targetId = `section-${pageName}`;
+    const targetSection = document.getElementById(targetId);
+    
+    if (targetSection && targetSection.classList.contains('active') && !skipLoading) return;
+    if (isNavigating) return;
+
+    // 1. 메뉴바에 있는 핵심 5개 메뉴만 로딩 영상 노출 허용
+    const menuPages = ['about', 'works', 'designers', 'archive', 'guestbook'];
+    if (!menuPages.includes(pageName)) {
+        skipLoading = true;
+    }
+
+    // 2. 메인(Home)으로 갈 때는 로딩 스킵 (UX 최적화 및 물리엔진 렌더링 버그 방지)
+    if (pageName === 'main') {
+        skipLoading = true;
+    }
+
+    // 3. 상세 페이지(detail)에서 X 버튼을 눌러 목록(works)으로 돌아갈 때 로딩 스킵
+    const detailSection = document.getElementById('section-detail');
+    if (detailSection && detailSection.classList.contains('active') && pageName === 'works') {
+        skipLoading = true;
+    }
+
+    // 스킵 조건에 해당하면 애니메이션 없이 즉시 전환
+    if (skipLoading) {
+        completeNavigation(pageName);
+        return;
+    }
+
+    isNavigating = true;
+    
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingVideo = document.getElementById('loading-video');
+    
+    const randomNum = Math.floor(Math.random() * 4) + 1;
+    loadingVideo.src = `loding_${randomNum}.mp4`; 
+    loadingVideo.load(); // 영상 강제 새로고침(버퍼링 방지)
+    
+    loadingScreen.classList.remove('hidden');
+    
+    const playPromise = loadingVideo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("Loading video play failed or interrupted:", error);
+            completeNavigation(pageName); 
+        });
+    }
+
+    loadingVideo.onended = () => {
+        completeNavigation(pageName);
+    };
+    
+    loadingVideo.onerror = () => {
+        completeNavigation(pageName);
+    };
+
+    if(navigationFallbackTimeout) clearTimeout(navigationFallbackTimeout);
+    navigationFallbackTimeout = setTimeout(() => {
+        if(isNavigating) completeNavigation(pageName);
+    }, 4500);
+}
+
+function completeNavigation(pageName) {
+    if(navigationFallbackTimeout) clearTimeout(navigationFallbackTimeout);
+
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) loadingScreen.classList.add('hidden');
+
     const sections = document.querySelectorAll('.page-section');
     sections.forEach(sec => sec.classList.remove('active'));
     
@@ -243,19 +480,17 @@ function navigateToPage(pageName) {
     }
 
     if (pageName === 'detail' || pageName === 'works') {
-        document.getElementById('link-works').classList.add('active');
+        const worksLink = document.getElementById('link-works');
+        if (worksLink) worksLink.classList.add('active');
     }
 
     document.body.classList.toggle('is-main-page', pageName === 'main');
 
-    // 보이지 않는 페이지의 물리요소가 마우스를 방해하지 않도록 처리
     const mainStage = document.getElementById('physics-stage');
     const gbStage = document.getElementById('guestbook-physics-stage');
     if (mainStage) mainStage.style.pointerEvents = (pageName === 'main') ? 'auto' : 'none';
     if (gbStage) gbStage.style.pointerEvents = (pageName === 'guestbook') ? 'auto' : 'none';
 
-    // Guestbook은 처음 로드될 때 display:none이라 크기가 0이므로,
-    // 실제 페이지가 화면에 표시된 다음 물리엔진을 시작한다.
     if (pageName === 'guestbook' && !window.__guestbookPhysicsInitialized) {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => initGuestbookPhysics());
@@ -263,24 +498,22 @@ function navigateToPage(pageName) {
     }
     
     if (pageName === 'archive') {
-        archiveIndex = 0;
-        updateArchiveView();
+        archiveCurrentIndex = archiveDataset.length - 1; 
+        if (window.updateArchiveSlider) window.updateArchiveSlider();
     }
     
     const navMenu = document.getElementById('nav-menu');
     const hamburgerBtn = document.querySelector('.hamburger-btn');
-    if (navMenu.classList.contains('active')) {
+    if (navMenu && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
-        hamburgerBtn.innerText = '☰';
+        if (hamburgerBtn) hamburgerBtn.innerText = '☰';
         document.body.style.overflow = 'auto';
     }
 
     window.scrollTo(0, 0);
+    isNavigating = false;
 }
 
-/* -----------------------------------------------------------
-   모바일 햄버거 메뉴 제어 로직 (드롭다운 삭제 반영)
------------------------------------------------------------ */
 function toggleMobileMenu() {
     const navMenu = document.getElementById('nav-menu');
     const hamburgerBtn = document.querySelector('.hamburger-btn');
@@ -296,9 +529,6 @@ function toggleMobileMenu() {
     }
 }
 
-/* -----------------------------------------------------------
-   About 영상 플레이 상태
------------------------------------------------------------ */
 function toggleAboutFilm(button) {
     const playing = button.dataset.playing === 'true';
     button.dataset.playing = String(!playing);
@@ -307,21 +537,11 @@ function toggleAboutFilm(button) {
 }
 
 /* ===========================================================
-   방명록 필수 데이터 및 다중 표정 상태
+   방명록 데이터 및 팝업
 =========================================================== */
 const guestbookStorageKey = 'gsdd-guestbook-entries';
-
-const gbColors = [
-    '#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', 
-    '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', 
-    '#73BEA2', '#9A87BE', '#0068AD'
-];
-
-const textBgColors = [
-    '#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', 
-    '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', 
-    '#73BEA2', '#9A87BE', '#0068AD'
-];
+const gbColors = ['#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', '#73BEA2', '#9A87BE', '#0068AD'];
+const textBgColors = ['#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', '#73BEA2', '#9A87BE', '#0068AD'];
 
 let gbDraft = { shapeColorIdx: 1, shapeIdx: null };
 let gbFaces = []; 
@@ -335,9 +555,6 @@ function getGuestbookEntries() {
     catch { return []; }
 }
 
-/* ===========================================================
-   방명록 팝업 컨트롤 및 탭
-=========================================================== */
 function openGuestbookPopup() {
     const popup = document.getElementById('guestbook-popup');
     if (popup) {
@@ -369,9 +586,6 @@ function setGuestbookTab(tabName) {
     document.querySelectorAll('.gb-tab-panel').forEach(panel => panel.classList.toggle('active', panel.id === `gb-panel-${tabName}`));
 }
 
-/* ===========================================================
-   초기화 및 색상 갱신
-=========================================================== */
 function initGuestbookControls() {
     const renderPalette = (containerId, type) => {
         const container = document.getElementById(containerId);
@@ -481,7 +695,7 @@ function renderFacesDOM() {
         wrapper.className = `preview-face-controller ${face.id === activeFaceId ? 'active' : ''}`;
         wrapper.style.pointerEvents = 'auto';
         
-        const baseSize = 190; // 크기 축소 비율 반영 (250 -> 190)
+        const baseSize = 190; 
         const currentSize = baseSize * face.scale;
         wrapper.style.width = `${currentSize}px`;
         wrapper.style.height = `${currentSize}px`;
@@ -520,9 +734,6 @@ function renderFacesDOM() {
     });
 }
 
-/* ===========================================================
-   마우스 드래그 이벤트 (이동, 크기, 회전)
-=========================================================== */
 function startDragFace(e, id) {
     e.preventDefault(); e.stopPropagation();
     makeFaceActive(id);
@@ -569,7 +780,7 @@ function startScaleFace(e, id) {
         const currentDist = Math.hypot(event.clientX - cx, event.clientY - cy);
         face.scale = Math.max(0.2, Math.min(3.0, startScale * (currentDist / startDist)));
         
-        const baseSize = 190; // 크기 축소 비율 반영 (250 -> 190)
+        const baseSize = 190; 
         const currentSize = baseSize * face.scale;
         wrapper.style.width = `${currentSize}px`;
         wrapper.style.height = `${currentSize}px`;
@@ -614,9 +825,6 @@ function startRotateFace(e, id) {
     document.addEventListener('mouseup', onMouseUp);
 }
 
-/* ===========================================================
-   최종 저장
-=========================================================== */
 function saveGuestbookEntry() {
     const name = document.getElementById('gb-name').value.trim();
     const msg = document.getElementById('gb-message').value.trim();
@@ -640,11 +848,7 @@ function saveGuestbookEntry() {
     location.reload(); 
 }
 
-/* ===========================================================
-   커스텀 마우스 커서 움직임 및 클릭 시 mouse1~13.png 랜덤 변경
-=========================================================== */
 const customCursor = document.getElementById('custom-cursor');
-
 if (customCursor) {
     document.addEventListener('mousemove', (e) => {
         customCursor.style.display = 'block';
@@ -676,7 +880,7 @@ function initPhysics() {
     
     engine.positionIterations = 20; 
     engine.velocityIterations = 20; 
-    engine.world.gravity.y = 1.2; // 중력을 살짝 올려서 떨어지는 속도 증가
+    engine.world.gravity.y = 1.2; 
     
     const stage = document.getElementById('physics-stage');
     const gbStage = document.getElementById('main-guestbook-stage');
@@ -717,7 +921,6 @@ function initPhysics() {
     
     Composite.add(world, [floor, leftWall, rightWall]);
 
-    // 방명록 아이템 생성 (메인 화면)
     const recentGbEntries = getGuestbookEntries().slice(0, 10); 
     const domPhysicsItems = []; 
 
@@ -729,7 +932,6 @@ function initPhysics() {
             const startX = randomXForWidth(hitBoxSize);
             const startY = -800 - (idx * 250); 
 
-            // 밀도, 탄성, 마찰, 공기저항 조절
             const gbBody = Bodies.rectangle(startX, startY, hitBoxSize, hitBoxSize, { 
                 restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 10 }, render: { visible: false } 
             });
@@ -756,7 +958,7 @@ function initPhysics() {
                 faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`;
                 faceImg.style.position = 'absolute'; 
                 
-                const faceWidth = 190 * f.scale * stageScale; // 크기 축소 비율 반영 (250 -> 190)
+                const faceWidth = 190 * f.scale * stageScale; 
                 faceImg.style.width = `${faceWidth}px`; 
                 faceImg.style.height = `${faceWidth}px`;
                 faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`;
@@ -779,7 +981,6 @@ function initPhysics() {
         });
     }
 
-    // 메인 그래픽 & 타이포 18종 생성
     const mainGraphics = [
         { src: 'maingraphic-01.png', width: 1063, height: 1063 },
         { src: 'maingraphic-02.png', width: 1075, height: 963 },
@@ -806,7 +1007,6 @@ function initPhysics() {
         const startX = randomXForWidth(hitBoxWidth);
         const startY = (Math.random() * -1500) - 200; 
 
-        // 밀도, 탄성, 마찰, 공기저항 조절
         const graphic = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
             restitution: 0.01,    
             friction: 1,       
@@ -835,7 +1035,6 @@ function initPhysics() {
         const startX = randomXForWidth(hitBoxWidth);
         const startY = -300 - (index * 300); 
 
-        // 밀도, 탄성, 마찰, 공기저항 조절
         const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
             restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 4 }, 
             render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } }
@@ -843,7 +1042,6 @@ function initPhysics() {
         Composite.add(world, typoBody);
     });
 
-    // Click 버튼 및 인터랙션 
     const clickBody = Bodies.circle(stage.clientWidth / 2, -1200, 86, {
         label: 'clickBtn', restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0,
         render: { sprite: { texture: 'Click1.png', xScale: 0.3, yScale: 0.3 } }
@@ -889,7 +1087,6 @@ function initPhysics() {
             const dy = event.mouse.position.y - clickStartY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // 이동 거리가 적을 때만 클릭으로 판정
             if (distance < 5) {
                 openGuestbookPopup(); 
                 mouseConstraint.body = null;
@@ -898,7 +1095,6 @@ function initPhysics() {
         }
     });
 
-    // 드래그 중 기본 커서 변경 방지
     Events.on(mouseConstraint, 'startdrag', () => {
         render.canvas.style.cursor = 'none';
     });
@@ -907,6 +1103,8 @@ function initPhysics() {
     });
 
     window.addEventListener('resize', () => {
+        if (stage.clientWidth === 0 || stage.clientHeight === 0) return; 
+
         render.canvas.width = stage.clientWidth;
         render.canvas.height = stage.clientHeight;
         Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: stage.clientHeight + 250 });
@@ -966,6 +1164,28 @@ function initGuestbookPhysics() {
 
     let layout = getLayout();
     const cardStates = [];
+
+    const updateContainerHeight = () => {
+        const currentLayout = getLayout();
+        const totalItems = entries.length + 1;
+        const totalRows = Math.ceil(totalItems / currentLayout.columns);
+        const requiredHeight = getTopMargin() + totalRows * (currentLayout.height + GAP) + 150;
+        
+        const section = document.getElementById('section-guestbook');
+        if (section) {
+            section.style.height = `${Math.max(window.innerHeight - 80, requiredHeight)}px`;
+        }
+
+        const addBtn = document.querySelector('.guestbook-add-floating');
+        if (addBtn) {
+            addBtn.style.left = `${currentLayout.left}px`;
+            addBtn.style.top = `${getTopMargin()}px`;
+            addBtn.style.width = `${currentLayout.width}px`;
+            addBtn.style.height = `${currentLayout.height}px`;
+        }
+    };
+
+    updateContainerHeight();
 
     const createCard = (entry, idx) => {
         const slot = idx + 1; 
@@ -1094,7 +1314,7 @@ function initGuestbookPhysics() {
             img.alt = '';
 
             const faceScale = (characterSize / 850);
-            const faceSize = 190 * (Number(face.scale) || 1) * faceScale; // 크기 축소 비율 반영 (250 -> 190)
+            const faceSize = 190 * (Number(face.scale) || 1) * faceScale; 
 
             img.style.width = `${faceSize}px`;
             img.style.height = `${faceSize}px`;
@@ -1119,7 +1339,7 @@ function initGuestbookPhysics() {
         Body.setInertia(characterBody, Infinity);
         Body.setAngularVelocity(characterBody, 0);
 
-        // 2. 이름 (렌더링된 DOM 크기를 히트박스에 정확히 반영)
+        // 2. 이름
         const name = document.createElement('div');
         name.className = 'gb-content-item gb-content-name';
         name.textContent = entry.name || '';
@@ -1130,20 +1350,16 @@ function initGuestbookPhysics() {
         name.style.maxWidth = `${card.w * 0.8}px`; 
         contentLayer.appendChild(name);
 
-        // 실제 렌더링된 텍스트 박스의 크기를 가져옴
-        let nameW = name.offsetWidth || 80;
-        let nameH = name.offsetHeight || 30;
+        requestAnimationFrame(() => {
+            let nameW = name.offsetWidth || 80;
+            let nameH = name.offsetHeight || 30;
 
-        const nameBody = makeContentBody(
-            30 + nameW / 2,
-            -20, 
-            nameW,
-            nameH
-        );
-        Body.setAngle(nameBody, (Math.random() * 12 - 6) * Math.PI / 180);
-        registerContent(nameBody, name);
+            const nameBody = makeContentBody(30 + nameW / 2, -20, nameW, nameH);
+            Body.setAngle(nameBody, (Math.random() * 12 - 6) * Math.PI / 180);
+            registerContent(nameBody, name);
+        });
 
-        // 3. 메시지 (렌더링된 DOM 크기를 히트박스에 정확히 반영)
+        // 3. 메시지
         const message = document.createElement('div');
         message.className = 'gb-content-item gb-content-message';
         message.textContent = entry.message || '';
@@ -1154,18 +1370,14 @@ function initGuestbookPhysics() {
         message.style.maxWidth = `${card.w - 30 * card.scale}px`;
         contentLayer.appendChild(message);
 
-        // 실제 렌더링된 텍스트 박스의 크기를 가져옴
-        let messageW = message.offsetWidth || 130;
-        let messageH = message.offsetHeight || 40;
+        requestAnimationFrame(() => {
+            let messageW = message.offsetWidth || 130;
+            let messageH = message.offsetHeight || 40;
 
-        const messageBody = makeContentBody(
-            card.w - 30 - messageW / 2,
-            -80, 
-            messageW,
-            messageH
-        );
-        Body.setAngle(messageBody, (Math.random() * 12 - 6) * Math.PI / 180);
-        registerContent(messageBody, message);
+            const messageBody = makeContentBody(card.w - 30 - messageW / 2, -80, messageW, messageH);
+            Body.setAngle(messageBody, (Math.random() * 12 - 6) * Math.PI / 180);
+            registerContent(messageBody, message);
+        });
 
         Events.on(engine, 'afterUpdate', () => {
             contentBodies.forEach(body => {
@@ -1199,7 +1411,6 @@ function initGuestbookPhysics() {
         Composite.add(engine.world, mouseConstraint);
         render.mouse = mouse;
 
-        // 드래그 중 커서 변경 방지
         Events.on(mouseConstraint, 'mousemove', () => {
             render.canvas.style.cursor = 'none';
         });
@@ -1264,6 +1475,7 @@ function initGuestbookPhysics() {
     window.addEventListener('resize', () => {
         layout = getLayout();
         const currentTop = getTopMargin(); 
+        updateContainerHeight(); 
 
         cardStates.forEach((card, idx) => {
             const slot = idx + 1;
@@ -1301,14 +1513,3 @@ function initGuestbookPhysics() {
         });
     });
 }
-
-/* ===========================================================
-   최종 실행부 (Init)
-=========================================================== */
-renderWorksGrid(worksDataset);
-initArchivePagination();
-updateArchiveView();
-initGuestbookControls();
-
-initPhysics();
-navigateToPage('main'); // 초기 렌더링 시점에 메인페이지 메뉴 색상 설정을 위한 실행코드 추가
