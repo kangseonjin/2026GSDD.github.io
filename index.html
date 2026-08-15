@@ -7,11 +7,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<!-- 처음 들어왔을 때 메인 페이지임을 알 수 있도록 is-main-page 클래스 추가 -->
 <body class="is-main-page">
     <!-- 마우스 커서를 따라다니는 커스텀 이미지 커서 -->
     <img id="custom-cursor" src="mouse/mouse1.png" alt="커서" class="custom-cursor">
     
+    <!-- 최초 접속 인트로 영상 영역 -->
+    <div id="intro-screen">
+        <video id="intro-video" muted playsinline>
+            <source src="op.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 서브페이지 전환 랜덤 로딩 영상 영역 -->
+    <div id="loading-screen" class="hidden">
+        <video id="loading-video" muted playsinline></video>
+    </div>
+
     <header class="top-title-bar" onclick="navigateToPage('main')">
         <img src="title.png" alt="Finding Balance In ___" class="top-title-img">
     </header>
@@ -73,25 +84,18 @@
             </article>
         </section>
 
-        <!-- Archive Section -->
-        <section id="section-archive" class="container page-section">
-            <figure class="archive-visual-area">
-                <p class="archive-year-display" id="archive-display-year">2025</p>
-                <div class="archive-poster" id="archive-poster-container" onclick="openArchiveExternalLink()"></div>
-                <nav class="archive-controls">
-                    <button class="archive-img-btn" onclick="moveArchiveSlide(-1)">
-                        <img src="archive1.png" alt="이전 포스터" class="archive-nav-icon">
-                    </button>
-                    <div class="archive-dots" id="archive-dots-container"></div>
-                    <button class="archive-img-btn" onclick="moveArchiveSlide(1)">
-                        <img src="archive2.png" alt="다음 포스터" class="archive-nav-icon">
-                    </button>
-                </nav>
-            </figure>
-            <article class="archive-text-area">
-                <h2 class="archive-title" id="archive-title-text">Graduation Exhibition Title</h2>
-                <p class="archive-desc" id="archive-description-text">해당 년도의 전시 설명 내용...</p>
-            </article>
+        <!-- Archive Section (3D 슬라이더 통합) -->
+        <section id="section-archive" class="archive-page-container page-section">
+            <div class="archive-slider-wrapper" id="archive-track"></div>
+            <div class="archive-controls-bar">
+                <button class="archive-arrow-btn prev-btn" id="archive-prev-btn" aria-label="이전 연도">
+                    <img src="archive1.png" alt="이전 포스터" class="archive-nav-icon">
+                </button>
+                <div class="archive-dots-container" id="archive-dots"></div>
+                <button class="archive-arrow-btn next-btn" id="archive-next-btn" aria-label="다음 연도">
+                    <img src="archive2.png" alt="다음 포스터" class="archive-nav-icon">
+                </button>
+            </div>
         </section>
 
         <!-- About Section -->
