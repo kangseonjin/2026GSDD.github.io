@@ -154,7 +154,6 @@ function initMainApp() {
     initGuestbookControls();
     initPhysics();
     
-    // 처음 실행 시 메인으로. 메인 로딩 스킵 (안전)
     navigateToPage('main', true); 
 }
 
@@ -498,7 +497,7 @@ function completeNavigation(pageName) {
     }
     
     if (pageName === 'archive') {
-        archiveCurrentIndex = archiveDataset.length - 1; 
+        archiveCurrentIndex = 0; // 아카이브 진입 시 2025년도(최신)로 갱신
         if (window.updateArchiveSlider) window.updateArchiveSlider();
     }
     
