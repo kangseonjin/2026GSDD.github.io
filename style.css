@@ -332,7 +332,7 @@ body.is-main-page .nav-link { color: #000; }
 }
 
 .designer-item .name { font-size: 18px; font-weight: bold; }
-.designer-item .title { font-size: 16px; color: #000; text-align: left; }
+.designer-item .title { font-size: 16px; color: #000; text-align: left;font-weight: 400; }
 
 .designer-preview-container {
     grid-column: 9 / 13;
