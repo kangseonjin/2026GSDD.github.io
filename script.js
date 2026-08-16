@@ -955,7 +955,11 @@ function initPhysics() {
     const domPhysicsItems = []; 
 
     if(gbStage) {
+        gbStage.innerHTML = ''; // ★ 추가: 기존에 남아있는 방명록 DOM 요소를 완전히 비워 중복 생성 방지
+        
         recentGbEntries.forEach((entry, idx) => {
+            if (idx >= 10) return; // ★ 추가: 혹시라도 배열에 10개가 넘게 들어오더라도 10개 초과 시 강제 차단
+
             const visualSize = 200; 
             const hitBoxSize = 130; 
             
@@ -1428,9 +1432,12 @@ function initGuestbookPhysics() {
 
         const mouse = Mouse.create(render.canvas);
         mouse.pixelRatio = window.devicePixelRatio || 1;
-mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
+
+        // ★ 추가: 마우스 휠 이벤트 가로채기 방지 (스크롤 가능하게)
+        mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
         mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
         mouse.element.removeEventListener("wheel", mouse.mousewheel);
+
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse,
             constraint: {
