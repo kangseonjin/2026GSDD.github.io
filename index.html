@@ -5,22 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 GSDD</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+   <link rel="stylesheet" href="https://use.typekit.net/xjx2wtn.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="is-main-page">
     <!-- 마우스 커서를 따라다니는 커스텀 이미지 커서 -->
     <img id="custom-cursor" src="mouse/mouse1.png" alt="커서" class="custom-cursor">
     
-    <!-- 최초 접속 인트로 영상 영역 -->
+    <!-- 최초 접속 시 나오는 오프닝 영상 영역 (새로고침 시 항상 재생) -->
     <div id="intro-screen">
         <video id="intro-video" muted playsinline>
             <source src="op.mp4" type="video/mp4">
         </video>
     </div>
 
-    <!-- 서브페이지 전환 랜덤 로딩 영상 영역 -->
+    <!-- 서브페이지 전환 시 나오는 커스텀 로딩 화면 (캐릭터 1.9초 -> 로고 1.3초) -->
     <div id="loading-screen" class="hidden">
-        <video id="loading-video" muted playsinline></video>
+        <div class="character-loader-wrapper" id="loading-chars">
+            <div class="loader-item item-1">
+                <!-- JS에서 랜덤 이미지가 들어갈 자리 -->
+                <img src="" alt="캐릭터1" class="loader-char" id="loader-img-1">
+            </div>
+            <div class="loader-item item-2">
+                <img src="" alt="캐릭터2" class="loader-char" id="loader-img-2">
+            </div>
+            <div class="loader-item item-3">
+                <img src="" alt="캐릭터3" class="loader-char" id="loader-img-3">
+            </div>
+        </div>
+        <!-- 1.9초 뒤 화면 전체에 나타나는 로딩 완료 이미지 -->
+        <img src="loding.png" alt="로딩 이미지" id="loading-final-img">
     </div>
 
     <header class="top-title-bar" onclick="navigateToPage('main')">
@@ -62,7 +76,7 @@
         <!-- Works Detail Section -->
         <section id="section-detail" class="container page-section">
             <article class="detail-container">
-                <!-- 왼쪽: 작품 이미지 영역 (가로 588px 고정) -->
+                <!-- 왼쪽: 작품 이미지 영역 -->
                 <figure class="detail-image-area" id="detail-images-list"></figure>
                 
                 <!-- 오른쪽: 작품 설명 텍스트 영역 및 X 버튼 -->
@@ -78,7 +92,6 @@
                         <p class="detail-contact" id="detail-author-insta">@h_h121</p>
                     </address>
                     
-                    <!-- 작품 설명 -->
                     <p class="detail-desc" id="detail-description-text">작품 설명글 영역입니다.</p>
                 </aside>
             </article>

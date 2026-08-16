@@ -24,7 +24,7 @@ const worksDataset = [
     { id: 'V_K_2', category: 'Visual', designer: 'K', title: '작품명 입력 K-2', desc: 'K 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_K_p2.png', detailPrefix: 'pe_K_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_L_1', category: 'Visual', designer: 'L', title: '작품명 입력 L-1', desc: 'L 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_L_p1.png', detailPrefix: 'pe_L_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_L_2', category: 'Visual', designer: 'L', title: '작품명 입력 L-2', desc: 'L 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_L_p2.png', detailPrefix: 'pe_L_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_M_1', category: 'Visual', designer: 'M', title: '작품명 입력 M-1', desc: 'M 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_M_p1.png', detailPrefix: 'pe_M_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_M_1', category: 'Visual', designer: 'M', title: '작품명 입력 M-1', desc: 'M 시 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_M_p1.png', detailPrefix: 'pe_M_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_M_2', category: 'Visual', designer: 'M', title: '작품명 입력 M-2', desc: 'M 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_M_p2.png', detailPrefix: 'pe_M_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_N_1', category: 'Visual', designer: 'N', title: '작품명 입력 N-1', desc: 'N 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_N_p1.png', detailPrefix: 'pe_N_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_N_2', category: 'Visual', designer: 'N', title: '작품명 입력 N-2', desc: 'N 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_N_p2.png', detailPrefix: 'pe_N_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
@@ -98,7 +98,7 @@ const worksDataset = [
 
 const archiveDataset = [
     { year: 2025, format: 'png', link: 'http://gsdd.org/2025/index.html', title: 'CUT! LAYER! PASTE!', desc: '2025년도 전시 설명 내용...' },
-    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수 multi 도전을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.' },
+    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수많은 도전을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.' },
     { year: 2023, format: 'png', link: 'http://gsdd.org/2023/index.html', title: 'PROJECT: FUTUREFORMING', desc: '퓨처포밍 프로젝트는 학생들이 각자 광활한 우주로 나아가 별을 찾고, 미래에 정착할 수 있도록 포밍(forming) 시키는 프로젝트다. 졸업 전시를 통해 각자의 미래를 준비하고 모습을 만들어 가는 것을 원석을 깎아 별 조각으로 만드는 것으로 비유하였으며, 별 조각이 대 학생들의 작업물이 하나로 합쳐져 완전한 별 형태를 이룬다. 이는 우리의 미래 가능성을 보여주는 코어로 재현된다. 프로젝트의 성공은 전시장에 포밍 완료된 별 조각 샘플을 채취하여 전시하는 것으로 증명한다.' },
     { year: 2022, format: 'jpeg', link: 'http://gsdd.org/2022/', title: 'NEXT LEVEL', desc: '대학교 4학년의 마지막을 장식하는 졸업전시회는 곧 우리가 사회에 한 걸음 내딛게 된다는 사실을 알려줍니다. 우리는 졸업이라는 과정을 거쳐 학생에서 사회인으로 발전하게 되고, 이렇게 사회 생활이라는 새로운 단계로 넘어가게 됩니다. 학생들은 개개인만의 개성과 능력으로 작품을 만들고, 주어진 다음 단계를 스스로 풀어나간다는 의미를 담았습니다.' },
     { year: 2021, format: 'png', link: 'http://gsdd.org/2021/', title: '2021', desc: '우리는 일상 속에서 디자인을 공부할 때 혹은 공책을 펴볼 때도 쉽게 행과 열을 찾아볼 수 있다. 각기 다른 행과 열이 뻗어 나가면 그 방향성이 모여 하나의 구조를 만들어내고 그 구조 안에는 다양한 가능성이 존재한다. 이는 우리와 닮아있다. 각자의 방식, 각자의 과정과 방법론이 모여 졸업전시회라는 구조를 만들어낸다.' },
@@ -107,40 +107,43 @@ const archiveDataset = [
 ];
 
 /* -----------------------------------------------------------
-   최초 진입 인트로 영상 (새로고침 시 항상 재생)
+   최초 진입 오프닝 영상 (최초 1회만 재생, 새로고침 시 스킵)
 ----------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
     const introScreen = document.getElementById('intro-screen');
     const introVideo = document.getElementById('intro-video');
 
-    if (introVideo) {
-        introVideo.currentTime = 0; 
-        introVideo.play().catch(error => {
-            console.log("Intro video autoplay blocked:", error);
-            if (introScreen) {
-                introScreen.classList.add('hidden');
-                setTimeout(() => introScreen.style.display = 'none', 800);
-            }
-            initMainApp(); 
-        });
-
-        introVideo.onended = () => {
-            if (introScreen) {
-                introScreen.classList.add('hidden');
-                setTimeout(() => introScreen.style.display = 'none', 800);
-            }
-            initMainApp(); 
-        };
-        
-        introVideo.onerror = () => {
-            if (introScreen) {
-                introScreen.classList.add('hidden');
-                setTimeout(() => introScreen.style.display = 'none', 800);
-            }
-            initMainApp(); 
-        };
-    } else {
+    // 세션 스토리지에 오프닝 재생 기록이 있는지 확인 (브라우저 탭 유지 동안 지속)
+    if (sessionStorage.getItem('gsdd_intro_played')) {
+        // 이미 본 경우 영상을 바로 건너뜀
+        if (introScreen) {
+            introScreen.style.display = 'none';
+            introScreen.classList.add('hidden');
+        }
         initMainApp();
+    } else {
+        // 처음 접속한 경우 영상 재생 후 기록 저장
+        if (introVideo) {
+            introVideo.currentTime = 0; 
+            introVideo.play().catch(error => {
+                console.log("Intro video autoplay blocked:", error);
+                hideIntro();
+            });
+
+            introVideo.onended = hideIntro;
+            introVideo.onerror = hideIntro;
+        } else {
+            initMainApp();
+        }
+    }
+
+    function hideIntro() {
+        sessionStorage.setItem('gsdd_intro_played', 'true');
+        if (introScreen) {
+            introScreen.classList.add('hidden');
+            setTimeout(() => introScreen.style.display = 'none', 500);
+        }
+        initMainApp(); 
     }
 });
 
@@ -154,6 +157,7 @@ function initMainApp() {
     initGuestbookControls();
     initPhysics();
     
+    // 처음 실행 시 메인으로 가며 로딩은 스킵 
     navigateToPage('main', true); 
 }
 
@@ -194,7 +198,8 @@ function showWorkDetail(workId) {
     const work = worksDataset.find(w => w.id === workId);
     if (!work) return;
 
-    navigateToPage('detail');
+    // 상세페이지 들어갈 때 로딩 없이 바로 이동
+    navigateToPage('detail', true);
     
     document.getElementById('detail-project-title').innerText = work.title;
     document.getElementById('detail-author-name').innerText = work.designer;
@@ -386,10 +391,17 @@ function initArchiveSlider() {
 }
 
 /* -----------------------------------------------------------
-   페이지 네비게이션 로직 (전환 로딩 영상 제어 완벽 수정)
+   페이지 네비게이션 로직 (4가지 랜덤 로딩 조합 + 1.9초 바운스 적용)
 ----------------------------------------------------------- */
 let isNavigating = false;
-let navigationFallbackTimeout = null;
+
+// 4가지 버전의 로딩 캐릭터 조합 배열
+const loadingCombinations = [
+    ['maingraphic-04.png', 'maingraphic-07.png', 'maingraphic-08.png'],
+    ['maingraphic-06.png', 'maingraphic-09.png', 'maingraphic-11.png'],
+    ['maingraphic-03.png', 'maingraphic-05.png', 'maingraphic-12.png'],
+    ['maingraphic-10.png', 'maingraphic-02.png', 'maingraphic-01.png'] 
+];
 
 function navigateToPage(pageName, skipLoading = false) {
     const targetId = `section-${pageName}`;
@@ -398,13 +410,13 @@ function navigateToPage(pageName, skipLoading = false) {
     if (targetSection && targetSection.classList.contains('active') && !skipLoading) return;
     if (isNavigating) return;
 
-    // 1. 메뉴바에 있는 핵심 5개 메뉴만 로딩 영상 노출 허용
+    // 1. 핵심 메뉴만 로딩 노출 허용
     const menuPages = ['about', 'works', 'designers', 'archive', 'guestbook'];
     if (!menuPages.includes(pageName)) {
         skipLoading = true;
     }
 
-    // 2. 메인(Home)으로 갈 때는 로딩 스킵 (UX 최적화 및 물리엔진 렌더링 버그 방지)
+    // 2. 메인(Home)으로 갈 때는 로딩 스킵
     if (pageName === 'main') {
         skipLoading = true;
     }
@@ -415,7 +427,6 @@ function navigateToPage(pageName, skipLoading = false) {
         skipLoading = true;
     }
 
-    // 스킵 조건에 해당하면 애니메이션 없이 즉시 전환
     if (skipLoading) {
         completeNavigation(pageName);
         return;
@@ -424,41 +435,59 @@ function navigateToPage(pageName, skipLoading = false) {
     isNavigating = true;
     
     const loadingScreen = document.getElementById('loading-screen');
-    const loadingVideo = document.getElementById('loading-video');
+    const charsWrap = document.getElementById('loading-chars');
+    const finalImg = document.getElementById('loading-final-img');
+    const loaderImg1 = document.getElementById('loader-img-1');
+    const loaderImg2 = document.getElementById('loader-img-2');
+    const loaderImg3 = document.getElementById('loader-img-3');
     
-    const randomNum = Math.floor(Math.random() * 4) + 1;
-    loadingVideo.src = `loding_${randomNum}.mp4`; 
-    loadingVideo.load(); // 영상 강제 새로고침(버퍼링 방지)
-    
-    loadingScreen.classList.remove('hidden');
-    
-    const playPromise = loadingVideo.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.log("Loading video play failed or interrupted:", error);
-            completeNavigation(pageName); 
-        });
+    if (loadingScreen && charsWrap && finalImg && loaderImg1 && loaderImg2 && loaderImg3) {
+        
+        // 4개 배열(0, 1, 2, 3) 중 랜덤 선택
+        const randomComboIndex = Math.floor(Math.random() * loadingCombinations.length);
+        const selectedCombo = loadingCombinations[randomComboIndex];
+        
+        // 선택된 캐릭터 이미지를 각 img 태그의 src에 할당
+        loaderImg1.src = selectedCombo[0];
+        loaderImg2.src = selectedCombo[1];
+        loaderImg3.src = selectedCombo[2];
+
+        // 로딩 화면 초기화 세팅 (가장 깔끔했던 버전으로 유지)
+        charsWrap.style.display = 'flex';
+        finalImg.style.display = 'none';
+        finalImg.style.opacity = '0';
+        loadingScreen.classList.remove('hidden');
+        
+        // 1.9초 동안 캐릭터 통통 튀는 바운스 애니메이션 진행
+        setTimeout(() => {
+            
+            // 캐릭터 깔끔하게 숨기고 로딩 이미지 바로 노출
+            charsWrap.style.display = 'none';
+            finalImg.style.display = 'block';
+            
+            // 브라우저 렌더링 지연 후 투명도 1 적용 (짠! 하고 뜨게)
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    finalImg.style.opacity = '1';
+                });
+            });
+            
+            // 1.3초 동안 완전히 나타난 뒤 페이지 전환 완료
+            setTimeout(() => {
+                completeNavigation(pageName);
+            }, 1300);
+            
+        }, 1900);
+    } else {
+        completeNavigation(pageName);
     }
-
-    loadingVideo.onended = () => {
-        completeNavigation(pageName);
-    };
-    
-    loadingVideo.onerror = () => {
-        completeNavigation(pageName);
-    };
-
-    if(navigationFallbackTimeout) clearTimeout(navigationFallbackTimeout);
-    navigationFallbackTimeout = setTimeout(() => {
-        if(isNavigating) completeNavigation(pageName);
-    }, 4500);
 }
 
 function completeNavigation(pageName) {
-    if(navigationFallbackTimeout) clearTimeout(navigationFallbackTimeout);
-
     const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) loadingScreen.classList.add('hidden');
+    if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+    }
 
     const sections = document.querySelectorAll('.page-section');
     sections.forEach(sec => sec.classList.remove('active'));
@@ -497,7 +526,7 @@ function completeNavigation(pageName) {
     }
     
     if (pageName === 'archive') {
-        archiveCurrentIndex = 0; // 아카이브 진입 시 2025년도(최신)로 갱신
+        archiveCurrentIndex = 0; // 아카이브 진입 시 항상 2025 포커싱
         if (window.updateArchiveSlider) window.updateArchiveSlider();
     }
     
@@ -536,7 +565,7 @@ function toggleAboutFilm(button) {
 }
 
 /* ===========================================================
-   방명록 데이터 및 팝업
+   방명록 데이터 및 팝업 (새로고침 원상복구)
 =========================================================== */
 const guestbookStorageKey = 'gsdd-guestbook-entries';
 const gbColors = ['#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', '#73BEA2', '#9A87BE', '#0068AD'];
@@ -844,6 +873,8 @@ function saveGuestbookEntry() {
     
     localStorage.setItem(guestbookStorageKey, JSON.stringify(entries));
     closeGuestbookPopup(); 
+    
+    // 방명록 작성 후 전체 새로고침 (오프닝은 세션스토리지로 스킵됨)
     location.reload(); 
 }
 

@@ -1,6 +1,11 @@
 /* ===========================================================
    1. CSS 변수
 =========================================================== */
+@font-face {
+    font-family: '2026GSDD';
+    src: url('2026GSDD-Bold.otf') format('opentype');
+    font-weight: normal; 
+}
 :root {
     --color-primary: #0088cc;
     --color-background: #F6F6F6;
@@ -12,7 +17,7 @@
     --grid-gap: 24px;
     --site-margin: 20px; 
     
-    --font-family: 'Pretendard', sans-serif;
+  --font-family: 'avenir-lt-pro', 'Pretendard', sans-serif;
 
     --text-title: 120px;
     --text-lg: 32px;
@@ -27,30 +32,29 @@
 /* ===========================================================
    2. 기본 리셋
 =========================================================== */
-/* 윈도우 스크롤 덜컹거림 완벽 방지 */
-html { 
-    overflow-y: scroll; 
-}
+html { overflow-y: scroll; } /* 윈도우 스크롤바 영역 고정으로 덜컹거림 완벽 해결 */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
-body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; word-break: keep-all; cursor: none; }
+body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; word-break: keep-all; cursor: none; font-weight: 200;
+    font-style: normal;}
 a { text-decoration: none; color: inherit; cursor: none; }
 button { border: none; background: none; cursor: none; }
 input { cursor: none; }
 ul, ol { list-style: none; }
 
+
 /* 커스텀 이미지 커서 */
 .custom-cursor { position: fixed; pointer-events: none; z-index: 99999; display: none; width: 50px; height: 50px; object-fit: contain; transform: translate(-50%, -50%); }
 
 /* ===========================================================
-   인트로 및 전환 로딩 스크린
+   인트로 (오프닝) 및 페이지 전환 커스텀 로딩 스크린
 =========================================================== */
-#intro-screen, #loading-screen {
+#intro-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #fff;
+    background-color: var(--color-background);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -58,21 +62,92 @@ ul, ol { list-style: none; }
     transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-/* 로딩 스크린이 일반 요소들보다 확실히 가장 위에 있도록 Z-index 상향 */
+#intro-video { width: 100%; height: 100%; object-fit: cover; }
+#intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
 #loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #FFE9B8; /* 요청하신 배경색 FFE9B8 적용 */
     z-index: 10005;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-#intro-screen.hidden, #loading-screen.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+#loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* 통통 튀는 캐릭터 로더 (가운데 정렬) */
+.character-loader-wrapper {
+    position: relative;
+    width: 320px;
+    height: 150px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-#intro-video, #loading-video {
+.loader-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+/* 글자, 그림자 100% 제거 완료 */
+
+.loader-char {
+    position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: cover; 
+    object-fit: contain;
+    left: 0;
+    transform-origin: 50% 100%; 
+    /* 가장 맘에 들어하셨던 적당한 텐션 애니메이션으로 복구 */
+    animation: bounceChar 0.5s alternate infinite ease-in-out;
+    z-index: 2;
+}
+
+/* 각각의 캐릭터마다 튀어오르는 타이밍(딜레이) 설정 */
+.item-1 .loader-char { animation-delay: 0s; }
+.item-2 .loader-char { animation-delay: 0.15s; }
+.item-3 .loader-char { animation-delay: 0.3s; }
+
+/* 캐릭터 바운스 애니메이션 원상복구 */
+@keyframes bounceChar {
+    0% {
+        top: 30px; 
+        transform: scaleX(1.2) scaleY(0.8); /* 살짝 찌그러짐 */
+    }
+    40% {
+        transform: scaleX(1) scaleY(1); /* 원래 모양 */
+    }
+    100% {
+        top: -30px; /* 적당히 점프 */
+        transform: scaleX(0.95) scaleY(1.05); /* 공중에서 살짝 길어짐 */
+    }
+}
+
+/* 1.9초 뒤 나타나는 로딩 완료 이미지 (화면 꽉 차게 짠! 등장) */
+#loading-final-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* loding.png의 배경색이 전체를 덮도록 처리 */
+    object-position: center;
+    opacity: 0;
+    display: none; /* 억지 효과 없이 깔끔하게 통제 */
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+#loading-final-img.active {
+    opacity: 1;
 }
 
 /* ===========================================================
@@ -102,14 +177,24 @@ ul, ol { list-style: none; }
    4. 헤더 및 네비게이션
 =========================================================== */
 .top-title-bar { position: fixed; top: 35px; left: 0; width: 100%; text-align: center; z-index: 1000; pointer-events: auto; cursor: pointer; }
-.top-title-img { height: 36px; object-fit: contain; }
+.top-title-img { height: 50px; object-fit: contain; transition: height 0.3s ease; } /* 기존 36px에서 56px로 크기 확대 */
 
 .global-header.bottom-nav { width: 100%; background: var(--color-background); position: fixed; top: auto; bottom: 0; z-index: 1000; border-top: 4.5px solid #111; border-bottom: none; }
 .nav-wrapper { max-width: calc(var(--grid-container) + (var(--site-margin) * 2)); padding: 0 var(--site-margin); margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 80px; }
 .nav-menu { display: flex; justify-content: space-between; width: 100%; max-width: 960px; gap: 20px; }
 
 /* 기본 상태 (서브 페이지에서 선택 안 된 메뉴)는 회색 */
-.nav-link { font-size: var(--text-md); font-weight: 700; color: #8a8a8a; display: inline-block; transform-origin: center; transition: color 0.2s; }
+.nav-link { 
+    font-family: '2026GSDD', sans-serif;
+    font-size: var(--text-md); 
+    font-weight: normal; /* 기존 700에서 normal(또는 400)로 변경하여 볼드 해제 */
+    color: #8a8a8a; 
+    display: inline-block; 
+    transform-origin: center; 
+    transition: color 0.2s; 
+}
+
+/* ★ 이 부분이 있어야 마우스 호버 시 왔다 갔다 합니다 ★ */
 .nav-link:hover { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }
 
 /* 선택된 페이지는 검정색 */
@@ -118,6 +203,7 @@ ul, ol { list-style: none; }
 /* 메인 페이지(body.is-main-page)일 때는 모든 메뉴가 검정색 */
 body.is-main-page .nav-link { color: #000; }
 
+/* ★ 호버 애니메이션 키프레임 (좌우 10도 회전) ★ */
 @keyframes nav-wiggle {
     from { transform: rotate(-10deg); }
     to { transform: rotate(10deg); }
@@ -182,211 +268,30 @@ body.is-main-page .nav-link { color: #000; }
 /* ===========================================================
    8. Archive Section (3D 슬라이더 통합)
 =========================================================== */
-.archive-page-container {
-    width: 100vw;
-    height: calc(100vh - 80px);
-    margin-left: calc(50% - 50vw); 
-    padding-top: 80px;
-    padding-bottom: 40px; 
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    background-color: var(--color-background);
-}
+.archive-page-container { width: 100vw; height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding-top: 80px; padding-bottom: 40px; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; box-sizing: border-box; background-color: var(--color-background); }
+.archive-slider-wrapper { position: relative; width: 100%; max-width: 1400px; height: min(600px, calc(100vh - 280px)); display: flex; justify-content: center; align-items: center; perspective: 1200px; transform-style: preserve-3d; }
+.archive-card { position: absolute; top: 50%; left: 50%; width: 430px; height: 600px; background: #ffffff; border-radius: 0; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.5s var(--ease-out-expo), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.5s ease; transform-origin: center center; backface-visibility: hidden; overflow: hidden; border: 1px solid #e0e0e0; }
+.archive-card:hover { box-shadow: 0 28px 65px rgba(0, 0, 0, 0.2); }
+.archive-card.focused { border-color: #d0d0d0; box-shadow: 0 32px 70px rgba(0, 0, 0, 0.25); }
+.archive-card-poster { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+.archive-card-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.archive-card-base-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%); color: #ffffff; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box; pointer-events: none; }
+.archive-card-year { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; }
+.archive-card-theme-title { font-size: 1.05rem; font-weight: 600; opacity: 0.9; }
+.archive-card-hover-desc { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 17, 17, 0.93); color: #ffffff; padding: 32px 28px 48px 28px; box-sizing: border-box; opacity: 0; visibility: hidden; transition: opacity 0.35s var(--ease-ios), visibility 0.35s ease; z-index: 20; display: flex; flex-direction: column; justify-content: flex-end; }
+.archive-card:hover .archive-card-hover-desc, .archive-card.focused:hover .archive-card-hover-desc, .archive-card.hover-active .archive-card-hover-desc { opacity: 1 !important; visibility: visible !important; }
+.hover-desc-inner { display: flex; flex-direction: column; gap: 12px; }
+.hover-year-tag { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+.hover-theme-title { font-size: 24px; font-weight: 400; line-height: 1.25; margin: 0; color: #ffffff; }
+.hover-desc-text { font-size: 12px; line-height: 1.7; color: #dddddd; margin: 0; word-break: keep-all; overflow: hidden; }
 
-.archive-slider-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 1400px;
-    height: min(600px, calc(100vh - 280px));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1200px; 
-    transform-style: preserve-3d;
-}
-
-.archive-card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 430px;
-    height: 600px;
-    background: #ffffff;
-    border-radius: 0; 
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    transition: transform 0.5s var(--ease-out-expo), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.5s ease;
-    transform-origin: center center;
-    backface-visibility: hidden;
-    overflow: hidden;
-    border: 1px solid #e0e0e0;
-}
-
-.archive-card:hover {
-    box-shadow: 0 28px 65px rgba(0, 0, 0, 0.2);
-}
-
-.archive-card.focused {
-    border-color: #d0d0d0;
-    box-shadow: 0 32px 70px rgba(0, 0, 0, 0.25);
-}
-
-.archive-card-poster {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.archive-card-poster img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.archive-card-base-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 24px;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    box-sizing: border-box;
-    pointer-events: none;
-}
-
-.archive-card-year {
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-}
-
-.archive-card-theme-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-.archive-card-hover-desc {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(17, 17, 17, 0.93);
-    color: #ffffff;
-    padding: 32px 28px 48px 28px; 
-    box-sizing: border-box;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.35s var(--ease-ios), visibility 0.35s ease;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; 
-}
-
-.archive-card:hover .archive-card-hover-desc,
-.archive-card.focused:hover .archive-card-hover-desc,
-.archive-card.hover-active .archive-card-hover-desc {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-.hover-desc-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.hover-year-tag {
-    font-size: 18px; 
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 4px;
-}
-
-.hover-theme-title {
-    font-size: 24px; 
-    font-weight: 400; 
-    line-height: 1.25;
-    margin: 0;
-    color: #ffffff;
-}
-
-.hover-desc-text {
-    font-size: 12px; 
-    line-height: 1.7;
-    color: #dddddd;
-    margin: 0;
-    word-break: keep-all;
-    overflow: hidden; 
-}
-
-.archive-controls-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    margin-top: 2rem;
-    z-index: 30;
-    position: relative;
-}
-
-.archive-dots-container {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    z-index: 20;
-}
-
-.archive-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #cbd5e1;
-    cursor: pointer;
-    transition: all 0.3s var(--ease-ios);
-}
-
-.archive-dot.active {
-    background-color: #111111;
-    transform: scale(1.3);
-}
-
-.archive-arrow-btn {
-    width: 50px;
-    height: 50px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s var(--ease-ios);
-}
-
-.archive-arrow-btn:hover {
-    transform: scale(1.1);
-}
-
-.archive-nav-icon {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    display: block;
-}
+.archive-controls-bar { display: flex; align-items: center; justify-content: center; gap: 36px; margin-top: 2rem; z-index: 30; position: relative; }
+.archive-dots-container { display: flex; gap: 12px; align-items: center; z-index: 20; }
+.archive-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #cbd5e1; cursor: pointer; transition: all 0.3s var(--ease-ios); }
+.archive-dot.active { background-color: #111111; transform: scale(1.3); }
+.archive-arrow-btn { width: 50px; height: 50px; background-color: transparent; border: none; cursor: pointer; z-index: 30; display: flex; align-items: center; justify-content: center; transition: transform 0.2s var(--ease-ios); }
+.archive-arrow-btn:hover { transform: scale(1.1); }
+.archive-nav-icon { width: 50px; height: 50px; object-fit: contain; display: block; }
 
 /* ===========================================================
    9. About Section
@@ -401,19 +306,9 @@ body.is-main-page .nav-link { color: #000; }
 .about-play-btn span { font-size: 40px; color: #000; margin-left: 5px; }
 
 /* ===========================================================
-   10. Guestbook Section
+   10. Guestbook Section 
 =========================================================== */
-.guestbook-page { 
-    position: relative; 
-    width: 100vw; 
-    min-height: calc(100vh - 80px); 
-    margin-left: calc(50% - 50vw); 
-    padding: 0; 
-    padding-top: 100px; 
-    overflow-x: hidden; 
-    background: var(--color-background); 
-    display: none; 
-}
+.guestbook-page { position: relative; width: 100vw; min-height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding: 0; padding-top: 100px; overflow-x: hidden; background: var(--color-background); display: none; }
 #guestbook-physics-stage, #guestbook-dom-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
 #guestbook-physics-stage { z-index: 1; pointer-events: auto; }
 #guestbook-physics-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background: transparent; pointer-events: auto; }
@@ -422,29 +317,12 @@ body.is-main-page .nav-link { color: #000; }
 .gb-fixed-frame { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #ffffff; overflow: hidden; pointer-events: none; z-index: 1; }
 .gb-frame-content-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .gb-content-item { position: absolute; box-sizing: border-box; pointer-events: none; user-select: none; z-index: 5; transform-origin: center center; will-change: transform, left, top; }
-
 .gb-character-content { display: block; }
 .gb-character-content .gb-content-shape, .gb-content-face { position: absolute; object-fit: contain; pointer-events: none; }
 .gb-character-content .gb-content-shape { inset: 0; width: 100%; height: 100%; }
+.gb-content-name, .gb-content-message { color: #000; font-weight: 800; line-height: 1.3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px 18px; font-size: 14px; white-space: pre-wrap; word-break: break-all; }
 
-.gb-content-name, .gb-content-message { 
-    color: #000; font-weight: 800; line-height: 1.3; 
-    display: flex; align-items: center; justify-content: center; text-align: center; 
-    padding: 10px 18px; font-size: 14px; 
-    white-space: pre-wrap; 
-    word-break: break-all;
-}
-
-.guestbook-add-floating { 
-    position: absolute; 
-    z-index: 20; 
-    padding: 0; 
-    background: transparent; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    cursor: pointer; 
-}
+.guestbook-add-floating { position: absolute; z-index: 20; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .guestbook-add-floating img { width: 150px; height: 150px; object-fit: contain; transition: transform 0.2s ease; }
 .guestbook-add-floating:hover img { transform: scale(1.05); }
 
@@ -454,36 +332,20 @@ body.is-main-page .nav-link { color: #000; }
 .popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; }
 .popup-overlay.hidden { display: none; }
 
-.popup-content { 
-    background: #ffffff; 
-    width: 950px; 
-    height: auto; 
-    max-width: 95vw; 
-    max-height: 90vh; 
-    padding: 35px 50px; 
-    position: relative; 
-    border-radius: 0; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
-    display: flex; 
-    flex-direction: column; 
-    overflow-y: auto; 
-}
+.popup-content { background: #ffffff; width: 950px; height: auto; max-width: 95vw; max-height: 90vh; padding: 35px 50px; position: relative; border-radius: 0; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow-y: auto; }
 .popup-close-btn { position: absolute; top: 25px; right: 25px; font-size: 26px; color: #555; z-index: 100; cursor: pointer; }
 .popup-title { font-size: 20px; font-weight: 800; margin-bottom: 25px; color: #111; }
-
 .popup-preview-area { height: 380px; flex: none; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; border-radius: 0; }
 .popup-options { min-height: 140px; } 
 
 .preview-character { position: relative; width: 360px; height: 360px; } 
 .preview-character > img { position: absolute; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-
 .gb-faces-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 .preview-face-controller { position: absolute; }
 .preview-face-controller.active { outline: 2px dashed #000; }
 .preview-face-controller img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
 .move-handle { position: absolute; inset: 0; z-index: 5; }
-
 .face-handle { display: none; position: absolute; width: 24px; height: 24px; background: #000; color: #fff; border-radius: 50%; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 .preview-face-controller.active .face-handle { display: flex; }
 .face-handle-delete { top: -12px; left: 50%; transform: translateX(-50%); cursor: pointer; } 
@@ -497,10 +359,8 @@ body.is-main-page .nav-link { color: #000; }
 .tab-btn { font-size: 15px; font-weight: 600; color: #aaa; padding: 0; cursor: pointer; }
 .tab-btn .tab-text { display: inline-block; padding: 4px 10px; border-radius: 0; }
 .tab-btn.active .tab-text { background-color: #ffcc00; color: #000; font-weight: 800; }
-
 .gb-tab-panel { display: none; }
 .gb-tab-panel.active { display: block; }
-
 .color-palette { display: flex; gap: 10px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px; flex-wrap: wrap; }
 .color-swatch { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s; cursor: pointer; }
 .color-swatch:hover, .color-swatch.active { transform: scale(1.1); }
@@ -516,47 +376,39 @@ body.is-main-page .nav-link { color: #000; }
 .message-inputs input { border: none; border-bottom: 1px solid #ccc; padding: 10px 5px; font-size: 15px; outline: none; border-radius: 0; }
 .message-inputs input:focus { border-bottom-color: #111; }
 
-/* ===========================================================
-   12. 반응형 모바일 (미디어 쿼리 통합)
-=========================================================== */
 @media screen and (max-width: 1100px) {
     #section-guestbook.guestbook-page { overflow-y: auto; }
 }
 
 @media screen and (max-width: 768px) {
     :root { --text-md: 18px; } 
-    
     .container { grid-template-columns: repeat(4, 1fr); padding-left: 20px; padding-right: 20px; padding-bottom: 60px; padding-top: 30px; }
     .main-content { padding-top: 80px; }
     .main-subtitle { word-break: keep-all; }
-    
     .nav-wrapper { padding-left: 20px; padding-right: 20px; }
     .top-title-bar { top: 14px; } 
-    
+    .top-title-img { height: 40px; } /* 모바일에서 타이틀 사이즈 적당하게 확대 적용 */
     .hamburger-btn { display: block; position: absolute; right: 20px; bottom: 20px; z-index: 1001; cursor: pointer; }
     .nav-menu { display: none; position: fixed; bottom: 80px; left: 0; top: auto; width: 100%; height: auto; background: rgba(246, 246, 246, 0.98); border-top: 2px solid #111; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; gap: 30px; z-index: 1000; }
     .nav-menu.active { display: flex; }
     .nav-link { font-size: 20px; } 
-    
     .works-filter-group { margin-bottom: 16px; }
     .works-grid-list { grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .works-item { grid-column: span 1; margin-bottom: 30px; }
-    
     .detail-container { flex-direction: column; }
     .detail-text-area { max-width: 100%; position: static; margin-bottom: 40px; }
     .detail-image-area { width: 100%; }
     .detail-img-placeholder { width: 100%; }
-    
-    /* 아카이브 반응형 추가 */
     .archive-card { width: min(350px, 60vw); height: min(490px, calc(100vh - 300px)); }
     .archive-slider-wrapper { height: min(490px, calc(100vh - 280px)); margin-top: 30px; }
     .hover-desc-text { max-height: 200px; }
     .archive-controls-bar { width: 100%; justify-content: center; margin-top: 2.5rem; }
     .archive-arrow-btn.prev-btn { position: absolute; left: 10px; top: 35%; transform: translateY(-50%); }
     .archive-arrow-btn.next-btn { position: absolute; right: 10px; top: 35%; transform: translateY(-50%); }
-
     .guestbook-page { min-height: calc(100vh - 80px); padding-top: 80px; }
     .gb-fixed-frame { border-width: 2px; }
     .gb-content-name, .gb-content-message { font-size: 11px; padding: 8px 12px; }
     .guestbook-add-floating img { width: 100px; height: 100px; }
+    .character-loader-wrapper { width: 250px; height: 120px; }
+    .loader-item { width: 60px; height: 60px; }
 }
