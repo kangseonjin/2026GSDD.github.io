@@ -1428,7 +1428,9 @@ function initGuestbookPhysics() {
 
         const mouse = Mouse.create(render.canvas);
         mouse.pixelRatio = window.devicePixelRatio || 1;
-
+mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
+        mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
+        mouse.element.removeEventListener("wheel", mouse.mousewheel);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse,
             constraint: {
