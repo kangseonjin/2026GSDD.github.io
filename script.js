@@ -113,23 +113,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const introScreen = document.getElementById('intro-screen');
     const introVideo = document.getElementById('intro-video');
 
-    // 세션 스토리지에 오프닝 재생 기록이 있는지 확인 (브라우저 탭 유지 동안 지속)
     if (sessionStorage.getItem('gsdd_intro_played')) {
-        // 이미 본 경우 영상을 바로 건너뜀
         if (introScreen) {
             introScreen.style.display = 'none';
             introScreen.classList.add('hidden');
         }
         initMainApp();
     } else {
-        // 처음 접속한 경우 영상 재생 후 기록 저장
         if (introVideo) {
             introVideo.currentTime = 0; 
             introVideo.play().catch(error => {
                 console.log("Intro video autoplay blocked:", error);
                 hideIntro();
             });
-
             introVideo.onended = hideIntro;
             introVideo.onerror = hideIntro;
         } else {
@@ -156,6 +152,9 @@ function initMainApp() {
     initArchiveSlider();
     initGuestbookControls();
     initPhysics();
+    
+    // 디자이너 페이지 렌더링 & 초기화
+    renderDesignersList('All');
     
     // 처음 실행 시 메인으로 가며 로딩은 스킵 
     navigateToPage('main', true); 
@@ -187,7 +186,7 @@ function renderWorksGrid(data) {
 }
 
 function filterWorksByCategory(category) {
-    document.querySelectorAll('.works-filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('#section-works .works-filter-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`filter-${category.toLowerCase()}`).classList.add('active');
     
     const filteredData = category === 'All' ? worksDataset : worksDataset.filter(w => w.category === category);
@@ -218,6 +217,154 @@ function showWorkDetail(workId) {
     imgBox.className = 'detail-img-placeholder';
     imgBox.innerHTML = `작품 이미지<br><br>Width: 588px<br>(${work.detailPrefix}.png)`;
     imagesList.appendChild(imgBox);
+}
+
+/* ===========================================================
+   디자이너 페이지 데이터 연동 및 호버 인터랙션
+=========================================================== */
+
+// 1. worksDataset에서 Visual / Space 분리하여 그룹화
+function getDesignersData() {
+    const dMap = {};
+    worksDataset.forEach(w => {
+        // 이름만 같다고 합쳐지는 걸 방지하기 위해 카테고리별로 고유키 생성
+        const key = w.category + '_' + w.designer; 
+        if (!dMap[key]) {
+            dMap[key] = {
+                designer: w.designer,
+                category: w.category,
+                works: []
+            };
+        }
+        dMap[key].works.push(w);
+    });
+    return Object.values(dMap);
+}
+
+// 2. 디자이너 리스트 동적 렌더링
+function renderDesignersList(category = 'All') {
+    const grid = document.getElementById('designers-list-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    
+    const allDesigners = getDesignersData();
+    
+    // ★ 이름(알파벳/가나다) 순으로 자동 정렬 추가
+    allDesigners.sort((a, b) => a.designer.localeCompare(b.designer));
+    
+    const filtered = category === 'All' ? allDesigners : allDesigners.filter(d => d.category === category);
+    
+    filtered.forEach(d => {
+        const li = document.createElement('li');
+        li.className = 'designer-item';
+        
+        const work1 = d.works[0];
+        const work2 = d.works[1];
+
+        // 이미지 경로 자동 생성 (dc_이름_p1.png / dc_이름.png 형식)
+        let img1 = '', img2 = '';
+        const safeName = d.designer.toLowerCase(); 
+        if (d.category === 'Visual') {
+            img1 = `dc_${safeName}_p1.png`;
+            img2 = `dc_${safeName}_p2.png`;
+        } else {
+            img1 = `dc_${safeName}.png`;
+            img2 = '';
+        }
+
+        const tagClass = d.category.toLowerCase();
+        
+        li.innerHTML = `
+            <span class="tag ${tagClass}">${d.category}</span>
+            <span class="name">${d.designer}</span>
+            <span class="title">${work1 ? work1.title : ''}</span>
+            <span class="title">${work2 ? work2.title : ''}</span>
+        `;
+        
+        // 인터랙션 처리를 위한 속성 저장
+        li.dataset.img1 = img1;
+        li.dataset.img2 = img2;
+        li.dataset.title1 = work1 ? work1.title : '';
+        li.dataset.title2 = work2 ? work2.title : '';
+        li.dataset.workid1 = work1 ? work1.id : '';
+        li.dataset.workid2 = work2 ? work2.id : '';
+        
+        grid.appendChild(li);
+    });
+
+    // 렌더링 후 이벤트 다시 연결
+    initDesignersInteractions(); 
+}
+
+// 3. 디자이너 페이지 전용 카테고리 필터
+function filterDesignersByCategory(category) {
+    document.querySelectorAll('#designers-filter-group .works-filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`d-filter-${category.toLowerCase()}`).classList.add('active');
+    renderDesignersList(category);
+}
+
+// 4. 호버 미리보기 및 클릭 이동 연동 (마우스 떼도 이미지 유지됨)
+function initDesignersInteractions() {
+    const previewImg1 = document.getElementById('preview-img-1');
+    const previewTitle1 = document.getElementById('preview-title-1');
+    const previewBox1 = document.getElementById('preview-box-1');
+    const previewItem1 = document.getElementById('preview-item-1');
+
+    const previewImg2 = document.getElementById('preview-img-2');
+    const previewTitle2 = document.getElementById('preview-title-2');
+    const previewBox2 = document.getElementById('preview-box-2');
+    const previewItem2 = document.getElementById('preview-item-2');
+    
+    const designerItems = document.querySelectorAll('.designer-item');
+    if (!designerItems.length) return; 
+
+    // 초기 상태: 빈 공간 유지
+    previewItem1.style.display = 'none';
+    previewItem2.style.display = 'none';
+
+    designerItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            // 다른 활성화된 행들 제거 후 현재 항목만 활성화
+            designerItems.forEach(el => el.classList.remove('wiggle-active'));
+            item.classList.add('wiggle-active');
+            
+            const img1Src = item.dataset.img1;
+            const img2Src = item.dataset.img2;
+            const title1 = item.dataset.title1;
+            const title2 = item.dataset.title2;
+            const workId1 = item.dataset.workid1;
+            const workId2 = item.dataset.workid2;
+
+            // 첫 번째 작품 미리보기
+            if (img1Src && img1Src.trim() !== "") {
+                previewItem1.style.display = 'flex';
+                previewImg1.src = img1Src;
+                previewImg1.style.display = 'block';
+                previewTitle1.innerText = title1;
+                // 클릭 시 해당 상세 페이지로 이동
+                previewBox1.onclick = () => showWorkDetail(workId1);
+            } else {
+                previewItem1.style.display = 'none';
+            }
+            
+            // 두 번째 작품 미리보기
+            if (img2Src && img2Src.trim() !== "") {
+                previewItem2.style.display = 'flex';
+                previewImg2.src = img2Src;
+                previewImg2.style.display = 'block';
+                previewTitle2.innerText = title2;
+                // 클릭 시 해당 상세 페이지로 이동
+                previewBox2.onclick = () => showWorkDetail(workId2);
+            } else {
+                previewItem2.style.display = 'none';
+            }
+        });
+
+        // ★ 마우스를 떼도 이미지를 지우지 않음! 그래야 오른쪽으로 마우스를 옮겨 클릭 가능
+        item.addEventListener('mouseleave', () => {
+            item.classList.remove('wiggle-active');
+        });
+    });
 }
 
 /* -----------------------------------------------------------
@@ -391,11 +538,10 @@ function initArchiveSlider() {
 }
 
 /* -----------------------------------------------------------
-   페이지 네비게이션 로직 (4가지 랜덤 로딩 조합 + 1.9초 바운스 적용)
+   페이지 네비게이션 로직
 ----------------------------------------------------------- */
 let isNavigating = false;
 
-// 4가지 버전의 로딩 캐릭터 조합 배열
 const loadingCombinations = [
     ['maingraphic-04.png', 'maingraphic-07.png', 'maingraphic-08.png'],
     ['maingraphic-06.png', 'maingraphic-09.png', 'maingraphic-11.png'],
@@ -410,18 +556,10 @@ function navigateToPage(pageName, skipLoading = false) {
     if (targetSection && targetSection.classList.contains('active') && !skipLoading) return;
     if (isNavigating) return;
 
-    // 1. 핵심 메뉴만 로딩 노출 허용
     const menuPages = ['about', 'works', 'designers', 'archive', 'guestbook'];
-    if (!menuPages.includes(pageName)) {
-        skipLoading = true;
-    }
+    if (!menuPages.includes(pageName)) skipLoading = true;
+    if (pageName === 'main') skipLoading = true;
 
-    // 2. 메인(Home)으로 갈 때는 로딩 스킵
-    if (pageName === 'main') {
-        skipLoading = true;
-    }
-
-    // 3. 상세 페이지(detail)에서 X 버튼을 눌러 목록(works)으로 돌아갈 때 로딩 스킵
     const detailSection = document.getElementById('section-detail');
     if (detailSection && detailSection.classList.contains('active') && pageName === 'works') {
         skipLoading = true;
@@ -442,37 +580,28 @@ function navigateToPage(pageName, skipLoading = false) {
     const loaderImg3 = document.getElementById('loader-img-3');
     
     if (loadingScreen && charsWrap && finalImg && loaderImg1 && loaderImg2 && loaderImg3) {
-        
-        // 4개 배열(0, 1, 2, 3) 중 랜덤 선택
         const randomComboIndex = Math.floor(Math.random() * loadingCombinations.length);
         const selectedCombo = loadingCombinations[randomComboIndex];
         
-        // 선택된 캐릭터 이미지를 각 img 태그의 src에 할당
         loaderImg1.src = selectedCombo[0];
         loaderImg2.src = selectedCombo[1];
         loaderImg3.src = selectedCombo[2];
 
-        // 로딩 화면 초기화 세팅 (가장 깔끔했던 버전으로 유지)
         charsWrap.style.display = 'flex';
         finalImg.style.display = 'none';
         finalImg.style.opacity = '0';
         loadingScreen.classList.remove('hidden');
         
-        // 1.9초 동안 캐릭터 통통 튀는 바운스 애니메이션 진행
         setTimeout(() => {
-            
-            // 캐릭터 깔끔하게 숨기고 로딩 이미지 바로 노출
             charsWrap.style.display = 'none';
             finalImg.style.display = 'block';
             
-            // 브라우저 렌더링 지연 후 투명도 1 적용 (짠! 하고 뜨게)
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     finalImg.style.opacity = '1';
                 });
             });
             
-            // 1.3초 동안 완전히 나타난 뒤 페이지 전환 완료
             setTimeout(() => {
                 completeNavigation(pageName);
             }, 1300);
@@ -526,7 +655,7 @@ function completeNavigation(pageName) {
     }
     
     if (pageName === 'archive') {
-        archiveCurrentIndex = 0; // 아카이브 진입 시 항상 2025 포커싱
+        archiveCurrentIndex = 0; 
         if (window.updateArchiveSlider) window.updateArchiveSlider();
     }
     
@@ -955,10 +1084,10 @@ function initPhysics() {
     const domPhysicsItems = []; 
 
     if(gbStage) {
-        gbStage.innerHTML = ''; // ★ 추가: 기존에 남아있는 방명록 DOM 요소를 완전히 비워 중복 생성 방지
+        gbStage.innerHTML = ''; 
         
         recentGbEntries.forEach((entry, idx) => {
-            if (idx >= 10) return; // ★ 추가: 혹시라도 배열에 10개가 넘게 들어오더라도 10개 초과 시 강제 차단
+            if (idx >= 10) return; 
 
             const visualSize = 200; 
             const hitBoxSize = 130; 
@@ -1433,7 +1562,6 @@ function initGuestbookPhysics() {
         const mouse = Mouse.create(render.canvas);
         mouse.pixelRatio = window.devicePixelRatio || 1;
 
-        // ★ 추가: 마우스 휠 이벤트 가로채기 방지 (스크롤 가능하게)
         mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
         mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
         mouse.element.removeEventListener("wheel", mouse.mousewheel);

@@ -34,13 +34,11 @@
 =========================================================== */
 html { overflow-y: scroll; } /* 윈도우 스크롤바 영역 고정으로 덜컹거림 완벽 해결 */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
-body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: hidden; word-break: keep-all; cursor: none; font-weight: 200;
-    font-style: normal;}
+body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: clip; word-break: keep-all; cursor: none; font-weight: 200; font-style: normal;}
 a { text-decoration: none; color: inherit; cursor: none; }
 button { border: none; background: none; cursor: none; }
 input { cursor: none; }
 ul, ol { list-style: none; }
-
 
 /* 커스텀 이미지 커서 */
 .custom-cursor { position: fixed; pointer-events: none; z-index: 99999; display: none; width: 50px; height: 50px; object-fit: contain; transform: translate(-50%, -50%); }
@@ -49,106 +47,37 @@ ul, ol { list-style: none; }
    인트로 (오프닝) 및 페이지 전환 커스텀 로딩 스크린
 =========================================================== */
 #intro-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--color-background);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--color-background);
+    z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease;
 }
-
 #intro-video { width: 100%; height: 100%; object-fit: cover; }
 #intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 #loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #FFE9B8; /* 요청하신 배경색 FFE9B8 적용 */
-    z-index: 10005;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #FFE9B8;
+    z-index: 10005; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease;
 }
-
 #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* 통통 튀는 캐릭터 로더 (가운데 정렬) */
-.character-loader-wrapper {
-    position: relative;
-    width: 320px;
-    height: 150px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
+.character-loader-wrapper { position: relative; width: 320px; height: 150px; display: flex; justify-content: space-around; align-items: center; }
+.loader-item { position: relative; width: 80px; height: 80px; }
+.loader-char { position: absolute; width: 100%; height: 100%; object-fit: contain; left: 0; transform-origin: 50% 100%; animation: bounceChar 0.5s alternate infinite ease-in-out; z-index: 2; }
 
-.loader-item {
-    position: relative;
-    width: 80px;
-    height: 80px;
-}
-
-/* 글자, 그림자 100% 제거 완료 */
-
-.loader-char {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    left: 0;
-    transform-origin: 50% 100%; 
-    /* 가장 맘에 들어하셨던 적당한 텐션 애니메이션으로 복구 */
-    animation: bounceChar 0.5s alternate infinite ease-in-out;
-    z-index: 2;
-}
-
-/* 각각의 캐릭터마다 튀어오르는 타이밍(딜레이) 설정 */
 .item-1 .loader-char { animation-delay: 0s; }
 .item-2 .loader-char { animation-delay: 0.15s; }
 .item-3 .loader-char { animation-delay: 0.3s; }
 
-/* 캐릭터 바운스 애니메이션 원상복구 */
 @keyframes bounceChar {
-    0% {
-        top: 30px; 
-        transform: scaleX(1.2) scaleY(0.8); /* 살짝 찌그러짐 */
-    }
-    40% {
-        transform: scaleX(1) scaleY(1); /* 원래 모양 */
-    }
-    100% {
-        top: -30px; /* 적당히 점프 */
-        transform: scaleX(0.95) scaleY(1.05); /* 공중에서 살짝 길어짐 */
-    }
+    0% { top: 30px; transform: scaleX(1.2) scaleY(0.8); }
+    40% { transform: scaleX(1) scaleY(1); }
+    100% { top: -30px; transform: scaleX(0.95) scaleY(1.05); }
 }
 
-/* 1.9초 뒤 나타나는 로딩 완료 이미지 (화면 꽉 차게 짠! 등장) */
 #loading-final-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* loding.png의 배경색이 전체를 덮도록 처리 */
-    object-position: center;
-    opacity: 0;
-    display: none; /* 억지 효과 없이 깔끔하게 통제 */
-    transition: opacity 0.3s ease;
-    z-index: 10;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center;
+    opacity: 0; display: none; transition: opacity 0.3s ease; z-index: 10;
 }
-
-#loading-final-img.active {
-    opacity: 1;
-}
+#loading-final-img.active { opacity: 1; }
 
 /* ===========================================================
    3. 공통 레이아웃
@@ -168,47 +97,24 @@ ul, ol { list-style: none; }
 #section-guestbook.page-section.active { display: block; }
 #section-archive.page-section.active { display: flex; }
 
-@keyframes pageFadeInOnly {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+@keyframes pageFadeInOnly { from { opacity: 0; } to { opacity: 1; } }
 
 /* ===========================================================
    4. 헤더 및 네비게이션
 =========================================================== */
 .top-title-bar { position: fixed; top: 35px; left: 0; width: 100%; text-align: center; z-index: 1000; pointer-events: auto; cursor: pointer; }
-.top-title-img { height: 50px; object-fit: contain; transition: height 0.3s ease; } /* 기존 36px에서 56px로 크기 확대 */
+.top-title-img { height: 50px; object-fit: contain; transition: height 0.3s ease; }
 
 .global-header.bottom-nav { width: 100%; background: var(--color-background); position: fixed; top: auto; bottom: 0; z-index: 1000; border-top: 4.5px solid #111; border-bottom: none; }
 .nav-wrapper { max-width: calc(var(--grid-container) + (var(--site-margin) * 2)); padding: 0 var(--site-margin); margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 80px; }
 .nav-menu { display: flex; justify-content: space-between; width: 100%; max-width: 960px; gap: 20px; }
 
-/* 기본 상태 (서브 페이지에서 선택 안 된 메뉴)는 회색 */
-.nav-link { 
-    font-family: '2026GSDD', sans-serif;
-    font-size: var(--text-md); 
-    font-weight: normal; /* 기존 700에서 normal(또는 400)로 변경하여 볼드 해제 */
-    color: #8a8a8a; 
-    display: inline-block; 
-    transform-origin: center; 
-    transition: color 0.2s; 
-}
-
-/* ★ 이 부분이 있어야 마우스 호버 시 왔다 갔다 합니다 ★ */
+.nav-link { font-family: '2026GSDD', sans-serif; font-size: var(--text-md); font-weight: normal; color: #8a8a8a; display: inline-block; transform-origin: center; transition: color 0.2s; }
 .nav-link:hover { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }
-
-/* 선택된 페이지는 검정색 */
 .nav-link.active { color: #000; }
-
-/* 메인 페이지(body.is-main-page)일 때는 모든 메뉴가 검정색 */
 body.is-main-page .nav-link { color: #000; }
 
-/* ★ 호버 애니메이션 키프레임 (좌우 10도 회전) ★ */
-@keyframes nav-wiggle {
-    from { transform: rotate(-10deg); }
-    to { transform: rotate(10deg); }
-}
-
+@keyframes nav-wiggle { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
 .hamburger-btn { display: none; font-size: 32px; color: var(--color-text-main); }
 
 /* ===========================================================
@@ -231,15 +137,15 @@ body.is-main-page .nav-link { color: #000; }
 #filter-all.active { background-color: #009FE8; }
 #filter-visual.active { background-color: #ED83B2; }
 #filter-space.active { background-color: #F39800; }
+#d-filter-all.active { background-color: #009FE8; }
+#d-filter-visual.active { background-color: #ED83B2; }
+#d-filter-space.active { background-color: #F39800; }
 
 .works-grid-list { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
 .works-item { grid-column: span 3; margin-bottom: 50px; transition: opacity 0.2s; transform-origin: center; cursor: pointer; }
 .works-item:hover { opacity: 0.8; animation: work-wiggle 0.45s ease-in-out infinite alternate; }
 
-@keyframes work-wiggle {
-    from { transform: rotate(-4deg); }
-    to { transform: rotate(4deg); }
-}
+@keyframes work-wiggle { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
 
 .works-thumb { width: 100%; aspect-ratio: 282 / 352; background-color: var(--color-placeholder); display: flex; align-items: center; justify-content: center; color: var(--color-text-sub); font-size: 12px; padding: 20px; text-align: center; }
 .works-meta { margin-top: 18px; }
@@ -376,6 +282,118 @@ body.is-main-page .nav-link { color: #000; }
 .message-inputs input { border: none; border-bottom: 1px solid #ccc; padding: 10px 5px; font-size: 15px; outline: none; border-radius: 0; }
 .message-inputs input:focus { border-bottom-color: #111; }
 
+/* ===========================================================
+   12. Designers Section
+=========================================================== */
+.designer-list {
+    grid-column: 1 / 8;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #eaeaea;
+}
+
+.designer-item {
+    display: grid;
+    grid-template-columns: 80px 120px 1fr 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 25px 10px;
+    border-bottom: 1px solid #eaeaea;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    transform-origin: center;
+}
+
+@keyframes designer-wiggle {
+    from { transform: rotate(-2deg); }
+    to { transform: rotate(2deg); }
+}
+
+.designer-item.wiggle-active {
+    animation: designer-wiggle 0.45s ease-in-out infinite alternate;
+    background-color: #fafafa;
+}
+
+.designer-item .tag {
+    padding: 4px 8px;
+    font-weight: 800;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 2px;
+}
+.designer-item .tag.visual {
+    background-color: #FF7CA8;
+    color: #000;
+}
+.designer-item .tag.space {
+    background-color: #FF9900;
+    color: #000;
+}
+
+.designer-item .name { font-size: 18px; font-weight: bold; }
+.designer-item .title { font-size: 16px; color: #000; text-align: left; }
+
+.designer-preview-container {
+    grid-column: 9 / 13;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 120px;
+    /* ★ 스크롤 시 아래에 있는 항목의 이미지도 화면에 따라다니게 해주는 핵심 코드 */
+    align-self: start; 
+    background-color: transparent !important; 
+}
+
+/* 이미지와 텍스트를 감싸는 아이템 래퍼 (하단 여백 제거) */
+.preview-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-box {
+    position: relative; /* 작품명 오버레이를 위한 기준점 */
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer; /* 클릭 유도를 위한 포인터 추가 */
+}
+
+.preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+/* ★ 호버 시 나타날 오버레이 (반투명 검정 배경 + 흰색 작품명 텍스트) */
+.preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+/* 박스에 마우스를 올리면 오버레이 활성화 */
+.preview-box:hover .preview-overlay {
+    opacity: 1;
+}
+
+.preview-title {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    color: #ffffff;
+    margin: 0;
+    word-break: keep-all;
+}
+
+/* 모바일 화면 대응용 미디어 쿼리 (768px 이하) */
 @media screen and (max-width: 1100px) {
     #section-guestbook.guestbook-page { overflow-y: auto; }
 }
@@ -387,7 +405,7 @@ body.is-main-page .nav-link { color: #000; }
     .main-subtitle { word-break: keep-all; }
     .nav-wrapper { padding-left: 20px; padding-right: 20px; }
     .top-title-bar { top: 14px; } 
-    .top-title-img { height: 40px; } /* 모바일에서 타이틀 사이즈 적당하게 확대 적용 */
+    .top-title-img { height: 40px; } 
     .hamburger-btn { display: block; position: absolute; right: 20px; bottom: 20px; z-index: 1001; cursor: pointer; }
     .nav-menu { display: none; position: fixed; bottom: 80px; left: 0; top: auto; width: 100%; height: auto; background: rgba(246, 246, 246, 0.98); border-top: 2px solid #111; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; gap: 30px; z-index: 1000; }
     .nav-menu.active { display: flex; }
@@ -411,4 +429,8 @@ body.is-main-page .nav-link { color: #000; }
     .guestbook-add-floating img { width: 100px; height: 100px; }
     .character-loader-wrapper { width: 250px; height: 120px; }
     .loader-item { width: 60px; height: 60px; }
+    
+    .designer-list { grid-column: span 4; }
+    .designer-item { grid-template-columns: 1fr; gap: 8px; padding: 15px 5px; }
+    .designer-preview-container { display: none; }
 }
