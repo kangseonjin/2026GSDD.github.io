@@ -1,99 +1,99 @@
 const worksDataset = [
     // Visual (A ~ AK) - 37명 x 2작품 = 74개
-    { id: 'V_A_1', category: 'Visual', designer: 'A', title: '작품명 입력 A-1', desc: 'A 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_A_p1.png', detailPrefix: 'pe_A_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_A_2', category: 'Visual', designer: 'A', title: '작품명 입력 A-2', desc: 'A 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_A_p2.png', detailPrefix: 'pe_A_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_B_1', category: 'Visual', designer: 'B', title: '작품명 입력 B-1', desc: 'B 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_B_p1.png', detailPrefix: 'pe_B_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_B_2', category: 'Visual', designer: 'B', title: '작품명 입력 B-2', desc: 'B 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_B_p2.png', detailPrefix: 'pe_B_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_C_1', category: 'Visual', designer: 'C', title: '작품명 입력 C-1', desc: 'C 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_C_p1.png', detailPrefix: 'pe_C_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_C_2', category: 'Visual', designer: 'C', title: '작품명 입력 C-2', desc: 'C 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_C_p2.png', detailPrefix: 'pe_C_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_D_1', category: 'Visual', designer: 'D', title: '작품명 입력 D-1', desc: 'D 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_D_p1.png', detailPrefix: 'pe_D_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_D_2', category: 'Visual', designer: 'D', title: '작품명 입력 D-2', desc: 'D 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_D_p2.png', detailPrefix: 'pe_D_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_E_1', category: 'Visual', designer: 'E', title: '작품명 입력 E-1', desc: 'E 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_E_p1.png', detailPrefix: 'pe_E_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_E_2', category: 'Visual', designer: 'E', title: '작품명 입력 E-2', desc: 'E 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_E_p2.png', detailPrefix: 'pe_E_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_F_1', category: 'Visual', designer: 'F', title: '작품명 입력 F-1', desc: 'F 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_F_p1.png', detailPrefix: 'pe_F_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_F_2', category: 'Visual', designer: 'F', title: '작품명 입력 F-2', desc: 'F 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_F_p2.png', detailPrefix: 'pe_F_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_G_1', category: 'Visual', designer: 'G', title: '작품명 입력 G-1', desc: 'G 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_G_p1.png', detailPrefix: 'pe_G_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_G_2', category: 'Visual', designer: 'G', title: '작품명 입력 G-2', desc: 'G 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_G_p2.png', detailPrefix: 'pe_G_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_H_1', category: 'Visual', designer: 'H', title: '작품명 입력 H-1', desc: 'H 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_H_p1.png', detailPrefix: 'pe_H_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_H_2', category: 'Visual', designer: 'H', title: '작품명 입력 H-2', desc: 'H 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_H_p2.png', detailPrefix: 'pe_H_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_I_1', category: 'Visual', designer: 'I', title: '작품명 입력 I-1', desc: 'I 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_I_p1.png', detailPrefix: 'pe_I_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_I_2', category: 'Visual', designer: 'I', title: '작품명 입력 I-2', desc: 'I 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_I_p2.png', detailPrefix: 'pe_I_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_J_1', category: 'Visual', designer: 'J', title: '작품명 입력 J-1', desc: 'J 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_J_p1.png', detailPrefix: 'pe_J_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_J_2', category: 'Visual', designer: 'J', title: '작품명 입력 J-2', desc: 'J 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_J_p2.png', detailPrefix: 'pe_J_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_K_1', category: 'Visual', designer: 'K', title: '작품명 입력 K-1', desc: 'K 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_K_p1.png', detailPrefix: 'pe_K_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_K_2', category: 'Visual', designer: 'K', title: '작품명 입력 K-2', desc: 'K 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_K_p2.png', detailPrefix: 'pe_K_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_L_1', category: 'Visual', designer: 'L', title: '작품명 입력 L-1', desc: 'L 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_L_p1.png', detailPrefix: 'pe_L_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_L_2', category: 'Visual', designer: 'L', title: '작품명 입력 L-2', desc: 'L 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_L_p2.png', detailPrefix: 'pe_L_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_M_1', category: 'Visual', designer: 'M', title: '작품명 입력 M-1', desc: 'M 시 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_M_p1.png', detailPrefix: 'pe_M_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_M_2', category: 'Visual', designer: 'M', title: '작품명 입력 M-2', desc: 'M 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_M_p2.png', detailPrefix: 'pe_M_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_N_1', category: 'Visual', designer: 'N', title: '작품명 입력 N-1', desc: 'N 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_N_p1.png', detailPrefix: 'pe_N_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_N_2', category: 'Visual', designer: 'N', title: '작품명 입력 N-2', desc: 'N 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_N_p2.png', detailPrefix: 'pe_N_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_O_1', category: 'Visual', designer: 'O', title: '작품명 입력 O-1', desc: 'O 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_O_p1.png', detailPrefix: 'pe_O_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_O_2', category: 'Visual', designer: 'O', title: '작품명 입력 O-2', desc: 'O 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_O_p2.png', detailPrefix: 'pe_O_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_P_1', category: 'Visual', designer: 'P', title: '작품명 입력 P-1', desc: 'P 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_P_p1.png', detailPrefix: 'pe_P_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_P_2', category: 'Visual', designer: 'P', title: '작품명 입력 P-2', desc: 'P 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_P_p2.png', detailPrefix: 'pe_P_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Q_1', category: 'Visual', designer: 'Q', title: '작품명 입력 Q-1', desc: 'Q 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Q_p1.png', detailPrefix: 'pe_Q_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Q_2', category: 'Visual', designer: 'Q', title: '작품명 입력 Q-2', desc: 'Q 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Q_p2.png', detailPrefix: 'pe_Q_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_R_1', category: 'Visual', designer: 'R', title: '작품명 입력 R-1', desc: 'R 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_R_p1.png', detailPrefix: 'pe_R_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_R_2', category: 'Visual', designer: 'R', title: '작품명 입력 R-2', desc: 'R 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_R_p2.png', detailPrefix: 'pe_R_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_S_1', category: 'Visual', designer: 'S', title: '작품명 입력 S-1', desc: 'S 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_S_p1.png', detailPrefix: 'pe_S_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_S_2', category: 'Visual', designer: 'S', title: '작품명 입력 S-2', desc: 'S 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_S_p2.png', detailPrefix: 'pe_S_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_T_1', category: 'Visual', designer: 'T', title: '작품명 입력 T-1', desc: 'T 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_T_p1.png', detailPrefix: 'pe_T_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_T_2', category: 'Visual', designer: 'T', title: '작품명 입력 T-2', desc: 'T 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_T_p2.png', detailPrefix: 'pe_T_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_U_1', category: 'Visual', designer: 'U', title: '작품명 입력 U-1', desc: 'U 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_U_p1.png', detailPrefix: 'pe_U_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_U_2', category: 'Visual', designer: 'U', title: '작품명 입력 U-2', desc: 'U 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_U_p2.png', detailPrefix: 'pe_U_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_V_1', category: 'Visual', designer: 'V', title: '작품명 입력 V-1', desc: 'V 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_V_p1.png', detailPrefix: 'pe_V_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_V_2', category: 'Visual', designer: 'V', title: '작품명 입력 V-2', desc: 'V 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_V_p2.png', detailPrefix: 'pe_V_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_W_1', category: 'Visual', designer: 'W', title: '작품명 입력 W-1', desc: 'W 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_W_p1.png', detailPrefix: 'pe_W_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_W_2', category: 'Visual', designer: 'W', title: '작품명 입력 W-2', desc: 'W 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_W_p2.png', detailPrefix: 'pe_W_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_X_1', category: 'Visual', designer: 'X', title: '작품명 입력 X-1', desc: 'X 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_X_p1.png', detailPrefix: 'pe_X_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_X_2', category: 'Visual', designer: 'X', title: '작품명 입력 X-2', desc: 'X 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_X_p2.png', detailPrefix: 'pe_X_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Y_1', category: 'Visual', designer: 'Y', title: '작품명 입력 Y-1', desc: 'Y 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Y_p1.png', detailPrefix: 'pe_Y_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Y_2', category: 'Visual', designer: 'Y', title: '작품명 입력 Y-2', desc: 'Y 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Y_p2.png', detailPrefix: 'pe_Y_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Z_1', category: 'Visual', designer: 'Z', title: '작품명 입력 Z-1', desc: 'Z 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Z_p1.png', detailPrefix: 'pe_Z_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_Z_2', category: 'Visual', designer: 'Z', title: '작품명 입력 Z-2', desc: 'Z 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Z_p2.png', detailPrefix: 'pe_Z_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AA_1', category: 'Visual', designer: 'AA', title: '작품명 입력 AA-1', desc: 'AA 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AA_p1.png', detailPrefix: 'pe_AA_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AA_2', category: 'Visual', designer: 'AA', title: '작품명 입력 AA-2', desc: 'AA 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AA_p2.png', detailPrefix: 'pe_AA_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AB_1', category: 'Visual', designer: 'AB', title: '작품명 입력 AB-1', desc: 'AB 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AB_p1.png', detailPrefix: 'pe_AB_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AB_2', category: 'Visual', designer: 'AB', title: '작품명 입력 AB-2', desc: 'AB 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AB_p2.png', detailPrefix: 'pe_AB_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AC_1', category: 'Visual', designer: 'AC', title: '작품명 입력 AC-1', desc: 'AC 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AC_p1.png', detailPrefix: 'pe_AC_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AC_2', category: 'Visual', designer: 'AC', title: '작품명 입력 AC-2', desc: 'AC 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AC_p2.png', detailPrefix: 'pe_AC_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AD_1', category: 'Visual', designer: 'AD', title: '작품명 입력 AD-1', desc: 'AD 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AD_p1.png', detailPrefix: 'pe_AD_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AD_2', category: 'Visual', designer: 'AD', title: '작품명 입력 AD-2', desc: 'AD 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AD_p2.png', detailPrefix: 'pe_AD_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AE_1', category: 'Visual', designer: 'AE', title: '작품명 입력 AE-1', desc: 'AE 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AE_p1.png', detailPrefix: 'pe_AE_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AE_2', category: 'Visual', designer: 'AE', title: '작품명 입력 AE-2', desc: 'AE 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AE_p2.png', detailPrefix: 'pe_AE_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AF_1', category: 'Visual', designer: 'AF', title: '작품명 입력 AF-1', desc: 'AF 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AF_p1.png', detailPrefix: 'pe_AF_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AF_2', category: 'Visual', designer: 'AF', title: '작품명 입력 AF-2', desc: 'AF 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AF_p2.png', detailPrefix: 'pe_AF_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AG_1', category: 'Visual', designer: 'AG', title: '작품명 입력 AG-1', desc: 'AG 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AG_p1.png', detailPrefix: 'pe_AG_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AG_2', category: 'Visual', designer: 'AG', title: '작품명 입력 AG-2', desc: 'AG 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AG_p2.png', detailPrefix: 'pe_AG_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AH_1', category: 'Visual', designer: 'AH', title: '작품명 입력 AH-1', desc: 'AH 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AH_p1.png', detailPrefix: 'pe_AH_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AH_2', category: 'Visual', designer: 'AH', title: '작품명 입력 AH-2', desc: 'AH 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AH_p2.png', detailPrefix: 'pe_AH_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AI_1', category: 'Visual', designer: 'AI', title: '작품명 입력 AI-1', desc: 'AI 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AI_p1.png', detailPrefix: 'pe_AI_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AI_2', category: 'Visual', designer: 'AI', title: '작품명 입력 AI-2', desc: 'AI 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AI_p2.png', detailPrefix: 'pe_AI_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AJ_1', category: 'Visual', designer: 'AJ', title: '작품명 입력 AJ-1', desc: 'AJ 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AJ_p1.png', detailPrefix: 'pe_AJ_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AJ_2', category: 'Visual', designer: 'AJ', title: '작품명 입력 AJ-2', desc: 'AJ 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AJ_p2.png', detailPrefix: 'pe_AJ_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AK_1', category: 'Visual', designer: 'AK', title: '작품명 입력 AK-1', desc: 'AK 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AK_p1.png', detailPrefix: 'pe_AK_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AK_2', category: 'Visual', designer: 'AK', title: '작품명 입력 AK-2', desc: 'AK 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AK_p2.png', detailPrefix: 'pe_AK_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_A_1', category: 'Visual', designer: 'A', engName: 'A', title: '작품명 입력 A-1', desc: 'A 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_A_p1.png', detailPrefix: 'pe_A_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_A_2', category: 'Visual', designer: 'A', engName: 'A', title: '작품명 입력 A-2', desc: 'A 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_A_p2.png', detailPrefix: 'pe_A_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_B_1', category: 'Visual', designer: 'B', engName: 'B', title: '작품명 입력 B-1', desc: 'B 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_B_p1.png', detailPrefix: 'pe_B_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_B_2', category: 'Visual', designer: 'B', engName: 'B', title: '작품명 입력 B-2', desc: 'B 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_B_p2.png', detailPrefix: 'pe_B_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_C_1', category: 'Visual', designer: 'C', engName: 'C', title: '작품명 입력 C-1', desc: 'C 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_C_p1.png', detailPrefix: 'pe_C_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_C_2', category: 'Visual', designer: 'C', engName: 'C', title: '작품명 입력 C-2', desc: 'C 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_C_p2.png', detailPrefix: 'pe_C_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_D_1', category: 'Visual', designer: 'D', engName: 'D', title: '작품명 입력 D-1', desc: 'D 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_D_p1.png', detailPrefix: 'pe_D_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_D_2', category: 'Visual', designer: 'D', engName: 'D', title: '작품명 입력 D-2', desc: 'D 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_D_p2.png', detailPrefix: 'pe_D_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_E_1', category: 'Visual', designer: 'E', engName: 'E', title: '작품명 입력 E-1', desc: 'E 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_E_p1.png', detailPrefix: 'pe_E_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_E_2', category: 'Visual', designer: 'E', engName: 'E', title: '작품명 입력 E-2', desc: 'E 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_E_p2.png', detailPrefix: 'pe_E_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_F_1', category: 'Visual', designer: 'F', engName: 'F', title: '작품명 입력 F-1', desc: 'F 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_F_p1.png', detailPrefix: 'pe_F_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_F_2', category: 'Visual', designer: 'F', engName: 'F', title: '작품명 입력 F-2', desc: 'F 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_F_p2.png', detailPrefix: 'pe_F_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_G_1', category: 'Visual', designer: 'G', engName: 'G', title: '작품명 입력 G-1', desc: 'G 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_G_p1.png', detailPrefix: 'pe_G_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_G_2', category: 'Visual', designer: 'G', engName: 'G', title: '작품명 입력 G-2', desc: 'G 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_G_p2.png', detailPrefix: 'pe_G_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_H_1', category: 'Visual', designer: 'H', engName: 'H', title: '작품명 입력 H-1', desc: 'H 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_H_p1.png', detailPrefix: 'pe_H_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_H_2', category: 'Visual', designer: 'H', engName: 'H', title: '작품명 입력 H-2', desc: 'H 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_H_p2.png', detailPrefix: 'pe_H_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_I_1', category: 'Visual', designer: 'I', engName: 'I', title: '작품명 입력 I-1', desc: 'I 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_I_p1.png', detailPrefix: 'pe_I_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_I_2', category: 'Visual', designer: 'I', engName: 'I', title: '작품명 입력 I-2', desc: 'I 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_I_p2.png', detailPrefix: 'pe_I_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_J_1', category: 'Visual', designer: 'J', engName: 'J', title: '작품명 입력 J-1', desc: 'J 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_J_p1.png', detailPrefix: 'pe_J_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_J_2', category: 'Visual', designer: 'J', engName: 'J', title: '작품명 입력 J-2', desc: 'J 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_J_p2.png', detailPrefix: 'pe_J_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_K_1', category: 'Visual', designer: 'K', engName: 'K', title: '작품명 입력 K-1', desc: 'K 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_K_p1.png', detailPrefix: 'pe_K_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_K_2', category: 'Visual', designer: 'K', engName: 'K', title: '작품명 입력 K-2', desc: 'K 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_K_p2.png', detailPrefix: 'pe_K_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_L_1', category: 'Visual', designer: 'L', engName: 'L', title: '작품명 입력 L-1', desc: 'L 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_L_p1.png', detailPrefix: 'pe_L_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_L_2', category: 'Visual', designer: 'L', engName: 'L', title: '작품명 입력 L-2', desc: 'L 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_L_p2.png', detailPrefix: 'pe_L_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_M_1', category: 'Visual', designer: 'M', engName: 'M', title: '작품명 입력 M-1', desc: 'M 시 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_M_p1.png', detailPrefix: 'pe_M_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_M_2', category: 'Visual', designer: 'M', engName: 'M', title: '작품명 입력 M-2', desc: 'M 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_M_p2.png', detailPrefix: 'pe_M_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_N_1', category: 'Visual', designer: 'N', engName: 'N', title: '작품명 입력 N-1', desc: 'N 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_N_p1.png', detailPrefix: 'pe_N_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_N_2', category: 'Visual', designer: 'N', engName: 'N', title: '작품명 입력 N-2', desc: 'N 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_N_p2.png', detailPrefix: 'pe_N_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_O_1', category: 'Visual', designer: 'O', engName: 'O', title: '작품명 입력 O-1', desc: 'O 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_O_p1.png', detailPrefix: 'pe_O_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_O_2', category: 'Visual', designer: 'O', engName: 'O', title: '작품명 입력 O-2', desc: 'O 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_O_p2.png', detailPrefix: 'pe_O_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_P_1', category: 'Visual', designer: 'P', engName: 'P', title: '작품명 입력 P-1', desc: 'P 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_P_p1.png', detailPrefix: 'pe_P_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_P_2', category: 'Visual', designer: 'P', engName: 'P', title: '작품명 입력 P-2', desc: 'P 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_P_p2.png', detailPrefix: 'pe_P_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Q_1', category: 'Visual', designer: 'Q', engName: 'Q', title: '작품명 입력 Q-1', desc: 'Q 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Q_p1.png', detailPrefix: 'pe_Q_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Q_2', category: 'Visual', designer: 'Q', engName: 'Q', title: '작품명 입력 Q-2', desc: 'Q 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Q_p2.png', detailPrefix: 'pe_Q_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_R_1', category: 'Visual', designer: 'R', engName: 'R', title: '작품명 입력 R-1', desc: 'R 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_R_p1.png', detailPrefix: 'pe_R_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_R_2', category: 'Visual', designer: 'R', engName: 'R', title: '작품명 입력 R-2', desc: 'R 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_R_p2.png', detailPrefix: 'pe_R_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_S_1', category: 'Visual', designer: 'S', engName: 'S', title: '작품명 입력 S-1', desc: 'S 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_S_p1.png', detailPrefix: 'pe_S_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_S_2', category: 'Visual', designer: 'S', engName: 'S', title: '작품명 입력 S-2', desc: 'S 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_S_p2.png', detailPrefix: 'pe_S_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_T_1', category: 'Visual', designer: 'T', engName: 'T', title: '작품명 입력 T-1', desc: 'T 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_T_p1.png', detailPrefix: 'pe_T_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_T_2', category: 'Visual', designer: 'T', engName: 'T', title: '작품명 입력 T-2', desc: 'T 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_T_p2.png', detailPrefix: 'pe_T_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_U_1', category: 'Visual', designer: 'U', engName: 'U', title: '작품명 입력 U-1', desc: 'U 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_U_p1.png', detailPrefix: 'pe_U_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_U_2', category: 'Visual', designer: 'U', engName: 'U', title: '작품명 입력 U-2', desc: 'U 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_U_p2.png', detailPrefix: 'pe_U_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_V_1', category: 'Visual', designer: 'V', engName: 'V', title: '작품명 입력 V-1', desc: 'V 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_V_p1.png', detailPrefix: 'pe_V_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_V_2', category: 'Visual', designer: 'V', engName: 'V', title: '작품명 입력 V-2', desc: 'V 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_V_p2.png', detailPrefix: 'pe_V_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_W_1', category: 'Visual', designer: 'W', engName: 'W', title: '작품명 입력 W-1', desc: 'W 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_W_p1.png', detailPrefix: 'pe_W_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_W_2', category: 'Visual', designer: 'W', engName: 'W', title: '작품명 입력 W-2', desc: 'W 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_W_p2.png', detailPrefix: 'pe_W_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_X_1', category: 'Visual', designer: 'X', engName: 'X', title: '작품명 입력 X-1', desc: 'X 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_X_p1.png', detailPrefix: 'pe_X_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_X_2', category: 'Visual', designer: 'X', engName: 'X', title: '작품명 입력 X-2', desc: 'X 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_X_p2.png', detailPrefix: 'pe_X_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Y_1', category: 'Visual', designer: 'Y', engName: 'Y', title: '작품명 입력 Y-1', desc: 'Y 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Y_p1.png', detailPrefix: 'pe_Y_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Y_2', category: 'Visual', designer: 'Y', engName: 'Y', title: '작품명 입력 Y-2', desc: 'Y 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Y_p2.png', detailPrefix: 'pe_Y_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Z_1', category: 'Visual', designer: 'Z', engName: 'Z', title: '작품명 입력 Z-1', desc: 'Z 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Z_p1.png', detailPrefix: 'pe_Z_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_Z_2', category: 'Visual', designer: 'Z', engName: 'Z', title: '작품명 입력 Z-2', desc: 'Z 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Z_p2.png', detailPrefix: 'pe_Z_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AA_1', category: 'Visual', designer: 'AA', engName: 'AA', title: '작품명 입력 AA-1', desc: 'AA 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AA_p1.png', detailPrefix: 'pe_AA_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AA_2', category: 'Visual', designer: 'AA', engName: 'AA', title: '작품명 입력 AA-2', desc: 'AA 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AA_p2.png', detailPrefix: 'pe_AA_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AB_1', category: 'Visual', designer: 'AB', engName: 'AB', title: '작품명 입력 AB-1', desc: 'AB 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AB_p1.png', detailPrefix: 'pe_AB_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AB_2', category: 'Visual', designer: 'AB', engName: 'AB', title: '작품명 입력 AB-2', desc: 'AB 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AB_p2.png', detailPrefix: 'pe_AB_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AC_1', category: 'Visual', designer: 'AC', engName: 'AC', title: '작품명 입력 AC-1', desc: 'AC 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AC_p1.png', detailPrefix: 'pe_AC_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AC_2', category: 'Visual', designer: 'AC', engName: 'AC', title: '작품명 입력 AC-2', desc: 'AC 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AC_p2.png', detailPrefix: 'pe_AC_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AD_1', category: 'Visual', designer: 'AD', engName: 'AD', title: '작품명 입력 AD-1', desc: 'AD 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AD_p1.png', detailPrefix: 'pe_AD_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AD_2', category: 'Visual', designer: 'AD', engName: 'AD', title: '작품명 입력 AD-2', desc: 'AD 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AD_p2.png', detailPrefix: 'pe_AD_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AE_1', category: 'Visual', designer: 'AE', engName: 'AE', title: '작품명 입력 AE-1', desc: 'AE 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AE_p1.png', detailPrefix: 'pe_AE_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AE_2', category: 'Visual', designer: 'AE', engName: 'AE', title: '작품명 입력 AE-2', desc: 'AE 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AE_p2.png', detailPrefix: 'pe_AE_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AF_1', category: 'Visual', designer: 'AF', engName: 'AF', title: '작품명 입력 AF-1', desc: 'AF 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AF_p1.png', detailPrefix: 'pe_AF_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AF_2', category: 'Visual', designer: 'AF', engName: 'AF', title: '작품명 입력 AF-2', desc: 'AF 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AF_p2.png', detailPrefix: 'pe_AF_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AG_1', category: 'Visual', designer: 'AG', engName: 'AG', title: '작품명 입력 AG-1', desc: 'AG 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AG_p1.png', detailPrefix: 'pe_AG_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AG_2', category: 'Visual', designer: 'AG', engName: 'AG', title: '작품명 입력 AG-2', desc: 'AG 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AG_p2.png', detailPrefix: 'pe_AG_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AH_1', category: 'Visual', designer: 'AH', engName: 'AH', title: '작품명 입력 AH-1', desc: 'AH 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AH_p1.png', detailPrefix: 'pe_AH_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AH_2', category: 'Visual', designer: 'AH', engName: 'AH', title: '작품명 입력 AH-2', desc: 'AH 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AH_p2.png', detailPrefix: 'pe_AH_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AI_1', category: 'Visual', designer: 'AI', engName: 'AI', title: '작품명 입력 AI-1', desc: 'AI 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AI_p1.png', detailPrefix: 'pe_AI_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AI_2', category: 'Visual', designer: 'AI', engName: 'AI', title: '작품명 입력 AI-2', desc: 'AI 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AI_p2.png', detailPrefix: 'pe_AI_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AJ_1', category: 'Visual', designer: 'AJ', engName: 'AJ', title: '작품명 입력 AJ-1', desc: 'AJ 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AJ_p1.png', detailPrefix: 'pe_AJ_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AJ_2', category: 'Visual', designer: 'AJ', engName: 'AJ', title: '작품명 입력 AJ-2', desc: 'AJ 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AJ_p2.png', detailPrefix: 'pe_AJ_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AK_1', category: 'Visual', designer: 'AK', engName: 'AK', title: '작품명 입력 AK-1', desc: 'AK 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AK_p1.png', detailPrefix: 'pe_AK_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AK_2', category: 'Visual', designer: 'AK', engName: 'AK', title: '작품명 입력 AK-2', desc: 'AK 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AK_p2.png', detailPrefix: 'pe_AK_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
 
     // Space (A ~ R) - 18명 x 1작품 = 18개
-    { id: 'S_A', category: 'Space', designer: 'A', title: '작품명 입력 Space-A', desc: 'A 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_A.png', detailPrefix: 'pe_A', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_B', category: 'Space', designer: 'B', title: '작품명 입력 Space-B', desc: 'B 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_B.png', detailPrefix: 'pe_B', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_C', category: 'Space', designer: 'C', title: '작품명 입력 Space-C', desc: 'C 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_C.png', detailPrefix: 'pe_C', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_D', category: 'Space', designer: 'D', title: '작품명 입력 Space-D', desc: 'D 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_D.png', detailPrefix: 'pe_D', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_E', category: 'Space', designer: 'E', title: '작품명 입력 Space-E', desc: 'E 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_E.png', detailPrefix: 'pe_E', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_F', category: 'Space', designer: 'F', title: '작품명 입력 Space-F', desc: 'F 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_F.png', detailPrefix: 'pe_F', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_G', category: 'Space', designer: 'G', title: '작품명 입력 Space-G', desc: 'G 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_G.png', detailPrefix: 'pe_G', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_H', category: 'Space', designer: 'H', title: '작품명 입력 Space-H', desc: 'H 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_H.png', detailPrefix: 'pe_H', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_I', category: 'Space', designer: 'I', title: '작품명 입력 Space-I', desc: 'I 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_I.png', detailPrefix: 'pe_I', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_J', category: 'Space', designer: 'J', title: '작품명 입력 Space-J', desc: 'J 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_J.png', detailPrefix: 'pe_J', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_K', category: 'Space', designer: 'K', title: '작품명 입력 Space-K', desc: 'K 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_K.png', detailPrefix: 'pe_K', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_L', category: 'Space', designer: 'L', title: '작품명 입력 Space-L', desc: 'L 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_L.png', detailPrefix: 'pe_L', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_M', category: 'Space', designer: 'M', title: '작품명 입력 Space-M', desc: 'M 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_M.png', detailPrefix: 'pe_M', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_N', category: 'Space', designer: 'N', title: '작품명 입력 Space-N', desc: 'N 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_N.png', detailPrefix: 'pe_N', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_O', category: 'Space', designer: 'O', title: '작품명 입력 Space-O', desc: 'O 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_O.png', detailPrefix: 'pe_O', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_P', category: 'Space', designer: 'P', title: '작품명 입력 Space-P', desc: 'P 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_P.png', detailPrefix: 'pe_P', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_Q', category: 'Space', designer: 'Q', title: '작품명 입력 Space-Q', desc: 'Q 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_Q.png', detailPrefix: 'pe_Q', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'S_R', category: 'Space', designer: 'R', title: '작품명 입력 Space-R', desc: 'R 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_R.png', detailPrefix: 'pe_R', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' }
+    { id: 'S_A', category: 'Space', designer: 'A', engName: 'A', title: '작품명 입력 Space-A', desc: 'A 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_A.png', detailPrefix: 'pe_A', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_B', category: 'Space', designer: 'B', engName: 'B', title: '작품명 입력 Space-B', desc: 'B 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_B.png', detailPrefix: 'pe_B', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_C', category: 'Space', designer: 'C', engName: 'C', title: '작품명 입력 Space-C', desc: 'C 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_C.png', detailPrefix: 'pe_C', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_D', category: 'Space', designer: 'D', engName: 'D', title: '작품명 입력 Space-D', desc: 'D 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_D.png', detailPrefix: 'pe_D', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_E', category: 'Space', designer: 'E', engName: 'E', title: '작품명 입력 Space-E', desc: 'E 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_E.png', detailPrefix: 'pe_E', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_F', category: 'Space', designer: 'F', engName: 'F', title: '작품명 입력 Space-F', desc: 'F 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_F.png', detailPrefix: 'pe_F', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_G', category: 'Space', designer: 'G', engName: 'G', title: '작품명 입력 Space-G', desc: 'G 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_G.png', detailPrefix: 'pe_G', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_H', category: 'Space', designer: 'H', engName: 'H', title: '작품명 입력 Space-H', desc: 'H 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_H.png', detailPrefix: 'pe_H', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_I', category: 'Space', designer: 'I', engName: 'I', title: '작품명 입력 Space-I', desc: 'I 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_I.png', detailPrefix: 'pe_I', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_J', category: 'Space', designer: 'J', engName: 'J', title: '작품명 입력 Space-J', desc: 'J 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_J.png', detailPrefix: 'pe_J', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_K', category: 'Space', designer: 'K', engName: 'K', title: '작품명 입력 Space-K', desc: 'K 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_K.png', detailPrefix: 'pe_K', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_L', category: 'Space', designer: 'L', engName: 'L', title: '작품명 입력 Space-L', desc: 'L 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_L.png', detailPrefix: 'pe_L', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_M', category: 'Space', designer: 'M', engName: 'M', title: '작품명 입력 Space-M', desc: 'M 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_M.png', detailPrefix: 'pe_M', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_N', category: 'Space', designer: 'N', engName: 'N', title: '작품명 입력 Space-N', desc: 'N 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_N.png', detailPrefix: 'pe_N', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_O', category: 'Space', designer: 'O', engName: 'O', title: '작품명 입력 Space-O', desc: 'O 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_O.png', detailPrefix: 'pe_O', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_P', category: 'Space', designer: 'P', engName: 'P', title: '작품명 입력 Space-P', desc: 'P 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_P.png', detailPrefix: 'pe_P', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_Q', category: 'Space', designer: 'Q', engName: 'Q', title: '작품명 입력 Space-Q', desc: 'Q 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_Q.png', detailPrefix: 'pe_Q', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'S_R', category: 'Space', designer: 'R', engName: 'R', title: '작품명 입력 Space-R', desc: 'R 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_R.png', detailPrefix: 'pe_R', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' }
 ];
 
 const archiveDataset = [
@@ -223,15 +223,14 @@ function showWorkDetail(workId) {
    디자이너 페이지 데이터 연동 및 호버 인터랙션
 =========================================================== */
 
-// 1. worksDataset에서 Visual / Space 분리하여 그룹화
 function getDesignersData() {
     const dMap = {};
     worksDataset.forEach(w => {
-        // 이름만 같다고 합쳐지는 걸 방지하기 위해 카테고리별로 고유키 생성
         const key = w.category + '_' + w.designer; 
         if (!dMap[key]) {
             dMap[key] = {
                 designer: w.designer,
+                engName: w.engName, // 영문이름 추가
                 category: w.category,
                 works: []
             };
@@ -241,15 +240,12 @@ function getDesignersData() {
     return Object.values(dMap);
 }
 
-// 2. 디자이너 리스트 동적 렌더링
 function renderDesignersList(category = 'All') {
     const grid = document.getElementById('designers-list-grid');
     if (!grid) return;
     grid.innerHTML = '';
     
     const allDesigners = getDesignersData();
-    
-    // ★ 이름(알파벳/가나다) 순으로 자동 정렬 추가
     allDesigners.sort((a, b) => a.designer.localeCompare(b.designer));
     
     const filtered = category === 'All' ? allDesigners : allDesigners.filter(d => d.category === category);
@@ -261,9 +257,10 @@ function renderDesignersList(category = 'All') {
         const work1 = d.works[0];
         const work2 = d.works[1];
 
-        // 이미지 경로 자동 생성 (dc_이름_p1.png / dc_이름.png 형식)
         let img1 = '', img2 = '';
-        const safeName = d.designer.toLowerCase(); 
+        
+        // engName 기반 이미지 생성
+        const safeName = d.engName ? d.engName.toLowerCase() : d.designer.toLowerCase(); 
         if (d.category === 'Visual') {
             img1 = `dc_${safeName}_p1.png`;
             img2 = `dc_${safeName}_p2.png`;
@@ -274,95 +271,65 @@ function renderDesignersList(category = 'All') {
 
         const tagClass = d.category.toLowerCase();
         
+        // 플로팅 이미지를 띄우기 위해 span 안에 'designer-work-title' 클래스와 데이터 속성 부여
+        // 수정됨: 텍스트를 감싸는 <span class="title-text"> 추가
         li.innerHTML = `
             <span class="tag ${tagClass}">${d.category}</span>
             <span class="name">${d.designer}</span>
-            <span class="title">${work1 ? work1.title : ''}</span>
-            <span class="title">${work2 ? work2.title : ''}</span>
+            <span class="title designer-work-title" data-img="${img1}" data-workid="${work1 ? work1.id : ''}"><span class="title-text">${work1 ? work1.title : ''}</span></span>
+            <span class="title designer-work-title" data-img="${img2}" data-workid="${work2 ? work2.id : ''}"><span class="title-text">${work2 ? work2.title : ''}</span></span>
         `;
-        
-        // 인터랙션 처리를 위한 속성 저장
-        li.dataset.img1 = img1;
-        li.dataset.img2 = img2;
-        li.dataset.title1 = work1 ? work1.title : '';
-        li.dataset.title2 = work2 ? work2.title : '';
-        li.dataset.workid1 = work1 ? work1.id : '';
-        li.dataset.workid2 = work2 ? work2.id : '';
         
         grid.appendChild(li);
     });
 
-    // 렌더링 후 이벤트 다시 연결
     initDesignersInteractions(); 
 }
 
-// 3. 디자이너 페이지 전용 카테고리 필터
 function filterDesignersByCategory(category) {
     document.querySelectorAll('#designers-filter-group .works-filter-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`d-filter-${category.toLowerCase()}`).classList.add('active');
     renderDesignersList(category);
 }
 
-// 4. 호버 미리보기 및 클릭 이동 연동 (마우스 떼도 이미지 유지됨)
 function initDesignersInteractions() {
-    const previewImg1 = document.getElementById('preview-img-1');
-    const previewTitle1 = document.getElementById('preview-title-1');
-    const previewBox1 = document.getElementById('preview-box-1');
-    const previewItem1 = document.getElementById('preview-item-1');
+    const floatingPreview = document.getElementById('floating-preview');
+    if (!floatingPreview) return;
 
-    const previewImg2 = document.getElementById('preview-img-2');
-    const previewTitle2 = document.getElementById('preview-title-2');
-    const previewBox2 = document.getElementById('preview-box-2');
-    const previewItem2 = document.getElementById('preview-item-2');
-    
-    const designerItems = document.querySelectorAll('.designer-item');
-    if (!designerItems.length) return; 
+    const titles = document.querySelectorAll('.designer-work-title');
 
-    // 초기 상태: 빈 공간 유지
-    previewItem1.style.display = 'none';
-    previewItem2.style.display = 'none';
+    titles.forEach(title => {
+        // 작품명이 비어있는 요소는 무시
+        if (!title.innerText.trim()) return; 
 
-    designerItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            // 다른 활성화된 행들 제거 후 현재 항목만 활성화
-            designerItems.forEach(el => el.classList.remove('wiggle-active'));
-            item.classList.add('wiggle-active');
-            
-            const img1Src = item.dataset.img1;
-            const img2Src = item.dataset.img2;
-            const title1 = item.dataset.title1;
-            const title2 = item.dataset.title2;
-            const workId1 = item.dataset.workid1;
-            const workId2 = item.dataset.workid2;
+        // 클릭 시 해당 상세 페이지로 이동
+        title.onclick = (e) => {
+            e.stopPropagation();
+            const workId = title.dataset.workid;
+            if(workId) showWorkDetail(workId);
+        };
 
-            // 첫 번째 작품 미리보기
-            if (img1Src && img1Src.trim() !== "") {
-                previewItem1.style.display = 'flex';
-                previewImg1.src = img1Src;
-                previewImg1.style.display = 'block';
-                previewTitle1.innerText = title1;
-                // 클릭 시 해당 상세 페이지로 이동
-                previewBox1.onclick = () => showWorkDetail(workId1);
-            } else {
-                previewItem1.style.display = 'none';
-            }
-            
-            // 두 번째 작품 미리보기
-            if (img2Src && img2Src.trim() !== "") {
-                previewItem2.style.display = 'flex';
-                previewImg2.src = img2Src;
-                previewImg2.style.display = 'block';
-                previewTitle2.innerText = title2;
-                // 클릭 시 해당 상세 페이지로 이동
-                previewBox2.onclick = () => showWorkDetail(workId2);
-            } else {
-                previewItem2.style.display = 'none';
+        // 타이틀 호버 시 플로팅 이미지 표시
+        title.addEventListener('mouseenter', (e) => {
+            const imgSrc = title.dataset.img;
+            if (imgSrc && imgSrc.trim() !== '') {
+                floatingPreview.src = imgSrc;
+                floatingPreview.classList.add('visible');
             }
         });
 
-        // ★ 마우스를 떼도 이미지를 지우지 않음! 그래야 오른쪽으로 마우스를 옮겨 클릭 가능
-        item.addEventListener('mouseleave', () => {
-            item.classList.remove('wiggle-active');
+        // 마우스가 타이틀 위에서 움직일 때 플로팅 이미지 위치 업데이트
+        title.addEventListener('mousemove', (e) => {
+            if (floatingPreview.classList.contains('visible')) {
+                // e.clientX, e.clientY를 통해 현재 마우스 커서의 X,Y 좌표값을 할당
+                floatingPreview.style.left = `${e.clientX}px`;
+                floatingPreview.style.top = `${e.clientY}px`;
+            }
+        });
+
+        // 마우스가 타이틀 밖으로 나가면 플로팅 이미지 숨김
+        title.addEventListener('mouseleave', () => {
+            floatingPreview.classList.remove('visible');
         });
     });
 }
@@ -543,10 +510,10 @@ function initArchiveSlider() {
 let isNavigating = false;
 
 const loadingCombinations = [
-    ['maingraphic-04.png', 'maingraphic-07.png', 'maingraphic-08.png'],
-    ['maingraphic-06.png', 'maingraphic-09.png', 'maingraphic-11.png'],
-    ['maingraphic-03.png', 'maingraphic-05.png', 'maingraphic-12.png'],
-    ['maingraphic-10.png', 'maingraphic-02.png', 'maingraphic-01.png'] 
+    ['loding/ld-01.png', 'loding/ld-02.png', 'loding/ld-03.png'],
+    ['loding/ld-04.png', 'loding/ld-05.png', 'loding/ld-06.png'],
+    ['loding/ld-07.png', 'loding/ld-08.png', 'loding/ld-09.png'],
+    ['loding/ld-10.png', 'loding/ld-11.png', 'loding/ld-12.png'] 
 ];
 
 function navigateToPage(pageName, skipLoading = false) {
@@ -592,6 +559,7 @@ function navigateToPage(pageName, skipLoading = false) {
         finalImg.style.opacity = '0';
         loadingScreen.classList.remove('hidden');
         
+        // 애니메이션 타이밍 조정 (1.5초 후 캐릭터 사라짐 -> 1.0초 로고 유지 = 2.5초)
         setTimeout(() => {
             charsWrap.style.display = 'none';
             finalImg.style.display = 'block';
@@ -604,9 +572,9 @@ function navigateToPage(pageName, skipLoading = false) {
             
             setTimeout(() => {
                 completeNavigation(pageName);
-            }, 1300);
+            }, 1000);
             
-        }, 1900);
+        }, 1500);
     } else {
         completeNavigation(pageName);
     }
@@ -1056,6 +1024,7 @@ function initPhysics() {
         return Math.random() * (stage.clientWidth - width) + (width / 2);
     };
 
+    // 그래픽 화질 개선을 위해 pixelRatio 옵션 추가
     const render = Render.create({
         element: stage,
         engine: engine,
@@ -1063,7 +1032,8 @@ function initPhysics() {
             width: stage.clientWidth,
             height: stage.clientHeight,
             wireframes: false,
-            background: 'transparent'
+            background: 'transparent',
+            pixelRatio: window.devicePixelRatio || 1
         }
     });
 

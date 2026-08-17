@@ -54,23 +54,27 @@ ul, ol { list-style: none; }
 #intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 #loading-screen {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #FFE9B8;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background-color: #FFFFFF; 
     z-index: 10005; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-.character-loader-wrapper { position: relative; width: 320px; height: 150px; display: flex; justify-content: space-around; align-items: center; }
-.loader-item { position: relative; width: 80px; height: 80px; }
+/* 로딩 애니메이션 영역 크기 증가 */
+.character-loader-wrapper { position: relative; width: 480px; height: 220px; display: flex; justify-content: space-around; align-items: center; }
+/* 로딩 개별 이미지 크기 증가 (기존 80px -> 140px) */
+.loader-item { position: relative; width: 140px; height: 140px; }
 .loader-char { position: absolute; width: 100%; height: 100%; object-fit: contain; left: 0; transform-origin: 50% 100%; animation: bounceChar 0.5s alternate infinite ease-in-out; z-index: 2; }
 
 .item-1 .loader-char { animation-delay: 0s; }
 .item-2 .loader-char { animation-delay: 0.15s; }
 .item-3 .loader-char { animation-delay: 0.3s; }
 
+/* 이미지가 커진 만큼 이동 폭(top)을 30px에서 40px로 수정 */
 @keyframes bounceChar {
-    0% { top: 30px; transform: scaleX(1.2) scaleY(0.8); }
+    0% { top: 40px; transform: scaleX(1.2) scaleY(0.8); }
     40% { transform: scaleX(1) scaleY(1); }
-    100% { top: -30px; transform: scaleX(0.95) scaleY(1.05); }
+    100% { top: -40px; transform: scaleX(0.95) scaleY(1.05); }
 }
 
 #loading-final-img {
@@ -174,9 +178,26 @@ body.is-main-page .nav-link { color: #000; }
 /* ===========================================================
    8. Archive Section (3D 슬라이더 통합)
 =========================================================== */
-.archive-page-container { width: 100vw; height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding-top: 80px; padding-bottom: 40px; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; box-sizing: border-box; background-color: var(--color-background); }
+.archive-page-container { width: 100vw; height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding-top: 120px; padding-bottom: 40px; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; box-sizing: border-box; background-color: var(--color-background); }
 .archive-slider-wrapper { position: relative; width: 100%; max-width: 1400px; height: min(600px, calc(100vh - 280px)); display: flex; justify-content: center; align-items: center; perspective: 1200px; transform-style: preserve-3d; }
-.archive-card { position: absolute; top: 50%; left: 50%; width: 430px; height: 600px; background: #ffffff; border-radius: 0; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.5s var(--ease-out-expo), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.5s ease; transform-origin: center center; backface-visibility: hidden; overflow: hidden; border: 1px solid #e0e0e0; }
+
+.archive-card { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    height: 100%;          
+    aspect-ratio: 43 / 60; 
+    max-height: 600px;     
+    background: #ffffff; 
+    border-radius: 0; 
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15); 
+    cursor: pointer; 
+    transition: transform 0.5s var(--ease-out-expo), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.5s ease; 
+    transform-origin: center center; 
+    backface-visibility: hidden; 
+    overflow: hidden; 
+    border: 1px solid #e0e0e0; 
+}
 .archive-card:hover { box-shadow: 0 28px 65px rgba(0, 0, 0, 0.2); }
 .archive-card.focused { border-color: #d0d0d0; box-shadow: 0 32px 70px rgba(0, 0, 0, 0.25); }
 .archive-card-poster { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
@@ -184,16 +205,19 @@ body.is-main-page .nav-link { color: #000; }
 .archive-card-base-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%); color: #ffffff; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box; pointer-events: none; }
 .archive-card-year { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; }
 .archive-card-theme-title { font-size: 1.05rem; font-weight: 600; opacity: 0.9; }
+
+/* CSS 특수성(Specificity)을 이용하여 제거 */
 .archive-card-hover-desc { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 17, 17, 0.93); color: #ffffff; padding: 32px 28px 48px 28px; box-sizing: border-box; opacity: 0; visibility: hidden; transition: opacity 0.35s var(--ease-ios), visibility 0.35s ease; z-index: 20; display: flex; flex-direction: column; justify-content: flex-end; }
-.archive-card:hover .archive-card-hover-desc, .archive-card.focused:hover .archive-card-hover-desc, .archive-card.hover-active .archive-card-hover-desc { opacity: 1 !important; visibility: visible !important; }
+.archive-card:hover .archive-card-hover-desc, .archive-card.focused:hover .archive-card-hover-desc, .archive-card.hover-active .archive-card-hover-desc { opacity: 1; visibility: visible; }
+
 .hover-desc-inner { display: flex; flex-direction: column; gap: 12px; }
 .hover-year-tag { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
 .hover-theme-title { font-size: 24px; font-weight: 400; line-height: 1.25; margin: 0; color: #ffffff; }
-.hover-desc-text { font-size: 12px; line-height: 1.7; color: #dddddd; margin: 0; word-break: keep-all; overflow: hidden; }
+.hover-desc-text { font-size: 12px; font-weight: 400; line-height: 1.7; color: #dddddd; margin: 0; word-break: keep-all; overflow: hidden; }
 
 .archive-controls-bar { display: flex; align-items: center; justify-content: center; gap: 36px; margin-top: 2rem; z-index: 30; position: relative; }
 .archive-dots-container { display: flex; gap: 12px; align-items: center; z-index: 20; }
-.archive-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #cbd5e1; cursor: pointer; transition: all 0.3s var(--ease-ios); }
+.archive-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #bcbcbc; cursor: pointer; transition: all 0.3s var(--ease-ios); }
 .archive-dot.active { background-color: #111111; transform: scale(1.3); }
 .archive-arrow-btn { width: 50px; height: 50px; background-color: transparent; border: none; cursor: pointer; z-index: 30; display: flex; align-items: center; justify-content: center; transition: transform 0.2s var(--ease-ios); }
 .archive-arrow-btn:hover { transform: scale(1.1); }
@@ -203,8 +227,17 @@ body.is-main-page .nav-link { color: #000; }
    9. About Section
 =========================================================== */
 .about-container { grid-column: span 12; width: 100vw; margin-left: calc(50% - 50vw); display: flex; flex-direction: column; align-items: center; }
-.about-img { width: 100%; max-width: 1920px; display: block; }
+
+.about-img { 
+    width: 100%; 
+    max-width: 1920px; 
+    display: block; 
+    image-rendering: -webkit-optimize-contrast; 
+    transform: translateZ(0); 
+    backface-visibility: hidden;
+}
 .about-img.auto-height { height: auto; }
+
 .about-video-wrapper { width: 100%; max-width: 995px; aspect-ratio: 16 / 9; background: #000; margin: 80px 0; position: relative; overflow: hidden; display: block; cursor: pointer; }
 .about-video-thumb { width: 100%; height: 100%; object-fit: cover; }
 .about-video-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); }
@@ -286,7 +319,7 @@ body.is-main-page .nav-link { color: #000; }
    12. Designers Section
 =========================================================== */
 .designer-list {
-    grid-column: 1 / 8;
+    grid-column: 1 / 13; 
     list-style: none;
     padding: 0;
     margin: 0;
@@ -300,18 +333,10 @@ body.is-main-page .nav-link { color: #000; }
     gap: 24px;
     padding: 25px 10px;
     border-bottom: 1px solid #eaeaea;
-    cursor: pointer;
     transition: background-color 0.3s ease;
-    transform-origin: center;
 }
 
-@keyframes designer-wiggle {
-    from { transform: rotate(-2deg); }
-    to { transform: rotate(2deg); }
-}
-
-.designer-item.wiggle-active {
-    animation: designer-wiggle 0.45s ease-in-out infinite alternate;
+.designer-item:hover {
     background-color: #fafafa;
 }
 
@@ -322,75 +347,47 @@ body.is-main-page .nav-link { color: #000; }
     text-align: center;
     border-radius: 0px;
 }
-.designer-item .tag.visual {
-    background-color: #FF7CA8;
-    color: #000;
-}
-.designer-item .tag.space {
-    background-color: #FF9900;
-    color: #000;
-}
+.designer-item .tag.visual { background-color: #FF7CA8; color: #000; }
+.designer-item .tag.space { background-color: #FF9900; color: #000; }
 
 .designer-item .name { font-size: 18px; font-weight: bold; }
-.designer-item .title { font-size: 16px; color: #000; text-align: left;font-weight: 400; }
 
-.designer-preview-container {
-    grid-column: 9 / 13;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    position: sticky;
-    top: 120px;
-    /* ★ 스크롤 시 아래에 있는 항목의 이미지도 화면에 따라다니게 해주는 핵심 코드 */
-    align-self: start; 
-    background-color: transparent !important; 
+.designer-item .title { 
+    font-size: 16px; color: #000; text-align: left; font-weight: 400; 
+    cursor: pointer; transition: color 0.2s; 
 }
 
-/* 이미지와 텍스트를 감싸는 아이템 래퍼 (하단 여백 제거) */
-.preview-item {
-    display: flex;
-    flex-direction: column;
+/* 새로 추가: 안쪽에 있는 텍스트만 인라인 블록으로 만들어 회전축 설정 */
+.designer-item .title .title-text {
+    display: inline-block;
+    transform-origin: center;
 }
 
-.preview-box {
-    position: relative; /* 작품명 오버레이를 위한 기준점 */
-    width: 100%;
-    aspect-ratio: 1 / 1; 
-    background-color: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    cursor: pointer; /* 클릭 유도를 위한 포인터 추가 */
+/* 호버 시 파란색, 밑줄 제거. 안쪽 텍스트가 까딱거리게 수정 */
+.designer-item .title:hover .title-text { 
+    animation: nav-wiggle 0.45s ease-in-out infinite alternate; 
 }
 
-.preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-
-/* ★ 호버 시 나타날 오버레이 (반투명 검정 배경 + 흰색 작품명 텍스트) */
-.preview-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* 마우스를 따라다니는 플로팅 미리보기 이미지 설정 */
+#floating-preview {
+    position: fixed;
+    pointer-events: none; 
+    z-index: 9999;
+    width: 384px; 
+    height: 384px;
+    object-fit: cover;
+    background-color: var(--color-placeholder); /* 회색 배경 추가 */
+    transform: translate(-50%, 0); 
+    margin-top: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: 20px;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
 }
 
-/* 박스에 마우스를 올리면 오버레이 활성화 */
-.preview-box:hover .preview-overlay {
+#floating-preview.visible {
     opacity: 1;
-}
-
-.preview-title {
-    font-size: 18px;
-    font-weight: 700;
-    text-align: center;
-    color: #ffffff;
-    margin: 0;
-    word-break: keep-all;
+    visibility: visible;
 }
 
 /* 모바일 화면 대응용 미디어 쿼리 (768px 이하) */
@@ -427,10 +424,15 @@ body.is-main-page .nav-link { color: #000; }
     .gb-fixed-frame { border-width: 2px; }
     .gb-content-name, .gb-content-message { font-size: 11px; padding: 8px 12px; }
     .guestbook-add-floating img { width: 100px; height: 100px; }
-    .character-loader-wrapper { width: 250px; height: 120px; }
-    .loader-item { width: 60px; height: 60px; }
+    
+    /* 로딩 애니메이션 모바일 대응 크기 조정 */
+    .character-loader-wrapper { width: 340px; height: 160px; }
+    .loader-item { width: 90px; height: 90px; }
     
     .designer-list { grid-column: span 4; }
     .designer-item { grid-template-columns: 1fr; gap: 8px; padding: 15px 5px; }
-    .designer-preview-container { display: none; }
+    
+    /* 모바일에서는 공간이 협소하므로 마우스를 따라다니는 플로팅 이미지를 숨깁니다. */
+    /* CSS 특수성(Specificity)을 활용하여 우선순위 반영 (!important 제거) */
+    #floating-preview, #floating-preview.visible { display: none; } 
 }
