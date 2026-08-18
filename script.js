@@ -1,7 +1,7 @@
 const worksDataset = [
     // Visual (A ~ AK) - 37명 x 2작품 = 74개
-    { id: 'V_A_1', category: 'Visual', designer: 'A', engName: 'A', title: '작품명 입력 A-1', desc: 'A 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_A_p1.png', detailPrefix: 'pe_A_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_A_2', category: 'Visual', designer: 'A', engName: 'A', title: '작품명 입력 A-2', desc: 'A 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_A_p2.png', detailPrefix: 'pe_A_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_A_1', category: 'Visual', designer: 'A', engName: 'A', title: '우연의 발견', desc: 'A 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_A_p1.png', detailPrefix: 'pe_A_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_A_2', category: 'Visual', designer: 'A', engName: 'A', title: '홈 베이커들을 위한 재료 소분 배송 서비스 플랫폼 "꼬집"', desc: 'A 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_A_p2.png', detailPrefix: 'pe_A_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_B_1', category: 'Visual', designer: 'B', engName: 'B', title: '작품명 입력 B-1', desc: 'B 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_B_p1.png', detailPrefix: 'pe_B_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_B_2', category: 'Visual', designer: 'B', engName: 'B', title: '작품명 입력 B-2', desc: 'B 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_B_p2.png', detailPrefix: 'pe_B_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_C_1', category: 'Visual', designer: 'C', engName: 'C', title: '작품명 입력 C-1', desc: 'C 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_C_p1.png', detailPrefix: 'pe_C_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
@@ -52,8 +52,8 @@ const worksDataset = [
     { id: 'V_Y_2', category: 'Visual', designer: 'Y', engName: 'Y', title: '작품명 입력 Y-2', desc: 'Y 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Y_p2.png', detailPrefix: 'pe_Y_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_Z_1', category: 'Visual', designer: 'Z', engName: 'Z', title: '작품명 입력 Z-1', desc: 'Z 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_Z_p1.png', detailPrefix: 'pe_Z_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_Z_2', category: 'Visual', designer: 'Z', engName: 'Z', title: '작품명 입력 Z-2', desc: 'Z 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_Z_p2.png', detailPrefix: 'pe_Z_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AA_1', category: 'Visual', designer: 'AA', engName: 'AA', title: '작품명 입력 AA-1', desc: 'AA 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AA_p1.png', detailPrefix: 'pe_AA_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
-    { id: 'V_AA_2', category: 'Visual', designer: 'AA', engName: 'AA', title: '작품명 입력 AA-2', desc: 'AA 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AA_p2.png', detailPrefix: 'pe_AA_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AA_1', category: 'Visual', designer: 'AA', engName: 'AA', title: '홈 베이커들을 위한 재료 소분 배송 서비스 플랫폼 "꼬집"', desc: 'AA 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AA_p1.png', detailPrefix: 'pe_AA_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
+    { id: 'V_AA_2', category: 'Visual', designer: 'AA', engName: 'AA', title: '우연의 발견', desc: 'AA 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AA_p2.png', detailPrefix: 'pe_AA_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_AB_1', category: 'Visual', designer: 'AB', engName: 'AB', title: '작품명 입력 AB-1', desc: 'AB 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AB_p1.png', detailPrefix: 'pe_AB_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_AB_2', category: 'Visual', designer: 'AB', engName: 'AB', title: '작품명 입력 AB-2', desc: 'AB 학생의 두 번째 작품 설명입니다.', thumbFile: 'pc_AB_p2.png', detailPrefix: 'pe_AB_p2', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
     { id: 'V_AC_1', category: 'Visual', designer: 'AC', engName: 'AC', title: '작품명 입력 AC-1', desc: 'AC 학생의 첫 번째 작품 설명입니다.', thumbFile: 'pc_AC_p1.png', detailPrefix: 'pe_AC_p1', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' },
