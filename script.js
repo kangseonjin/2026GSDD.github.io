@@ -169,24 +169,19 @@ function renderWorksGrid(data) {
     const grid = document.getElementById('works-list-grid');
     grid.innerHTML = '';
     
-    const sortedData = [...data].sort((a, b) => a.designer.localeCompare(b.designer));
-    
-    sortedData.forEach(work => {
+    data.forEach(work => {
         const workItem = document.createElement('li'); 
-        workItem.className = `works-item category-${work.category.toLowerCase()}`;
+        workItem.className = 'works-item';
         workItem.onclick = () => showWorkDetail(work.id);
         
         workItem.innerHTML = `
             <figure class="works-thumb">
-                <img src="${work.thumbFile}" alt="${work.title}" onerror="this.style.display='none'" class="thumb-bg-img">
-                <div class="works-hover-overlay">
-                    <div class="works-hover-content">
-                        <p class="works-hover-title">${work.title}</p>
-                        <p class="works-hover-name">${work.designer}</p>
-                    </div>
-                    <p class="works-hover-category">${work.category.toUpperCase()}</p>
-                </div>
+                3 Columns<br>282px x 352px<br>(${work.thumbFile})
             </figure>
+            <article class="works-meta">
+                <h3 class="works-title">${work.title}</h3>
+                <p class="works-author">${work.designer} / ${work.category}</p>
+            </article>
         `;
         grid.appendChild(workItem);
     });
@@ -1166,7 +1161,7 @@ function initGuestbookPhysics() {
     const getColumns = () => {
         if (window.innerWidth <= 768) return 2;
         if (window.innerWidth <= 1100) return 3;
-        return 5;
+        return 4;
     };
 
     const getTopMargin = () => window.innerWidth <= 768 ? 100 : 150; 
