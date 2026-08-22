@@ -84,6 +84,8 @@ ul, ol { list-style: none; }
    3. 공통 레이아웃
 =========================================================== */
 .container {
+    /* 기존 패딩 방식 대신, 전체 너비에서 양옆 20px씩 총 40px을 빼줍니다 */
+    width: calc(100% - 40px); 
     max-width: var(--grid-container);
     margin: 0 auto;
     display: grid;
@@ -91,7 +93,6 @@ ul, ol { list-style: none; }
     gap: var(--grid-gap);
     padding-top: 120px;
     padding-bottom: 120px;
-    
 }
 .page-section { display: none; animation: pageFadeInOnly 0.35s ease-out forwards; }
 .page-section.active { display: grid; }
