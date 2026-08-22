@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 GSDD</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-   <link rel="stylesheet" href="https://use.typekit.net/xjx2wtn.css">
+    <link rel="stylesheet" href="https://use.typekit.net/xjx2wtn.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="is-main-page">
@@ -19,7 +19,7 @@
         </video>
     </div>
 
-    <!-- 서브페이지 전환 시 나오는 커스텀 로딩 화면 (캐릭터 1.5초 -> 로고 1.0초 총 2.5초) -->
+    <!-- 서브페이지 전환 시 나오는 커스텀 로딩 화면 -->
     <div id="loading-screen" class="hidden">
         <div class="character-loader-wrapper" id="loading-chars">
             <div class="loader-item item-1">
@@ -32,7 +32,6 @@
                 <img src="" alt="캐릭터3" class="loader-char" id="loader-img-3">
             </div>
         </div>
-        <!-- 1.5초 뒤 화면 전체에 나타나는 로딩 완료 이미지 -->
         <img src="loding.png" alt="로딩 이미지" id="loading-final-img">
     </div>
 
@@ -96,18 +95,31 @@
             </article>
         </section>
 
-        <!-- Archive Section (3D 슬라이더 통합) -->
-        <section id="section-archive" class="archive-page-container page-section">
-            <div class="archive-slider-wrapper" id="archive-track"></div>
-            <div class="archive-controls-bar">
-                <button class="archive-arrow-btn prev-btn" id="archive-prev-btn" aria-label="이전 연도">
-                    <img src="archive1.png" alt="이전 포스터" class="archive-nav-icon">
-                </button>
-                <div class="archive-dots-container" id="archive-dots"></div>
-                <button class="archive-arrow-btn next-btn" id="archive-next-btn" aria-label="다음 연도">
-                    <img src="archive2.png" alt="다음 포스터" class="archive-nav-icon">
-                </button>
+        <!-- Archive Section -->
+        <section id="section-archive" class="container page-section">
+            <div class="archive-visual-area">
+                <!-- 연도와 포스터를 하나로 묶는 Wrapper -->
+                <div class="archive-poster-wrapper">
+                    <p class="archive-year-display" id="archive-display-year">2025</p>
+                    <figure class="archive-poster" id="archive-poster-container" onclick="openArchiveExternalLink()">
+                    </figure>
+                    
+                    <nav class="archive-controls">
+                        <button class="archive-btn" onclick="moveArchiveSlide(-1)">
+                            <img src="archive1.png" alt="이전" class="archive-nav-icon">
+                        </button>
+                        <div class="archive-dots" id="archive-dots-container"></div>
+                        <button class="archive-btn" onclick="moveArchiveSlide(1)">
+                            <img src="archive2.png" alt="다음" class="archive-nav-icon">
+                        </button>
+                    </nav>
+                </div>
             </div>
+            
+            <article class="archive-text-area">
+                <h2 class="archive-title" id="archive-title-text">Graduation Exhibition Title</h2>
+                <p class="archive-desc" id="archive-description-text">해당 년도의 전시 설명 내용...</p>
+            </article>
         </section>
 
         <!-- About Section -->
@@ -129,20 +141,14 @@
 
         <!-- Designers Section -->
         <section id="section-designers" class="container page-section designers-page">
-            
-            <!-- 상단 필터 영역 추가 -->
             <nav class="works-filter-group" id="designers-filter-group">
                 <button class="works-filter-btn active" onclick="filterDesignersByCategory('All')" id="d-filter-all">All</button>
                 <button class="works-filter-btn" onclick="filterDesignersByCategory('Visual')" id="d-filter-visual">Visual</button>
                 <button class="works-filter-btn" onclick="filterDesignersByCategory('Space')" id="d-filter-space">Space</button>
             </nav>
 
-            <!-- 디자이너 리스트 (100% 가로 너비로 표시) -->
             <ul class="designer-list" id="designers-list-grid"></ul>
-
-            <!-- 마우스를 따라다닐 플로팅 미리보기 이미지 -->
             <img id="floating-preview" src="" alt="작품 미리보기">
-            
         </section>
 
         <!-- Guestbook Section -->

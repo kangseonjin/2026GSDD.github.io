@@ -96,14 +96,15 @@ const worksDataset = [
     { id: 'S_R', category: 'Space', designer: 'R', engName: 'R', title: '작품명 입력 Space-R', desc: 'R 학생의 공간 디자인 작품 설명입니다.', thumbFile: 'pc_R.png', detailPrefix: 'pe_R', imagesCount: 2, email: '이메일 입력', insta: '@인스타 입력' }
 ];
 
+/* 연도별 배경색 추가 */
 const archiveDataset = [
-    { year: 2025, format: 'png', link: 'http://gsdd.org/2025/index.html', title: 'CUT! LAYER! PASTE!', desc: '2025년도 전시 설명 내용...' },
-    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수많은 도전을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.' },
-    { year: 2023, format: 'png', link: 'http://gsdd.org/2023/index.html', title: 'PROJECT: FUTUREFORMING', desc: '퓨처포밍 프로젝트는 학생들이 각자 광활한 우주로 나아가 별을 찾고, 미래에 정착할 수 있도록 포밍(forming) 시키는 프로젝트다. 졸업 전시를 통해 각자의 미래를 준비하고 모습을 만들어 가는 것을 원석을 깎아 별 조각으로 만드는 것으로 비유하였으며, 별 조각이 대 학생들의 작업물이 하나로 합쳐져 완전한 별 형태를 이룬다. 이는 우리의 미래 가능성을 보여주는 코어로 재현된다. 프로젝트의 성공은 전시장에 포밍 완료된 별 조각 샘플을 채취하여 전시하는 것으로 증명한다.' },
-    { year: 2022, format: 'jpeg', link: 'http://gsdd.org/2022/', title: 'NEXT LEVEL', desc: '대학교 4학년의 마지막을 장식하는 졸업전시회는 곧 우리가 사회에 한 걸음 내딛게 된다는 사실을 알려줍니다. 우리는 졸업이라는 과정을 거쳐 학생에서 사회인으로 발전하게 되고, 이렇게 사회 생활이라는 새로운 단계로 넘어가게 됩니다. 학생들은 개개인만의 개성과 능력으로 작품을 만들고, 주어진 다음 단계를 스스로 풀어나간다는 의미를 담았습니다.' },
-    { year: 2021, format: 'png', link: 'http://gsdd.org/2021/', title: '2021', desc: '우리는 일상 속에서 디자인을 공부할 때 혹은 공책을 펴볼 때도 쉽게 행과 열을 찾아볼 수 있다. 각기 다른 행과 열이 뻗어 나가면 그 방향성이 모여 하나의 구조를 만들어내고 그 구조 안에는 다양한 가능성이 존재한다. 이는 우리와 닮아있다. 각자의 방식, 각자의 과정과 방법론이 모여 졸업전시회라는 구조를 만들어낸다.' },
-    { year: 2020, format: 'webp', link: 'http://gsdd.org/2020/', title: '2020', desc: '지난 1월 유행하기 시작한 전염병 코로나로 인해 학교 출입 시, 마스크에 체온 확인 완료를 표시하기 위해 스티커를 붙여야만 했다. 둥근 모양의 형광 스티커는 매일 다른 색으로 교체되었고 버려지거나 핸드폰, 노트북, 방 거울 등에 쌓여갔다. 형형색색의 스티커는 곧 코로나로 인해 바뀌어버린 우리의 생활을 뜻하기도 하지만 둥글둥글 귀여운 모양으로 핸드폰 뒷면에 남아있기도 했다. 우리는 둥근 스티커로 졸업생 한 명 한 명의 개성을 표현하고자 했다.' },
-    { year: 2019, format: 'webp', link: 'http://gsdd.org/2019/', title: '2019', desc: '제 1회 동양대학교 디자인학부 졸업전시회' }
+    { year: 2025, format: 'png', link: 'http://gsdd.org/2025/index.html', title: 'CUT! LAYER! PASTE!', desc: '2025년도 전시 설명 내용...', bgColor: '#F6A700' },
+    { year: 2024, format: 'webp', link: 'http://gsdd.org/2024/index.html', title: 'Get A Clue', desc: '대학에서의 4년간, 우리는 수많은 도전을 통해 많은 것을 배웠습니다. 이 과정에서 얻은 경험과 노력이 우리 미래에 대한 중요한 단서를 제공해 주었습니다. “GET A CLUE”는 이러한 경험을 바탕으로, 미래를 향한 방향성을 탐색하는 여정을 선보입니다.', bgColor: '#E72F4C' },
+    { year: 2023, format: 'png', link: 'http://gsdd.org/2023/index.html', title: 'PROJECT: FUTUREFORMING', desc: '퓨처포밍 프로젝트는 학생들이 각자 광활한 우주로 나아가 별을 찾고, 미래에 정착할 수 있도록 포밍(forming) 시키는 프로젝트다. 졸업 전시를 통해 각자의 미래를 준비하고 모습을 만들어 가는 것을 원석을 깎아 별 조각으로 만드는 것으로 비유하였으며, 별 조각이 대 학생들의 작업물이 하나로 합쳐져 완전한 별 형태를 이룬다. 이는 우리의 미래 가능성을 보여주는 코어로 재현된다. 프로젝트의 성공은 전시장에 포밍 완료된 별 조각 샘플을 채취하여 전시하는 것으로 증명한다.', bgColor: '#009DDA' },
+    { year: 2022, format: 'jpeg', link: 'http://gsdd.org/2022/', title: 'NEXT LEVEL', desc: '대학교 4학년의 마지막을 장식하는 졸업전시회는 곧 우리가 사회에 한 걸음 내딛게 된다는 사실을 알려줍니다. 우리는 졸업이라는 과정을 거쳐 학생에서 사회인으로 발전하게 되고, 이렇게 사회 생활이라는 새로운 단계로 넘어가게 됩니다. 학생들은 개개인만의 개성과 능력으로 작품을 만들고, 주어진 다음 단계를 스스로 풀어나간다는 의미를 담았습니다.', bgColor: '#14A146' },
+    { year: 2021, format: 'png', link: 'http://gsdd.org/2021/', title: '2021', desc: '우리는 일상 속에서 디자인을 공부할 때 혹은 공책을 펴볼 때도 쉽게 행과 열을 찾아볼 수 있다. 각기 다른 행과 열이 뻗어 나가면 그 방향성이 모여 하나의 구조를 만들어내고 그 구조 안에는 다양한 가능성이 존재한다. 이는 우리와 닮아있다. 각자의 방식, 각자의 과정과 방법론이 모여 졸업전시회라는 구조를 만들어낸다.', bgColor: '#AAA1CE' },
+    { year: 2020, format: 'webp', link: 'http://gsdd.org/2020/', title: '2020', desc: '지난 1월 유행하기 시작한 전염병 코로나로 인해 학교 출입 시, 마스크에 체온 확인 완료를 표시하기 위해 스티커를 붙여야만 했다. 둥근 모양의 형광 스티커는 매일 다른 색으로 교체되었고 버려지거나 핸드폰, 노트북, 방 거울 등에 쌓여갔다. 형형색색의 스티커는 곧 코로나로 인해 바뀌어버린 우리의 생활을 뜻하기도 하지만 둥글둥글 귀여운 모양으로 핸드폰 뒷면에 남아있기도 했다. 우리는 둥근 스티커로 졸업생 한 명 한 명의 개성을 표현하고자 했다.', bgColor: '#EA5703' },
+    { year: 2019, format: 'webp', link: 'http://gsdd.org/2019/', title: '2019', desc: '제 1회 동양대학교 디자인학부 졸업전시회', bgColor: '#0068AD' }
 ];
 
 /* -----------------------------------------------------------
@@ -149,7 +150,8 @@ function initMainApp() {
     isAppInitialized = true;
 
     renderWorksGrid(worksDataset);
-    initArchiveSlider();
+    initArchivePagination();
+    updateArchiveView();
     initGuestbookControls();
     initPhysics();
     
@@ -167,19 +169,24 @@ function renderWorksGrid(data) {
     const grid = document.getElementById('works-list-grid');
     grid.innerHTML = '';
     
-    data.forEach(work => {
+    const sortedData = [...data].sort((a, b) => a.designer.localeCompare(b.designer));
+    
+    sortedData.forEach(work => {
         const workItem = document.createElement('li'); 
-        workItem.className = 'works-item';
+        workItem.className = `works-item category-${work.category.toLowerCase()}`;
         workItem.onclick = () => showWorkDetail(work.id);
         
         workItem.innerHTML = `
             <figure class="works-thumb">
-                3 Columns<br>282px x 352px<br>(${work.thumbFile})
+                <img src="${work.thumbFile}" alt="${work.title}" onerror="this.style.display='none'" class="thumb-bg-img">
+                <div class="works-hover-overlay">
+                    <div class="works-hover-content">
+                        <p class="works-hover-title">${work.title}</p>
+                        <p class="works-hover-name">${work.designer}</p>
+                    </div>
+                    <p class="works-hover-category">${work.category.toUpperCase()}</p>
+                </div>
             </figure>
-            <article class="works-meta">
-                <h3 class="works-title">${work.title}</h3>
-                <p class="works-author">${work.designer} / ${work.category}</p>
-            </article>
         `;
         grid.appendChild(workItem);
     });
@@ -271,8 +278,6 @@ function renderDesignersList(category = 'All') {
 
         const tagClass = d.category.toLowerCase();
         
-        // 플로팅 이미지를 띄우기 위해 span 안에 'designer-work-title' 클래스와 데이터 속성 부여
-        // 수정됨: 텍스트를 감싸는 <span class="title-text"> 추가
         li.innerHTML = `
             <span class="tag ${tagClass}">${d.category}</span>
             <span class="name">${d.designer}</span>
@@ -299,17 +304,14 @@ function initDesignersInteractions() {
     const titles = document.querySelectorAll('.designer-work-title');
 
     titles.forEach(title => {
-        // 작품명이 비어있는 요소는 무시
         if (!title.innerText.trim()) return; 
 
-        // 클릭 시 해당 상세 페이지로 이동
         title.onclick = (e) => {
             e.stopPropagation();
             const workId = title.dataset.workid;
             if(workId) showWorkDetail(workId);
         };
 
-        // 타이틀 호버 시 플로팅 이미지 표시
         title.addEventListener('mouseenter', (e) => {
             const imgSrc = title.dataset.img;
             if (imgSrc && imgSrc.trim() !== '') {
@@ -318,16 +320,13 @@ function initDesignersInteractions() {
             }
         });
 
-        // 마우스가 타이틀 위에서 움직일 때 플로팅 이미지 위치 업데이트
         title.addEventListener('mousemove', (e) => {
             if (floatingPreview.classList.contains('visible')) {
-                // e.clientX, e.clientY를 통해 현재 마우스 커서의 X,Y 좌표값을 할당
                 floatingPreview.style.left = `${e.clientX}px`;
                 floatingPreview.style.top = `${e.clientY}px`;
             }
         });
 
-        // 마우스가 타이틀 밖으로 나가면 플로팅 이미지 숨김
         title.addEventListener('mouseleave', () => {
             floatingPreview.classList.remove('visible');
         });
@@ -335,173 +334,63 @@ function initDesignersInteractions() {
 }
 
 /* -----------------------------------------------------------
-   Archive 3D Slider 렌더링 로직 (통합)
+   Archive 렌더링 로직 
 ----------------------------------------------------------- */
-let archiveCurrentIndex = 0;
-window.updateArchiveSlider = null; 
+let archiveIndex = 0;
 
-function initArchiveSlider() {
-    const track = document.getElementById('archive-track');
-    const dotsContainer = document.getElementById('archive-dots');
-    const prevBtn = document.getElementById('archive-prev-btn');
-    const nextBtn = document.getElementById('archive-next-btn');
-
-    if (!track || !dotsContainer) return;
-
-    archiveCurrentIndex = archiveDataset.findIndex(item => item.year === 2025);
-    if (archiveCurrentIndex === -1) archiveCurrentIndex = archiveDataset.length - 1;
-
-    let startX = 0;
-
-    archiveDataset.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'archive-card';
-        card.dataset.index = index;
-        card.innerHTML = `
-            <div class="archive-card-poster">
-                <img src="${item.year}gsdd.${item.format}" alt="${item.year} 졸업전시 포스터" />
-            </div>
-            <div class="archive-card-base-info">
-                <span class="archive-card-year">${item.year}</span>
-                <span class="archive-card-theme-title">${item.title}</span>
-            </div>
-            <div class="archive-card-hover-desc">
-                <div class="hover-desc-inner">
-                    <span class="hover-year-tag">${item.year}</span>
-                    <h4 class="hover-theme-title">${item.title}</h4>
-                    <p class="hover-desc-text">${item.desc}</p>
-                </div>
-            </div>
-        `;
-        track.appendChild(card);
-
+function initArchivePagination() {
+    const dotsContainer = document.getElementById('archive-dots-container');
+    
+    if (!dotsContainer) return;
+    
+    archiveDataset.forEach((data, index) => {
         const dot = document.createElement('div');
-        dot.className = `archive-dot ${index === archiveCurrentIndex ? 'active' : ''}`;
-        dot.dataset.index = index;
+        dot.className = index === 0 ? 'archive-dot active' : 'archive-dot';
+        dot.onclick = () => { archiveIndex = index; updateArchiveView(); };
         dotsContainer.appendChild(dot);
     });
+}
 
-    const cards = document.querySelectorAll('.archive-card');
-    const dots = document.querySelectorAll('.archive-dot');
+function moveArchiveSlide(direction) {
+    archiveIndex += direction; 
+    if (archiveIndex < 0) archiveIndex = archiveDataset.length - 1;
+    if (archiveIndex >= archiveDataset.length) archiveIndex = 0;
+    updateArchiveView();
+}
 
-    let mouseX = 0, mouseY = 0;
-    function updateHoverState() {
-        cards.forEach(c => c.classList.remove('hover-active'));
-        const element = document.elementFromPoint(mouseX, mouseY);
-        if (element) {
-            const card = element.closest('.archive-card');
-            if (card) card.classList.add('hover-active');
-        }
+function updateArchiveView() {
+    const data = archiveDataset[archiveIndex];
+    if (!data) return;
+    
+    const displayYear = document.getElementById('archive-display-year');
+    const titleText = document.getElementById('archive-title-text');
+    const descText = document.getElementById('archive-description-text');
+    const posterContainer = document.getElementById('archive-poster-container');
+    
+    if (displayYear) {
+        displayYear.innerText = data.year;
+        displayYear.style.backgroundColor = data.bgColor;
+    }
+    
+    if (titleText) titleText.innerText = data.title;
+    if (descText) descText.innerHTML = (data.desc || '').replace(/\n/g, '<br>');
+    
+    if (posterContainer) {
+        posterContainer.innerHTML = `<img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster">`;
     }
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX; mouseY = e.clientY;
-        updateHoverState();
+    const dots = document.querySelectorAll('#archive-dots-container .archive-dot');
+    dots.forEach((dot, idx) => {
+        if (idx === archiveIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
     });
+}
 
-    const container = document.getElementById('section-archive');
-    if (container) {
-        container.addEventListener('mouseleave', () => {
-            cards.forEach(c => c.classList.remove('hover-active'));
-        });
+function openArchiveExternalLink() {
+    const data = archiveDataset[archiveIndex];
+    if (data && data.link) {
+        window.open(data.link, '_blank');
     }
-
-    window.updateArchiveSlider = function updateSlider() {
-        cards.forEach((card, index) => {
-            const offset = index - archiveCurrentIndex;
-            const absOffset = Math.abs(offset);
-
-            if (offset === 0) {
-                card.style.transform = `translate(-50%, -50%) translate3d(0, 0, 0) scale(1) rotateY(0deg)`;
-                card.style.opacity = '1';
-                card.style.zIndex = '30';
-                card.classList.add('focused');
-            } else {
-                const direction = offset > 0 ? 1 : -1;
-                const isMobile = window.innerWidth <= 768;
-                const spacing = isMobile ? 180 : 380;
-                const shiftX = offset * spacing;
-                
-                const rotateY = direction * -12;
-                const scaleVal = Math.max(0.72, 1 - (absOffset * 0.08));
-                const opacityVal = Math.max(0.25, 1 - (absOffset * 0.28));
-
-                card.style.transform = `translate(-50%, -50%) translate3d(${shiftX}px, 0, ${-absOffset * 90}px) rotateY(${rotateY}deg) scale(${scaleVal})`;
-                card.style.opacity = opacityVal.toString();
-                card.style.zIndex = (20 - absOffset).toString();
-                card.classList.remove('focused');
-            }
-        });
-
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === archiveCurrentIndex);
-        });
-
-        updateHoverState();
-    };
-
-    function goToCard(index) {
-        if (index < 0 || index >= archiveDataset.length) return;
-        archiveCurrentIndex = index;
-        window.updateArchiveSlider();
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            if (archiveCurrentIndex > 0) goToCard(archiveCurrentIndex - 1);
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            if (archiveCurrentIndex < archiveDataset.length - 1) goToCard(archiveCurrentIndex + 1);
-        });
-    }
-
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            goToCard(parseInt(dot.dataset.index));
-        });
-    });
-
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            const idx = parseInt(card.dataset.index);
-            if (idx === archiveCurrentIndex) {
-                window.open(archiveDataset[idx].link, '_blank');
-            } else {
-                goToCard(idx);
-            }
-        });
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (document.getElementById('section-archive').classList.contains('active')) {
-            if (e.key === 'ArrowLeft') goToCard(archiveCurrentIndex - 1);
-            else if (e.key === 'ArrowRight') goToCard(archiveCurrentIndex + 1);
-        }
-    });
-
-    window.addEventListener('wheel', (e) => {
-        if (window.innerWidth > 768 && document.getElementById('section-archive').classList.contains('active')) {
-            e.preventDefault(); 
-            if (e.deltaY > 0) goToCard(archiveCurrentIndex + 1);
-            else if (e.deltaY < 0) goToCard(archiveCurrentIndex - 1);
-        }
-    }, { passive: false });
-
-    track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diffX = startX - endX;
-        if (Math.abs(diffX) > 50) {
-            if (diffX > 0) goToCard(archiveCurrentIndex + 1);
-            else goToCard(archiveCurrentIndex - 1);
-        }
-    }, { passive: true });
-
-    window.addEventListener('resize', window.updateArchiveSlider);
-    window.updateArchiveSlider();
 }
 
 /* -----------------------------------------------------------
@@ -623,8 +512,8 @@ function completeNavigation(pageName) {
     }
     
     if (pageName === 'archive') {
-        archiveCurrentIndex = 0; 
-        if (window.updateArchiveSlider) window.updateArchiveSlider();
+        archiveIndex = 0; 
+        updateArchiveView();
     }
     
     const navMenu = document.getElementById('nav-menu');
@@ -1024,7 +913,6 @@ function initPhysics() {
         return Math.random() * (stage.clientWidth - width) + (width / 2);
     };
 
-    // 그래픽 화질 개선을 위해 pixelRatio 옵션 추가
     const render = Render.create({
         element: stage,
         engine: engine,
@@ -1278,7 +1166,7 @@ function initGuestbookPhysics() {
     const getColumns = () => {
         if (window.innerWidth <= 768) return 2;
         if (window.innerWidth <= 1100) return 3;
-        return 4;
+        return 5;
     };
 
     const getTopMargin = () => window.innerWidth <= 768 ? 100 : 150; 
