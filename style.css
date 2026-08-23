@@ -225,7 +225,7 @@ body.is-main-page .nav-link { color: #000; }
 /* 하단 카테고리 (VISUAL / SPACE) */
 .works-hover-category {
     font-family: '2026GSDD', sans-serif;
-    font-size: 12px;
+    font-size: 10px;
     margin: 0;
     letter-spacing: 1px;
 }
