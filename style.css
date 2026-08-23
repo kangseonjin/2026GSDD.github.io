@@ -210,7 +210,7 @@ body.is-main-page .nav-link { color: #000; }
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 13px;
 }
 
 /* 작품명, 이름 같은 크기 적용 */
