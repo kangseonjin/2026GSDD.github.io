@@ -104,19 +104,25 @@ ul, ol { list-style: none; }
    4. 헤더 및 네비게이션
 =========================================================== */
 .top-title-bar { 
-    position: absolute; /* fixed에서 absolute로 변경하여 스크롤 시 같이 올라가게 함 */
-    top: 0; 
+    position: absolute; 
+    top: 0px; /* 아까 맞추신 높이값 그대로 유지해 주세요 */
     left: 0; 
     width: 100%; 
     text-align: center; 
     z-index: 1000; 
-    pointer-events: auto; 
-    cursor: pointer; 
-    background-color: transparent; /* var(--color-background)에서 투명하게 변경하여 상단바 배경 제거 */
+    pointer-events: none; /* 핵심: 여백 부분은 클릭을 무시하고 뒤로 통과시킵니다 */
+    background-color: transparent; 
     border-bottom: none; 
     padding: 30px 0; 
 }
-.top-title-img { height: 50px; object-fit: contain; transition: height 0.3s ease; }
+
+.top-title-img { 
+    height: 50px; 
+    object-fit: contain; 
+    transition: height 0.3s ease; 
+    cursor: pointer; /* 이미지에 마우스를 올렸을 때만 클릭 모양이 되도록 추가 */
+    pointer-events: auto; /* 이미지만 클릭을 인식하도록 설정 */
+}
 
 .global-header.bottom-nav { width: 100%; background: var(--color-background); position: fixed; top: auto; bottom: 0; z-index: 1000; border-top: 4.5px solid #111; border-bottom: none; }
 .nav-wrapper { max-width: 100%; padding: 0 32px; margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 80px; } 
