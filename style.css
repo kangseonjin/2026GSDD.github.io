@@ -272,20 +272,47 @@ body.is-main-page .nav-link { color: #000; }
     .top-title-bar { position: fixed; background-color: var(--color-background); border-bottom: 2px solid #111; padding-top: calc(15px + env(safe-area-inset-top)); padding-bottom: 5px; } 
     .top-title-img { height: 28px; } 
     
-    .global-header.bottom-nav { border-top: 2px solid #111; padding-bottom: env(safe-area-inset-bottom); }
-    /* 기존 .nav-menu 부분 교체 및 .nav-menu.active 추가 */
+ .global-header.bottom-nav { border-top: 2px solid #111; padding-bottom: env(safe-area-inset-bottom); }
+    
+    .nav-wrapper { 
+        height: 55px; 
+        padding: 0 var(--site-margin); 
+        justify-content: flex-end; 
+    }
+    
+    /* 햄버거 버튼 (모바일에서 무조건 노출!) */
+    .hamburger-btn { 
+        display: block !important; 
+        position: static; 
+        font-size: 26px; 
+        padding: 5px; 
+        background: transparent; 
+        z-index: 10002; 
+    }
+    
+    /* 메뉴바 창 (기본적으로 숨김) */
     .nav-menu { 
-        display: none; /* 기본적으로 숨김 처리 */
-        position: fixed; left: 0; bottom: calc(55px + env(safe-area-inset-bottom)); 
-        width: 100%; background: var(--color-background); border-top: 2px solid #111; 
-        padding: 20px 0 10px; gap: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
-        flex-direction: column; z-index: 10001; 
+        display: none; 
+        position: fixed; 
+        left: 0; 
+        bottom: calc(55px + env(safe-area-inset-bottom)); 
+        width: 100%; 
+        background: var(--color-background); 
+        border-top: 2px solid #111; 
+        padding: 20px 0 10px; 
+        gap: 15px; 
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
+        flex-direction: column; 
+        z-index: 10001; 
     }
+    
+    /* 햄버거 버튼 클릭 시 메뉴바 노출 */
     .nav-menu.active { 
-        display: flex; /* 햄버거 버튼 클릭 시 나타남 */
+        display: flex; 
     }
+    
     .nav-menu li { text-align: center; width: 100%; }
-    .nav-link { font-size: 17px; padding: 8px 0; } 
+    .nav-link { font-size: 17px; padding: 8px 0; display: block; } 
     .nav-link:hover { animation: none; }
 
     .main-section-wrapper { min-height: calc(100vh - 55px - env(safe-area-inset-bottom)); min-height: calc(100dvh - 55px - env(safe-area-inset-bottom)); padding-left: 0; padding-right: 0; }
@@ -341,9 +368,12 @@ body.is-main-page .nav-link { color: #000; }
     .archive-text-area { width: 100%; max-width: min(280px, 100%); text-align: center; padding: 6px 0; grid-column: auto;} 
     .archive-title { font-size: 15px; margin-top: 0; margin-bottom: 6px; line-height: 1.3; text-align: center; }
     
-    .archive-btn.prev-btn { position: absolute; left: -20px; top: 50%; transform: translateY(-50%); }
-    .archive-btn.next-btn { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); }
-    .archive-nav-icon { width: 60px; height: 60px; } 
+  /* 기존에 left: -20px, right: -20px 였던 것을 0으로 변경해서 화면 끝에 딱 붙임 */
+    .archive-btn.prev-btn { position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0; padding: 0; }
+    .archive-btn.next-btn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); margin: 0; padding: 0; }
+    
+    /* 모바일 버튼 크기를 기존 60px에서 80px로 조금 더 키움 (원하는 만큼 숫자 조절 가능) */
+    .archive-nav-icon { width: 80px; height: 80px; }
     .archive-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); gap: 6px; }
     .archive-dot { width: 6px; height: 6px; }
     .archive-dot.active { transform: scale(1.2); }
