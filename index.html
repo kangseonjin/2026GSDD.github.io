@@ -13,10 +13,12 @@
 <body class="is-main-page">
     <img id="custom-cursor" src="mouse/mouse1.png" alt="커서" class="custom-cursor">
     
-<div id="intro-screen">
-        <!-- preload="auto" 추가: 브라우저가 원본 데이터를 미리 최대한 불러와서 렌더링 화질 저하 방지 -->
-        <video id="intro-video" muted playsinline preload="auto"></video>
+    <div id="intro-screen">
+        <video id="intro-video" muted playsinline>
+            <source src="op.mp4" type="video/mp4">
+        </video>
     </div>
+
     <div id="loading-screen" class="hidden">
         <div class="character-loader-wrapper" id="loading-chars">
             <div class="loader-item item-1"><img src="" alt="캐릭터1" class="loader-char" id="loader-img-1"></div>
@@ -99,13 +101,12 @@
             </div>
 
             <!-- 모바일용 아카이브 UI (CSS에서 모바일일 때만 표시됨) -->
-          <div class="archive-mobile-view">
-    <div class="archive-scroll-container" id="archive-scroll-container"></div>
-    <!-- 이미지 경로를 archive1_mb.png, archive2_mb.png로 변경 -->
-    <button class="archive-btn prev-btn" onclick="moveArchiveScrollSlide(-1)"><img src="archive1_mb.png" alt="이전" class="archive-nav-icon"></button>
-    <button class="archive-btn next-btn" onclick="moveArchiveScrollSlide(1)"><img src="archive2_mb.png" alt="다음" class="archive-nav-icon"></button>
-    <div class="archive-dots" id="archive-mobile-dots-container"></div>
-</div>
+            <div class="archive-mobile-view">
+                <div class="archive-scroll-container" id="archive-scroll-container"></div>
+                <button class="archive-btn prev-btn" onclick="moveArchiveScrollSlide(-1)"><img src="archive1.png" alt="이전" class="archive-nav-icon"></button>
+                <button class="archive-btn next-btn" onclick="moveArchiveScrollSlide(1)"><img src="archive2.png" alt="다음" class="archive-nav-icon"></button>
+                <div class="archive-dots" id="archive-mobile-dots-container"></div>
+            </div>
         </section>
 
         <section id="section-about" class="container page-section about-page">

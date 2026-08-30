@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-if (sessionStorage.getItem('gsdd_intro_played')) {
+    if (sessionStorage.getItem('gsdd_intro_played')) {
         if (introScreen) {
             introScreen.style.display = 'none';
             introScreen.classList.add('hidden');
@@ -39,9 +39,6 @@ if (sessionStorage.getItem('gsdd_intro_played')) {
         initMainApp();
     } else {
         if (introVideo) {
-            // 💡 이 부분이 추가되었습니다! (모바일이면 op_mb.mp4, 데스크탑이면 op.mp4)
-            introVideo.src = isMobile() ? 'op_mb.mp4' : 'op.mp4';
-            
             introVideo.currentTime = 0; 
             introVideo.play().catch(error => {
                 hideIntro();
