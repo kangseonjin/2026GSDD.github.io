@@ -330,13 +330,18 @@ body.is-main-page .nav-link { color: #000; }
     .works-hover-content { gap: 8px; }
     .works-hover-title, .works-hover-name { font-size: 12px; font-weight: 700; }
     .works-hover-category { font-size: 9px; }
-.detail-container { display: flex; flex-direction: column; padding: 0; gap: 20px; }
-    .detail-text-area { max-width: 100%; position: static; padding-bottom: 10px; order: 1; }
+.detail-container { display: flex; flex-direction: column; padding: 0; gap: 20px; align-items: stretch; }
+    
+    /* width: 100%; 를 추가해서 글자 수와 상관없이 끝까지 뻗게 함 */
+    .detail-text-area { width: 100%; max-width: 100%; position: static; padding-bottom: 10px; order: 1; }
     .detail-image-area { width: 100%; order: 2; }
     
     .detail-img-placeholder { width: 100%; aspect-ratio: 588 / 750; min-height: auto; margin-bottom: 12px; font-size: 13px; }
     .detail-title { font-size: 18px; }
-    .detail-close-btn { font-size: 20px; }
+    
+    /* 모바일에서 X 버튼이 너무 작지 않게 크기를 좀 더 키워줌 */
+    .detail-close-btn { font-size: 28px; padding: 0; }
+    
     .detail-author { font-size: 16px; margin-bottom: 6px; }
     .detail-contact { font-size: 12px; margin-bottom: 3px; }
     .detail-desc { font-size: 13px; }
