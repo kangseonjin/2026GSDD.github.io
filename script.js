@@ -460,9 +460,13 @@ function completeNavigation(pageName) {
     const targetNavLink = document.getElementById(`link-${pageName}`);
     if (targetNavLink) targetNavLink.classList.add('active');
 
-    if (pageName === 'detail' || pageName === 'works') {
-        const worksLink = document.getElementById('link-works');
-        if (worksLink) worksLink.classList.add('active');
+if (pageName === 'detail') {
+        const parentPage = window.detailBackPage || 'works';
+        const parentNavLink = document.getElementById(`link-${parentPage}`);
+        if (parentNavLink) parentNavLink.classList.add('active');
+    } else {
+        const targetNavLink = document.getElementById(`link-${pageName}`);
+        if (targetNavLink) targetNavLink.classList.add('active');
     }
 
     document.body.classList.toggle('is-main-page', pageName === 'main');
