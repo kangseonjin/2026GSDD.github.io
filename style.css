@@ -1,5 +1,5 @@
 /* ===========================================================
-   1. CSS 변수
+   1. CSS 변수 (웹 기존 코드)
 =========================================================== */
 @font-face {
     font-family: '2026GSDD';
@@ -12,26 +12,19 @@
     --color-text-main: #000000;
     --color-text-sub: #555555;
     --color-placeholder: #e0e0e0;
-    
     --grid-container: 100%; 
     --grid-gap: 24px;
     --site-margin: 32px; 
-    
     --font-family: 'avenir-lt-pro', 'Pretendard', sans-serif;
-
     --text-title: 120px;
     --text-lg: 32px;
     --text-md: 22px; 
     --text-sm: 18px;
     --text-base: 16px;
-
     --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ===========================================================
-   2. 기본 리셋
-=========================================================== */
 html { overflow-y: scroll; }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
 body { background-color: var(--color-background); color: var(--color-text-main); overflow-x: clip; word-break: keep-all; cursor: none; font-weight: 200; font-style: normal;}
@@ -40,121 +33,50 @@ button { border: none; background: none; cursor: none; }
 input { cursor: none; }
 ul, ol { list-style: none; }
 
-/* 커스텀 이미지 커서 */
 .custom-cursor { position: fixed; pointer-events: none; z-index: 99999; display: none; width: 50px; height: 50px; object-fit: contain; transform: translate(-50%, -50%); }
 
-/* ===========================================================
-   인트로 (오프닝) 및 페이지 전환 커스텀 로딩 스크린
-=========================================================== */
-#intro-screen {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--color-background);
-    z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease;
-}
+#intro-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--color-background); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease; }
 #intro-video { width: 100%; height: 100%; object-fit: cover; }
 #intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-#loading-screen {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-    background-color: #FFFFFF; 
-    z-index: 10005; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease;
-}
+#loading-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #FFFFFF; z-index: 10005; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease; }
 #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .character-loader-wrapper { position: relative; width: 480px; height: 220px; display: flex; justify-content: space-around; align-items: center; }
 .loader-item { position: relative; width: 140px; height: 140px; }
 .loader-char { position: absolute; width: 100%; height: 100%; object-fit: contain; left: 0; transform-origin: 50% 100%; animation: bounceChar 0.5s alternate infinite ease-in-out; z-index: 2; }
-
 .item-1 .loader-char { animation-delay: 0s; }
 .item-2 .loader-char { animation-delay: 0.15s; }
 .item-3 .loader-char { animation-delay: 0.3s; }
-
-@keyframes bounceChar {
-    0% { top: 40px; transform: scaleX(1.2) scaleY(0.8); }
-    40% { transform: scaleX(1) scaleY(1); }
-    100% { top: -40px; transform: scaleX(0.95) scaleY(1.05); }
-}
-
-#loading-final-img {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center;
-    opacity: 0; display: none; transition: opacity 0.3s ease; z-index: 10;
-}
+@keyframes bounceChar { 0% { top: 40px; transform: scaleX(1.2) scaleY(0.8); } 40% { transform: scaleX(1) scaleY(1); } 100% { top: -40px; transform: scaleX(0.95) scaleY(1.05); } }
+#loading-final-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; display: none; transition: opacity 0.3s ease; z-index: 10; }
 #loading-final-img.active { opacity: 1; }
 
-/* ===========================================================
-   3. 공통 레이아웃
-=========================================================== */
-.container {
-    width: calc(100% - 64px); 
-    max-width: 100%;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    padding-top: 120px;
-    padding-bottom: 120px;
-}
+.container { width: calc(100% - 64px); max-width: 100%; margin: 0 auto; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); padding-top: 120px; padding-bottom: 120px; }
 .page-section { display: none; animation: pageFadeInOnly 0.35s ease-out forwards; }
 .page-section.active { display: grid; }
 #section-detail.page-section.active { display: block; }
 #section-guestbook.page-section.active { display: block; }
-
 @keyframes pageFadeInOnly { from { opacity: 0; } to { opacity: 1; } }
 
-/* ===========================================================
-   4. 헤더 및 네비게이션
-=========================================================== */
-.top-title-bar { 
-    position: absolute; 
-    top: 0px; /* 아까 맞추신 높이값 그대로 유지해 주세요 */
-    left: 0; 
-    width: 100%; 
-    text-align: center; 
-    z-index: 1000; 
-    pointer-events: none; /* 핵심: 여백 부분은 클릭을 무시하고 뒤로 통과시킵니다 */
-    background-color: transparent; 
-    border-bottom: none; 
-    padding: 30px 0; 
-}
-
-.top-title-img { 
-    height: 50px; 
-    object-fit: contain; 
-    transition: height 0.3s ease; 
-    cursor: pointer; /* 이미지에 마우스를 올렸을 때만 클릭 모양이 되도록 추가 */
-    pointer-events: auto; /* 이미지만 클릭을 인식하도록 설정 */
-}
-
+.top-title-bar { position: absolute; top: 0px; left: 0; width: 100%; text-align: center; z-index: 1000; pointer-events: none; background-color: transparent; border-bottom: none; padding: 30px 0; }
+.top-title-img { height: 50px; object-fit: contain; transition: height 0.3s ease; cursor: pointer; pointer-events: auto; }
 .global-header.bottom-nav { width: 100%; background: var(--color-background); position: fixed; top: auto; bottom: 0; z-index: 1000; border-top: 4.5px solid #111; border-bottom: none; }
 .nav-wrapper { max-width: 100%; padding: 0 32px; margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 80px; } 
 .nav-menu { display: flex; justify-content: space-between; width: 100%; max-width: 960px; gap: 20px; }
-
-/* ===========================================================
-   메뉴바 글씨 크기 조절
-=========================================================== */
 .nav-link { font-family: '2026GSDD', sans-serif; font-size: 16px; font-weight: normal; color: #8a8a8a; display: inline-block; transform-origin: center; transition: color 0.2s; text-transform: uppercase; } 
 .nav-link:hover { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }
 .nav-link.active { color: #000; }
 body.is-main-page .nav-link { color: #000; }
-
 @keyframes nav-wiggle { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
 .hamburger-btn { display: none; font-size: 32px; color: var(--color-text-main); }
 
-/* ===========================================================
-   5. 메인, 디자이너스 섹션
-=========================================================== */
 .main-section-wrapper { position: relative; min-height: calc(100vh - 80px); padding-top: 0; }
 .physics-stage { position: absolute; top: 0; left: calc(50% - 50vw); width: 100vw; height: calc(100vh - 80px); z-index: 1; }
 .main-guestbook-stage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .main-content { grid-column: span 12; text-align: center; padding-top: 15vh; position: relative; z-index: 10; pointer-events: none; }
 
-.designers-container { grid-column: span 12; text-align: center; padding: 100px 0; }
-.designers-title { font-size: var(--text-md); margin-bottom: 20px; }
-
-/* ===========================================================
-   6. Works List Section
-=========================================================== */
 .works-filter-group { grid-column: span 12; display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
-/* 수정: 폰트 사이즈를 15px에서 13px로, 패딩을 약간 줄여 버튼 전체 크기 축소 */
 .works-filter-btn { font-family: '2026GSDD', sans-serif; text-transform: uppercase; font-size: 13px; font-weight: normal; color: #8a8a8a; padding: 9px 12px 6px; line-height: 1; transition: color 0.2s; }
 .works-filter-btn.active { color: var(--color-text-main); }
 #filter-all.active { background-color: #009FE8; }
@@ -167,223 +89,70 @@ body.is-main-page .nav-link { color: #000; }
 .works-grid-list { grid-column: span 12; display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--grid-gap); } 
 .works-item { grid-column: span 1; transition: opacity 0.2s; transform-origin: center; cursor: pointer; }
 .works-item:hover { opacity: 0.8; animation: work-wiggle 0.45s ease-in-out infinite alternate; }
-
 @keyframes work-wiggle { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
 
-/* ===========================================================
-   Works 호버 인터랙션 (스크린샷 디자인 적용)
-=========================================================== */
-.works-thumb { 
-    position: relative; 
-    width: 100%; 
-    aspect-ratio: 282 / 352; 
-    background-color: var(--color-placeholder); 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    overflow: hidden; 
-}
+.works-thumb { position: relative; width: 100%; aspect-ratio: 282 / 352; background-color: var(--color-placeholder); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.thumb-bg-img { width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast; transform: translateZ(0); backface-visibility: hidden; }
+.works-hover-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s ease; color: #ffffff; text-align: center; padding: 30px 20px; }
+.works-item:hover .works-hover-overlay { opacity: 1; }
+.works-item.category-visual .works-hover-overlay { background-color: #ED83B2; }
+.works-item.category-space .works-hover-overlay { background-color: #F39800; }
+.works-hover-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 13px; }
+.works-hover-title, .works-hover-name { font-size: 18px; font-weight: 500; margin: 0; line-height: 1.3; }
+.works-hover-category { font-family: '2026GSDD', sans-serif; font-size: 10px; margin: 0; letter-spacing: 1px; }
 
-.thumb-bg-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    image-rendering: -webkit-optimize-contrast; 
-    transform: translateZ(0); 
-    backface-visibility: hidden; 
-}
-
-/* 호버 시 나타나는 오버레이 기본 상태 (숨김) */
-.works-hover-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    color: #ffffff;
-    text-align: center;
-    padding: 30px 20px;
-}
-
-/* 호버 시 오버레이 표시 */
-.works-item:hover .works-hover-overlay {
-    opacity: 1;
-}
-
-/* 카테고리별 오버레이 배경색 (Visual / Space) */
-.works-item.category-visual .works-hover-overlay {
-    background-color: #ED83B2;
-}
-.works-item.category-space .works-hover-overlay {
-    background-color: #F39800;
-}
-
-/* 텍스트 컨텐츠 정렬 (작품명, 이름) */
-.works-hover-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 13px;
-}
-
-/* 작품명, 이름 같은 크기 적용 */
-.works-hover-title,
-.works-hover-name {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 0;
-    line-height: 1.3;
-}
-
-/* 하단 카테고리 (VISUAL / SPACE) */
-.works-hover-category {
-    font-family: '2026GSDD', sans-serif;
-    font-size: 10px;
-    margin: 0;
-    letter-spacing: 1px;
-}
-
-.works-meta { 
-    display: none; 
-}
-
-/* ===========================================================
-   7. Works Detail Section
-=========================================================== */
 #section-detail { display: none; }
 .detail-container { display: flex; gap: 40px; justify-content: center; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
 .detail-image-area { width: 588px; display: flex; flex-direction: column; flex-shrink: 0; }
 .detail-img-placeholder { width: 588px; min-height: 900px; background-color: #eaeaea; display: flex; align-items: center; justify-content: center; text-align: center; color: #555; font-size: 16px; margin-bottom: 20px; }
-.detail-img-placeholder img { 
-    width: 100%; 
-    height: auto; 
-    display: block; 
-    image-rendering: -webkit-optimize-contrast; 
-    transform: translateZ(0); 
-    backface-visibility: hidden; 
-}
-
+.detail-img-placeholder img { width: 100%; height: auto; display: block; image-rendering: -webkit-optimize-contrast; transform: translateZ(0); backface-visibility: hidden; }
 .detail-text-area { flex: 1; max-width: 450px; position: sticky; top: 120px; }
 .detail-text-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
 .detail-title { font-size: 24px; font-weight: 700; color: #000; margin: 0; line-height: 1.4; }
 .detail-close-btn { font-size: 24px; font-weight: 400; color: #000; line-height: 1.4; padding: 0 5px; cursor: pointer; }
-
 .detail-author-info { margin-bottom: 35px; font-style: normal; }
 .detail-author { font-size: 20px; font-weight: 700; color: #000; margin-bottom: 8px; }
 .detail-contact { font-size: 16px; font-weight: 400; color: #000; margin-bottom: 4px; }
 .detail-desc { font-size: 16px; font-weight: 400; line-height: 1.6; color: #000; }
 
-/* ===========================================================
-   8. Archive Section
-=========================================================== */
-#section-archive { 
-    position: relative; 
-    padding-top: 110px; 
-    padding-bottom: 180px; 
-}
-
-.archive-visual-area { 
-    grid-column: 2 / 7; 
-    display: flex; 
-    flex-direction: column; 
-    padding-right: 15px; 
-}
-
-.archive-poster-wrapper {
-    width: 100%;
-    max-width: calc((100vh - 350px) / 1.414); 
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.archive-year-display { 
-    font-size: 24px; 
-    font-weight: 800; 
-    margin-bottom: 0; 
-    line-height: 1;
-    text-align: center; 
-    width: fit-content; 
-    padding: 4px 12px;  
-    color: #000000;     
-    background-color: #F6A700; 
-}
-
-.archive-poster {
-    width: 100%;
-    aspect-ratio: 1 / 1.414; 
-    background-color: transparent; 
-    overflow: hidden; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-}
-.archive-poster img { 
+/* -------------------------------------
+   수정된 아카이브 데스크탑/모바일 뷰
+-------------------------------------- */
+.archive-desktop-view { 
+    grid-column: span 12; 
+    display: grid; 
+    grid-template-columns: repeat(12, 1fr); 
+    gap: var(--grid-gap);
     width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
 }
+.archive-mobile-view { grid-column: span 12; display: none; }
 
-.archive-text-area { 
-    grid-column: 7 / 12; 
-    padding-top: 35px; 
-    padding-left: 15px; 
-}
-.archive-title { 
-    font-size: var(--text-md); 
-    font-weight: 800; 
-    margin-top: 0;
-    margin-bottom: 20px; 
-    line-height: 1; 
-}
-.archive-desc { 
-    font-family: var(--font-family); 
-    font-size: var(--text-base); 
-    line-height: 1.8; 
-    font-weight: 400; 
-}
-
-.archive-controls { 
-    position: absolute;
-    bottom: 85px; 
-    left: 50%;
-    transform: translateX(-50%); 
-    margin-top: 0; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 30px; 
-    z-index: 10;
-    pointer-events: auto;
-}
-
-.archive-btn, .archive-dots { pointer-events: auto; }
-
+#section-archive { position: relative; padding-top: 110px; padding-bottom: 180px; }
+.archive-visual-area { grid-column: 2 / 7; display: flex; flex-direction: column; padding-right: 15px; }
+.archive-poster-wrapper { width: 100%; max-width: calc((100vh - 350px) / 1.414); margin: 0 auto; display: flex; flex-direction: column; }
+.archive-year-display { font-size: 24px; font-weight: 800; margin-bottom: 0; line-height: 1; text-align: center; width: fit-content; padding: 4px 12px; color: #000000; background-color: #F6A700; }
+.archive-poster { width: 100%; aspect-ratio: 1 / 1.414; background-color: transparent; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; }
+.archive-poster img { width: 100%; height: 100%; object-fit: cover; }
+.archive-text-area { grid-column: 7 / 12; padding-top: 35px; padding-left: 15px; }
+.archive-title { font-size: var(--text-md); font-weight: 800; margin-top: 0; margin-bottom: 20px; line-height: 1; }
+.archive-desc { font-family: var(--font-family); font-size: var(--text-base); line-height: 1.8; font-weight: 400; }
+.archive-controls { position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 30px; z-index: 10; pointer-events: auto; }
 .archive-btn { background: transparent; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
 .archive-btn:hover { transform: scale(1.1); }
 .archive-nav-icon { width: 50px; height: 50px; object-fit: contain; } 
-
 .archive-dots { display: flex; gap: 8px; }
 .archive-dot { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; cursor: pointer; transition: transform 0.2s, background-color 0.2s; }
 .archive-dot.active { background-color: var(--color-text-main); transform: scale(1.3); }
 
-/* ===========================================================
-   9. About Section
-=========================================================== */
+/* -------------------------------------
+   수정된 About 섹션 (이미지 중복 수정)
+-------------------------------------- */
 .about-container { grid-column: span 12; width: 100vw; margin-left: calc(50% - 50vw); display: flex; flex-direction: column; align-items: center; }
+.about-img { width: 100%; max-width: 1920px; display: block; image-rendering: -webkit-optimize-contrast; transform: translateZ(0); backface-visibility: hidden; }
 
-.about-img { 
-    width: 100%; 
-    max-width: 1920px; 
-    display: block; 
-    image-rendering: -webkit-optimize-contrast; 
-    transform: translateZ(0); 
-    backface-visibility: hidden;
-}
-.about-img.auto-height { height: auto; }
+/* 모바일 이미지 데스크탑에서는 숨김 (!important 추가) */
+.mb-img { display: none !important; }
+.pc-img { display: block !important; }
 
 .about-video-wrapper { width: 100%; max-width: 995px; aspect-ratio: 16 / 9; background: #000; margin: 80px 0; position: relative; overflow: hidden; display: block; cursor: pointer; }
 .about-video-thumb { width: 100%; height: 100%; object-fit: cover; }
@@ -391,53 +160,39 @@ body.is-main-page .nav-link { color: #000; }
 .about-play-btn { width: 80px; height: 80px; background: rgba(255,255,255,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .about-play-btn span { font-size: 40px; color: #000; margin-left: 5px; }
 
-/* ===========================================================
-   10. Guestbook Section 
-=========================================================== */
 .guestbook-page { position: relative; width: 100vw; min-height: calc(100vh - 80px); margin-left: calc(50% - 50vw); padding: 0; padding-top: 100px; overflow-x: hidden; background: var(--color-background); display: none; }
 #guestbook-physics-stage, #guestbook-dom-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
 #guestbook-physics-stage { z-index: 1; pointer-events: auto; }
 #guestbook-physics-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background: transparent; pointer-events: auto; }
 #guestbook-dom-stage { z-index: 2; pointer-events: none; }
-
 .gb-fixed-frame { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #ffffff; overflow: hidden; pointer-events: none; z-index: 1; }
 .gb-frame-content-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .gb-content-item { position: absolute; box-sizing: border-box; pointer-events: none; user-select: none; z-index: 5; transform-origin: center center; will-change: transform, left, top; }
-.gb-character-content { display: block; }
 .gb-character-content .gb-content-shape, .gb-content-face { position: absolute; object-fit: contain; pointer-events: none; }
 .gb-character-content .gb-content-shape { inset: 0; width: 100%; height: 100%; }
 .gb-content-name, .gb-content-message { color: #000; font-weight: 800; line-height: 1.3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px 18px; font-size: 14px; white-space: pre-wrap; word-break: break-all; }
-
 .guestbook-add-floating { position: absolute; z-index: 20; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .guestbook-add-floating img { width: 150px; height: 150px; object-fit: contain; transition: transform 0.2s ease; }
 .guestbook-add-floating:hover img { transform: scale(1.05); }
 
-/* ===========================================================
-   11. Guestbook Popup UI
-=========================================================== */
-.popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 20000; display: flex; align-items: center; justify-content: center; }
 .popup-overlay.hidden { display: none; }
-
 .popup-content { background: #ffffff; width: 950px; height: auto; max-width: 95vw; max-height: 90vh; padding: 35px 50px; position: relative; border-radius: 0; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow-y: auto; }
 .popup-close-btn { position: absolute; top: 25px; right: 25px; font-size: 26px; color: #555; z-index: 100; cursor: pointer; }
 .popup-title { font-size: 20px; font-weight: 800; margin-bottom: 25px; color: #111; }
 .popup-preview-area { height: 380px; flex: none; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; border-radius: 0; }
-.popup-options { min-height: 140px; } 
-
 .preview-character { position: relative; width: 360px; height: 360px; } 
 .preview-character > img { position: absolute; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 .gb-faces-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 .preview-face-controller { position: absolute; }
 .preview-face-controller.active { outline: 2px dashed #000; }
 .preview-face-controller img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-
 .move-handle { position: absolute; inset: 0; z-index: 5; }
 .face-handle { display: none; position: absolute; width: 24px; height: 24px; background: #000; color: #fff; border-radius: 50%; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 .preview-face-controller.active .face-handle { display: flex; }
 .face-handle-delete { top: -12px; left: 50%; transform: translateX(-50%); cursor: pointer; } 
 .face-handle-resize { bottom: -12px; left: -12px; cursor: nesw-resize; } 
 .face-handle-rotate { bottom: -12px; right: -12px; cursor: crosshair; } 
-
 .popup-submit-btn { position: absolute; right: 20px; bottom: 20px; width: 80px; height: 80px; background: url('make.png') center/contain no-repeat; transition: transform 0.2s; z-index: 100; cursor: pointer; }
 .popup-submit-btn:hover { transform: scale(1.05); }
 
@@ -451,7 +206,6 @@ body.is-main-page .nav-link { color: #000; }
 .color-swatch { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s; cursor: pointer; }
 .color-swatch:hover, .color-swatch.active { transform: scale(1.1); }
 .color-swatch.active { border-color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-
 .shape-picker, .face-picker { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
 .shape-choice, .face-choice { width: 65px; height: 65px; flex-shrink: 0; border: 2px solid transparent; background: #fafafa; border-radius: 0; transition: all 0.2s; padding: 8px; cursor: pointer; }
 .shape-choice:hover, .face-choice:hover { background: #f0f0f0; }
@@ -462,94 +216,33 @@ body.is-main-page .nav-link { color: #000; }
 .message-inputs input { border: none; border-bottom: 1px solid #ccc; padding: 10px 5px; font-size: 15px; outline: none; border-radius: 0; }
 .message-inputs input:focus { border-bottom-color: #111; }
 
-/* ===========================================================
-   12. Designers Section
-=========================================================== */
-.designer-list {
-    grid-column: 1 / 13; 
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid #eaeaea;
-}
-
-.designer-item {
-    display: grid;
-    grid-template-columns: 80px 120px 1fr 1fr;
-    align-items: center;
-    gap: 24px;
-    padding: 25px 10px;
-    border-bottom: 1px solid #eaeaea;
-    transition: background-color 0.3s ease;
-}
-
-.designer-item:hover {
-    background-color: #fafafa;
-}
-
-.designer-item .tag {
-    padding: 4px 8px;
-    font-weight: 800;
-    font-size: 14px;
-    text-align: center;
-    border-radius: 0px;
-}
+.designer-list { grid-column: 1 / 13; list-style: none; padding: 0; margin: 0; border-top: 1px solid #eaeaea; }
+.designer-item { display: grid; grid-template-columns: 80px 120px 1fr 1fr; align-items: center; gap: 24px; padding: 25px 10px; border-bottom: 1px solid #eaeaea; transition: background-color 0.3s ease; }
+.designer-item:hover { background-color: #fafafa; }
+.designer-item .tag { padding: 4px 8px; font-weight: 800; font-size: 14px; text-align: center; border-radius: 0px; }
 .designer-item .tag.visual { background-color: #FF7CA8; color: #000; }
 .designer-item .tag.space { background-color: #FF9900; color: #000; }
-
 .designer-item .name { font-size: 18px; font-weight: bold; }
+.designer-item .title { font-size: 16px; color: #000; text-align: left; font-weight: 400; cursor: pointer; transition: color 0.2s; }
+.designer-item .title .title-text { display: inline-block; transform-origin: center; }
+.designer-item .title:hover .title-text { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }
 
-.designer-item .title { 
-    font-size: 16px; color: #000; text-align: left; font-weight: 400; 
-    cursor: pointer; transition: color 0.2s; 
-}
+#floating-preview { position: fixed; pointer-events: none; z-index: 9999; width: 384px; height: 384px; object-fit: cover; background-color: var(--color-placeholder); transform: translate(-50%, 0); margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transition: opacity 0.15s ease, visibility 0.15s ease; }
+#floating-preview.visible { opacity: 1; visibility: visible; }
 
-.designer-item .title .title-text {
-    display: inline-block;
-    transform-origin: center;
-}
 
-.designer-item .title:hover .title-text { 
-    animation: nav-wiggle 0.45s ease-in-out infinite alternate; 
-}
-
-#floating-preview {
-    position: fixed;
-    pointer-events: none; 
-    z-index: 9999;
-    width: 384px; 
-    height: 384px;
-    object-fit: cover;
-    background-color: var(--color-placeholder); 
-    transform: translate(-50%, 0); 
-    margin-top: 20px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, visibility 0.15s ease;
-}
-
-#floating-preview.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* 모바일 화면 대응용 미디어 쿼리 (768px 이하) */
+/* ===========================================================
+   2. 미디어 쿼리 - 모바일 최적화 (768px 이하)
+=========================================================== */
 @media screen and (max-width: 1100px) {
     #section-guestbook.guestbook-page { overflow-y: auto; }
 }
 
 /* ===========================================================
-   데스크탑/모바일 아카이브 디스플레이 제어
-=========================================================== */
-.archive-mobile-view { display: none; }
-.archive-desktop-view { display: flex; width: 100%; flex-direction: row; }
-
-/* ===========================================================
-   모바일 전용 시안 병합 (768px 이하)
+   2. 미디어 쿼리 - 모바일 최적화 (768px 이하)
 =========================================================== */
 @media screen and (max-width: 768px) {
-    :root {
+    :root { 
         --grid-gap: 12px;
         --site-margin: 15px; 
         --text-title: 32px;
@@ -557,155 +250,133 @@ body.is-main-page .nav-link { color: #000; }
         --text-md: 18px; 
         --text-sm: 14px;
         --text-base: 13px;
-    }
-
-    html { -webkit-text-size-adjust: 100%; }
+    } 
+    
     body { cursor: auto !important; -webkit-tap-highlight-color: transparent; }
     a, button, input { cursor: auto !important; }
     .custom-cursor { display: none !important; }
 
-    #intro-screen { z-index: 25000; height: 100vh; height: 100dvh; }
-    #loading-screen { height: 100vh; height: 100dvh; }
+    /* 인트로 및 페이지 전환 로딩 스크린 */
+    #intro-screen { z-index: 25000; }
+    #loading-screen { z-index: 10005; }
     .character-loader-wrapper { width: 280px; height: 130px; }
     .loader-item { width: 80px; height: 80px; }
-    @keyframes bounceChar {
-        0% { top: 20px; transform: scaleX(1.2) scaleY(0.8); }
-        40% { transform: scaleX(1) scaleY(1); }
-        100% { top: -20px; transform: scaleX(0.95) scaleY(1.05); }
-    }
-    #loading-final-img { content: url('loding-mb.png'); }
-
-    .container {
-        grid-template-columns: repeat(2, 1fr);
-        padding-left: var(--site-margin);
-        padding-right: var(--site-margin);
-        padding-top: calc(75px + env(safe-area-inset-top));
-        padding-bottom: calc(85px + env(safe-area-inset-bottom));
-        max-width: 100%;
+    @keyframes bounceChar { 
+        0% { top: 20px; transform: scaleX(1.2) scaleY(0.8); } 
+        40% { transform: scaleX(1) scaleY(1); } 
+        100% { top: -20px; transform: scaleX(0.95) scaleY(1.05); } 
     }
 
-    .top-title-bar { 
-        position: fixed; top: 0; padding-top: calc(15px + env(safe-area-inset-top)); padding-bottom: 5px; border-bottom: 2px solid #111; 
-        background-color: var(--color-background);
-        pointer-events: auto;
-    }
-    .top-title-img { height: 28px; }
-    .global-header.bottom-nav { border-top: 2px solid #111; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-wrapper { justify-content: flex-end; height: 55px; padding: 0 var(--site-margin); }
-    .hamburger-btn { display: block !important; font-size: 26px; z-index: 10002; right: 20px; bottom: auto; position: relative;}
+    .container { grid-template-columns: repeat(2, 1fr); padding-left: var(--site-margin); padding-right: var(--site-margin); padding-top: calc(75px + env(safe-area-inset-top)); padding-bottom: calc(85px + env(safe-area-inset-bottom)); width: 100%; max-width: 100%; }
     
-    .nav-menu { display: none; position: fixed; left: 0; bottom: calc(55px + env(safe-area-inset-bottom)); width: 100%; border-top: 2px solid #111; padding: 20px 0 10px; gap: 15px; z-index: 10001; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); top: auto; background: var(--color-background); height: auto; flex-direction: column;}
-    .nav-menu.active { display: flex; }
-    .nav-link { font-size: 17px; padding: 8px 0; }
+    .top-title-bar { position: fixed; background-color: var(--color-background); border-bottom: 2px solid #111; padding-top: calc(15px + env(safe-area-inset-top)); padding-bottom: 5px; } 
+    .top-title-img { height: 28px; } 
+    
+    .global-header.bottom-nav { border-top: 2px solid #111; padding-bottom: env(safe-area-inset-bottom); }
+    .nav-wrapper { height: 55px; padding: 0 var(--site-margin); justify-content: flex-end; }
+    
+    .hamburger-btn { display: block !important; position: static; font-size: 26px; padding: 5px; background: transparent; z-index: 10002; }
+    
+    .nav-menu { position: fixed; left: 0; bottom: calc(55px + env(safe-area-inset-bottom)); width: 100%; background: var(--color-background); border-top: 2px solid #111; padding: 20px 0 10px; gap: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); flex-direction: column; z-index: 10001; }
+    .nav-menu li { text-align: center; width: 100%; }
+    .nav-link { font-size: 17px; padding: 8px 0; } 
+    .nav-link:hover { animation: none; }
 
-    .main-section-wrapper { min-height: calc(100vh - 55px - env(safe-area-inset-bottom)); min-height: calc(100dvh - 55px - env(safe-area-inset-bottom)); padding-top: 0; padding-left: 0; padding-right: 0;}
-    .physics-stage, .main-guestbook-stage { height: calc(100vh - 55px - env(safe-area-inset-bottom)); height: calc(100dvh - 55px - env(safe-area-inset-bottom)); left: 0; width: 100vw; }
+    .main-section-wrapper { min-height: calc(100vh - 55px - env(safe-area-inset-bottom)); min-height: calc(100dvh - 55px - env(safe-area-inset-bottom)); padding-left: 0; padding-right: 0; }
+    .physics-stage { height: calc(100vh - 55px - env(safe-area-inset-bottom)); height: calc(100dvh - 55px - env(safe-area-inset-bottom)); left: 0; width: 100vw; }
     .main-content { padding-top: 10vh; }
-
-    .works-filter-group { margin-bottom: 12px; gap: 12px; }
+    
+    .works-filter-group { margin-bottom: 12px; grid-column: span 2; gap: 12px; }
     .works-filter-btn { font-size: 9px; padding: 8px 10px 5px; }
-    .works-grid-list { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .works-item { grid-column: span 1; }
+    
+    .works-grid-list { grid-column: span 2; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); }
+    .works-item:hover { animation: none; opacity: 1; }
     .works-item.hover-active { opacity: 0.85; animation: work-wiggle 0.45s ease-in-out infinite alternate; }
     .works-item.hover-active .works-hover-overlay { opacity: 1; }
     .works-hover-overlay { padding: 15px 10px; }
     .works-hover-content { gap: 8px; }
-    .works-hover-title, .works-hover-name { font-size: 12px; }
+    .works-hover-title, .works-hover-name { font-size: 12px; font-weight: 700; }
     .works-hover-category { font-size: 9px; }
-
-    /* 상세페이지 모바일화 (Text 위로, Image 아래로 - order: -1 트릭) */
-    .detail-container { flex-direction: column; gap: 20px; padding: 0; }
-    .detail-text-area { width: 100%; max-width: 100%; position: static; padding-bottom: 10px; order: -1; margin-bottom: 0; }
+    
+    .detail-container { flex-direction: column; padding: 0; gap: 20px; }
+    .detail-text-area { max-width: 100%; position: static; padding-bottom: 10px; }
     .detail-image-area { width: 100%; }
-    .detail-img-placeholder { width: 100%; aspect-ratio: 588 / 750; min-height: auto; font-size: 13px; margin-bottom: 12px; }
+    .detail-img-placeholder { width: 100%; aspect-ratio: 588 / 750; min-height: auto; margin-bottom: 12px; font-size: 13px; }
     .detail-title { font-size: 18px; }
     .detail-close-btn { font-size: 20px; }
-    .detail-author { font-size: 16px; }
-    .detail-contact { font-size: 12px; }
+    .detail-author { font-size: 16px; margin-bottom: 6px; }
+    .detail-contact { font-size: 12px; margin-bottom: 3px; }
     .detail-desc { font-size: 13px; }
+    
+    /* 아카이브 반응형 분기 */
+    .archive-desktop-view { display: none; }
+    .archive-mobile-view { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; }
 
-    /* 아카이브 분기 */
-    .archive-desktop-view { display: none !important; }
-    .archive-mobile-view { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; }
-    #section-archive { 
-        height: calc(100vh - 55px - env(safe-area-inset-bottom)); height: calc(100dvh - 55px - env(safe-area-inset-bottom));
-        padding-top: calc(50px + env(safe-area-inset-top)); padding-bottom: 0; overflow: hidden; justify-content: center;
-    }
-    .archive-scroll-container {
-        display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch; width: 100%; height: 100%; gap: 0; padding: 0; scrollbar-width: none;
-    }
+    #section-archive { display: none; width: 100%; height: calc(100vh - 55px - env(safe-area-inset-bottom)); height: calc(100dvh - 55px - env(safe-area-inset-bottom)); padding-top: calc(50px + env(safe-area-inset-top)); padding-bottom: 0; align-items: center; justify-content: center; overflow: hidden; flex-direction: column; box-sizing: border-box; }
+    #section-archive.active { display: flex; }
+    
+    .archive-scroll-container { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; width: 100%; height: 100%; gap: 0; padding: 0; scrollbar-width: none; }
     .archive-scroll-container::-webkit-scrollbar { display: none; }
-    .archive-card {
-        flex: 0 0 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box;
-        padding: 25px 55px 45px 55px;
-    }
-    .archive-visual-area { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 12px; padding: 0; }
-    .archive-poster-wrapper { width: 100%; max-width: 340px; min-width: 200px; display: flex; flex-direction: column; align-items: flex-start; }
-    .archive-year-display { font-size: 13px; padding: 6px 10px; border-radius: 0 !important; margin: 0; align-self: flex-start; z-index: 5; text-align: left; }
-    .archive-poster { position: relative; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; aspect-ratio: 1/1.414;}
-    .archive-poster-img { width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: filter 0.3s ease; }
-    .archive-desc-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: rgba(0, 0, 0, 0.45); opacity: 0; transition: opacity 0.3s ease; padding: 20px 15px; pointer-events: none; z-index: 2; }
-    .archive-poster.show-desc .archive-poster-img { filter: blur(5px) brightness(30%); }
+    .archive-card { flex: 0 0 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px 55px 45px; box-sizing: border-box; }
+    
+    .archive-visual-area { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 12px; }
+    .archive-poster-wrapper { width: 100%; max-width: 340px; min-width: 200px; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; }
+    
+    .archive-year-display { font-size: 13px; padding: 6px 10px; border-radius: 0 !important; align-self: flex-start; margin: 0; z-index: 5; text-align: center; } 
+    .archive-poster { width: 100%; background-color: transparent; border: none; cursor: pointer; aspect-ratio: auto; }
+    .archive-poster-img { width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: filter 0.3s ease; display: block; }
+    
+    .archive-desc-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; padding: 20px 15px; box-sizing: border-box; pointer-events: none; z-index: 2; }
+    .archive-poster.show-desc .archive-poster-img { filter: blur(5px) brightness(75%); }
     .archive-poster.show-desc .archive-desc-overlay { opacity: 1; pointer-events: auto; }
     .archive-overlay-desc { font-size: 12px; line-height: 1.6; font-weight: 300; text-align: center; color: #ffffff; margin: 0 0 12px 0; word-break: keep-all; }
-    .archive-link-text { position: absolute; left: 15px; bottom: 15px; font-size: 9px; font-weight: 700; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 2px; text-transform: uppercase; }
-    .archive-text-area { width: 100%; max-width: min(280px, 100%); text-align: center; padding: 6px 0; }
-    .archive-title { font-size: 15px; margin-bottom: 6px; line-height: 1.3; }
+    .archive-link-text { position: absolute; left: 15px; bottom: 15px; font-size: 9px; font-weight: 700; color: #ffffff; letter-spacing: 0.05em; cursor: pointer; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 2px; text-transform: uppercase; }
     
-    .archive-btn.prev-btn { position: absolute; left: 2px; top: 50%; transform: translateY(-50%); }
-    .archive-btn.next-btn { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); }
-    .archive-nav-icon { width: 45px; height: 45px; }
-    .archive-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; margin-top: 0; }
+    .archive-text-area { width: 100%; max-width: min(280px, 100%); text-align: center; padding: 6px 0; grid-column: auto;} 
+    .archive-title { font-size: 15px; margin-top: 0; margin-bottom: 6px; line-height: 1.3; text-align: center; }
+    
+    .archive-btn.prev-btn { position: absolute; left: -20px; top: 50%; transform: translateY(-50%); }
+    .archive-btn.next-btn { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); }
+    .archive-nav-icon { width: 60px; height: 60px; } 
+    .archive-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); gap: 6px; }
+    .archive-dot { width: 6px; height: 6px; }
+    .archive-dot.active { transform: scale(1.2); }
+    
+    /* 모바일/PC 이미지 토글 */
+    .mb-img { display: block !important; }
+    .pc-img { display: none !important; }
 
-    /* About Images */
-    .about-img.about-img-1 { content: url('about-1-mb.png'); }
-    .about-img.about-img-2 { content: url('about-2-mb.png'); }
-    .about-img.about-img-3 { content: url('about-3-mb.png'); }
-    .about-video-wrapper { width: 85%; margin: 30px auto; }
+    .about-video-wrapper { margin: 30px 0; }
     .about-play-btn { width: 50px; height: 50px; }
     .about-play-btn span { font-size: 24px; margin-left: 3px; }
 
-    /* Guestbook Mobile */
-    .guestbook-page { 
-        min-height: calc(100vh - 55px - env(safe-area-inset-bottom)); min-height: calc(100dvh - 55px - env(safe-area-inset-bottom)); 
-        padding-top: calc(75px + env(safe-area-inset-top)); overflow-y: auto; 
-    }
-    #guestbook-physics-stage, #guestbook-dom-stage { top: calc(50px + env(safe-area-inset-top)); bottom: 0; left: 0; width: 100%; }
-    .gb-fixed-frame { border-width: 2px; }
-    .gb-content-name, .gb-content-message { font-size: 11px; padding: 6px 12px; }
-    .guestbook-add-floating { z-index: 20; position: absolute;}
-    .guestbook-add-floating img { width: 90px; height: 90px; }
+    .designer-list { grid-column: span 2; }
+    .designer-item { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px 5px; }
+    .designer-item .tag { padding: 3px 6px; font-size: 11px; width: fit-content; }
+    .designer-item .name { font-size: 15px; }
+    .designer-item .title { font-size: 13px; width: 100%; }
+    .designer-item .title:hover .title-text { animation: none; }
+    #floating-preview, #floating-preview.visible { display: none !important; }
 
-    /* Guestbook Popup */
-    .popup-overlay { height: 100vh; height: 100dvh; z-index: 20000; }
-    .popup-content { width: 90%; max-width: 400px; max-height: 82vh; max-height: 82dvh; padding: 20px 15px; border-radius: 0; box-shadow: 0 5px 25px rgba(0,0,0,0.15); }
+    .guestbook-page { min-height: calc(100vh - 55px - env(safe-area-inset-bottom)); padding-top: calc(75px + env(safe-area-inset-top)); }
+    #guestbook-physics-stage, #guestbook-dom-stage { top: calc(50px + env(safe-area-inset-top)); }
+    .gb-content-name, .gb-content-message { font-size: 11px; padding: 6px 12px; line-height: 1.2; }
+    .guestbook-add-floating img { width: 90px; height: 90px; }
+    
+    .popup-content { width: 90%; max-width: 400px; max-height: 82vh; max-height: 82dvh; padding: 20px 15px; border: none; box-shadow: 0 5px 25px rgba(0,0,0,0.15); }
     .popup-close-btn { top: 15px; right: 15px; font-size: 20px; }
     .popup-title { font-size: 14px; margin-bottom: 15px; text-align: left; }
     .popup-preview-area { height: 260px; margin-bottom: 15px; border: 2px solid #f0f0f0; }
     .popup-options { min-height: 110px; }
     .preview-character { width: 240px; height: 240px; }
-    .face-handle { width: 22px; height: 22px; font-size: 11px; }
-    .face-handle-delete { top: -11px; } 
-    .face-handle-resize { bottom: -11px; left: -11px; } 
-    .face-handle-rotate { bottom: -11px; right: -11px; } 
     .popup-submit-btn { right: 15px; bottom: 15px; width: 55px; height: 55px; }
     .popup-tabs { gap: 8px; padding-bottom: 8px; margin-bottom: 12px; }
     .tab-btn { font-size: 12px; }
     .tab-btn .tab-text { padding: 3px 6px; }
     .color-palette { gap: 4px; padding-bottom: 10px; margin-bottom: 10px; flex-wrap: nowrap; justify-content: space-between; }
-    .color-swatch { width: 18px; height: 18px; border: 1.5px solid transparent; }
+    .color-swatch { width: 18px; height: 18px; border: 1.5px solid transparent; flex-shrink: 0; }
     .shape-picker, .face-picker { gap: 8px; padding-bottom: 6px; }
     .shape-choice, .face-choice { width: 50px; height: 50px; padding: 5px; }
     .message-inputs { gap: 12px; }
     .message-inputs input { padding: 8px 4px; font-size: 13px; }
-
-    /* Designers */
-    .designer-list { grid-column: span 2; padding: 0 10px; }
-    .designer-item { grid-template-columns: 1fr; gap: 8px; padding: 16px 5px; flex-direction: column; align-items: flex-start;}
-    .designer-item .tag { font-size: 11px; padding: 3px 6px; width: fit-content; }
-    .designer-item .name { font-size: 15px; }
-    .designer-item .title { font-size: 13px; width: 100%;}
-    #floating-preview, #floating-preview.visible { display: none !important; }
 }

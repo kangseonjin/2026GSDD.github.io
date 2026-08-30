@@ -1,7 +1,6 @@
-// data.js에서 worksDataset, archiveDataset이 자동 로드됩니다.
-
-const isMobile = () => window.innerWidth <= 768;
-
+/* ===========================================================
+   최초 진입 오프닝 영상 및 초기화
+=========================================================== */
 const physicsImagesToPreload = [
     'maingraphic-01.png', 'maingraphic-02.png', 'maingraphic-03.png',
     'maingraphic-04.png', 'maingraphic-05.png', 'maingraphic-06.png',
@@ -12,10 +11,7 @@ const physicsImagesToPreload = [
 ];
 
 function preloadPhysicsResources() {
-    physicsImagesToPreload.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
+    physicsImagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,9 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('touchstart', (e) => {
         if (!e.target.closest('.works-item')) {
-            document.querySelectorAll('#works-list-grid .works-item').forEach(item => {
-                item.classList.remove('hover-active');
-            });
+            document.querySelectorAll('#works-list-grid .works-item').forEach(item => { item.classList.remove('hover-active'); });
         }
     });
 
@@ -40,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         if (introVideo) {
             introVideo.currentTime = 0; 
-            introVideo.play().catch(error => {
-                hideIntro();
-            });
+            introVideo.play().catch(error => { hideIntro(); });
             introVideo.onended = hideIntro;
             introVideo.onerror = hideIntro;
         } else {
@@ -66,24 +58,25 @@ function initMainApp() {
     isAppInitialized = true;
 
     renderWorksGrid(worksDataset);
-    initArchivePagination(); // Desktop Archive Init
-    initArchiveScroll();     // Mobile Archive Init
-    updateArchiveView();
+    if(window.innerWidth <= 768) {
+        initArchiveScrollMobile();
+    } else {
+        initArchivePaginationDesktop();
+        updateArchiveViewDesktop();
+    }
     initGuestbookControls();
-    
     initPhysics();
     renderDesignersList('All');
     navigateToPage('main', true); 
 }
 
-/* -----------------------------------------------------------
-   Works 렌더링 로직 (모바일 터치 대응)
------------------------------------------------------------ */
+/* ===========================================================
+   Works 렌더링 로직
+=========================================================== */
 function renderWorksGrid(data) {
     const grid = document.getElementById('works-list-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    
     const sortedData = [...data].sort((a, b) => a.designer.localeCompare(b.designer, 'ko'));
     
     sortedData.forEach(work => {
@@ -104,21 +97,18 @@ function renderWorksGrid(data) {
         `;
         
         workItem.onclick = (e) => {
-            if (isMobile()) {
+            if(window.innerWidth <= 768) {
                 if (workItem.classList.contains('hover-active')) {
                     showWorkDetail(work.id);
                 } else {
                     e.stopPropagation();
-                    document.querySelectorAll('#works-list-grid .works-item').forEach(item => {
-                        item.classList.remove('hover-active');
-                    });
+                    document.querySelectorAll('#works-list-grid .works-item').forEach(item => { item.classList.remove('hover-active'); });
                     workItem.classList.add('hover-active');
                 }
             } else {
                 showWorkDetail(work.id);
             }
         };
-        
         grid.appendChild(workItem);
     });
 }
@@ -131,7 +121,6 @@ function filterWorksByCategory(category) {
 }
 
 window.detailBackPage = 'works';
-
 function closeWorkDetail() {
     const backPage = window.detailBackPage || 'works';
     navigateToPage(backPage, true);
@@ -142,8 +131,9 @@ function showWorkDetail(workId) {
     if (!work) return;
 
     const currentActiveSection = document.querySelector('.page-section.active');
-    if (currentActiveSection && currentActiveSection.id === 'section-designers') {
-        window.detailBackPage = 'designers';
+    if (currentActiveSection) {
+        const activeId = currentActiveSection.id;
+        window.detailBackPage = (activeId === 'section-designers') ? 'designers' : 'works';
     } else {
         window.detailBackPage = 'works';
     }
@@ -162,24 +152,21 @@ function showWorkDetail(workId) {
     
     const imagesList = document.getElementById('detail-images-list');
     imagesList.innerHTML = ''; 
-
     const imgBox = document.createElement('figure');
     imgBox.className = 'detail-img-placeholder';
-    const widthText = isMobile() ? '100%' : '588px';
-    imgBox.innerHTML = `작품 이미지<br><br>Width: ${widthText}<br>(${work.detailPrefix}.png)`;
+    const isMobile = window.innerWidth <= 768;
+    imgBox.innerHTML = `작품 이미지<br><br>Width: ${isMobile ? '100%' : '588px'}<br>(${work.detailPrefix}.png)`;
     imagesList.appendChild(imgBox);
 }
 
 /* ===========================================================
-   디자이너 페이지 데이터
+   디자이너 페이지 
 =========================================================== */
 function getDesignersData() {
     const dMap = {};
     worksDataset.forEach(w => {
         const key = w.category + '_' + w.designer; 
-        if (!dMap[key]) {
-            dMap[key] = { designer: w.designer, engName: w.engName, category: w.category, works: [] };
-        }
+        if (!dMap[key]) { dMap[key] = { designer: w.designer, engName: w.engName, category: w.category, works: [] }; }
         dMap[key].works.push(w);
     });
     return Object.values(dMap);
@@ -191,36 +178,33 @@ function renderDesignersList(category = 'All') {
     grid.innerHTML = '';
     
     const allDesigners = getDesignersData();
-    allDesigners.sort((a, b) => a.designer.localeCompare(b.designer));
+    allDesigners.sort((a, b) => a.designer.localeCompare(b.designer, 'ko'));
+    
     const filtered = category === 'All' ? allDesigners : allDesigners.filter(d => d.category === category);
     
     filtered.forEach(d => {
         const li = document.createElement('li');
         li.className = 'designer-item';
-        
         const work1 = d.works[0];
         const work2 = d.works[1];
 
         let img1 = '', img2 = '';
         const safeName = d.engName ? d.engName.toLowerCase() : d.designer.toLowerCase(); 
         if (d.category === 'Visual') {
-            img1 = `dc_${safeName}_p1.png`;
-            img2 = `dc_${safeName}_p2.png`;
+            img1 = `dc_${safeName}_p1.png`; img2 = `dc_${safeName}_p2.png`;
         } else {
-            img1 = `dc_${safeName}.png`;
+            img1 = `dc_${safeName}.png`; img2 = '';
         }
-
-        const tagClass = d.category.toLowerCase();
         
         li.innerHTML = `
-            <span class="tag ${tagClass}">${d.category}</span>
+            <span class="tag ${d.category.toLowerCase()}">${d.category}</span>
             <span class="name">${d.designer}</span>
             <span class="title designer-work-title" data-img="${img1}" data-workid="${work1 ? work1.id : ''}"><span class="title-text">${work1 ? work1.title : ''}</span></span>
             ${work2 ? `<span class="title designer-work-title" data-img="${img2}" data-workid="${work2 ? work2.id : ''}"><span class="title-text">${work2.title}</span></span>` : ''}
         `;
-        
         grid.appendChild(li);
     });
+
     initDesignersInteractions(); 
 }
 
@@ -236,13 +220,14 @@ function initDesignersInteractions() {
 
     titles.forEach(title => {
         if (!title.innerText.trim()) return; 
+
         title.onclick = (e) => {
             e.stopPropagation();
             const workId = title.dataset.workid;
             if(workId) showWorkDetail(workId);
         };
-        
-        if (!isMobile() && floatingPreview) {
+
+        if(window.innerWidth > 768 && floatingPreview) {
             title.addEventListener('mouseenter', (e) => {
                 const imgSrc = title.dataset.img;
                 if (imgSrc && imgSrc.trim() !== '') {
@@ -256,39 +241,39 @@ function initDesignersInteractions() {
                     floatingPreview.style.top = `${e.clientY}px`;
                 }
             });
-            title.addEventListener('mouseleave', () => {
-                floatingPreview.classList.remove('visible');
-            });
+            title.addEventListener('mouseleave', () => { floatingPreview.classList.remove('visible'); });
         }
     });
 }
 
-/* -----------------------------------------------------------
-   Archive 렌더링 로직 (Desktop & Mobile 분리 구동)
------------------------------------------------------------ */
+/* ===========================================================
+   Archive (데스크탑 / 모바일 분리)
+=========================================================== */
 let archiveIndex = 0;
 
-// [Desktop]
-function initArchivePagination() {
-    const dotsContainer = document.getElementById('archive-dots-container');
+function initArchivePaginationDesktop() {
+    const dotsContainer = document.getElementById('archive-dots-container-desktop');
     if (!dotsContainer) return;
     dotsContainer.innerHTML = '';
     archiveDataset.forEach((data, index) => {
         const dot = document.createElement('div');
         dot.className = index === 0 ? 'archive-dot active' : 'archive-dot';
-        dot.onclick = () => { archiveIndex = index; updateArchiveView(); };
+        dot.onclick = () => { archiveIndex = index; updateArchiveViewDesktop(); };
         dotsContainer.appendChild(dot);
     });
 }
-function moveArchiveSlide(direction) {
+
+function moveArchiveSlideDesktop(direction) {
     archiveIndex += direction; 
     if (archiveIndex < 0) archiveIndex = archiveDataset.length - 1;
     if (archiveIndex >= archiveDataset.length) archiveIndex = 0;
-    updateArchiveView();
+    updateArchiveViewDesktop();
 }
-function updateArchiveView() {
+
+function updateArchiveViewDesktop() {
     const data = archiveDataset[archiveIndex];
     if (!data) return;
+    
     const displayYear = document.getElementById('archive-display-year');
     const titleText = document.getElementById('archive-title-text');
     const descText = document.getElementById('archive-description-text');
@@ -299,50 +284,27 @@ function updateArchiveView() {
     if (descText) descText.innerHTML = (data.desc || '').replace(/\n/g, '<br>');
     if (posterContainer) posterContainer.innerHTML = `<img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster">`;
 
-    const dots = document.querySelectorAll('#archive-dots-container .archive-dot');
+    const dots = document.querySelectorAll('#archive-dots-container-desktop .archive-dot');
     dots.forEach((dot, idx) => {
         if (idx === archiveIndex) dot.classList.add('active');
         else dot.classList.remove('active');
     });
 }
-function openArchiveExternalLink() {
-    const data = archiveDataset[archiveIndex];
-    if (data && data.link) window.open(data.link, '_blank');
+
+// 색상 변환 헬퍼 함수 추가
+function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// [Mobile]
-function updateArchiveDotsOnScroll() {
-    const container = document.getElementById('archive-scroll-container');
-    if (!container) return;
-    const cardWidth = container.clientWidth;
-    if (cardWidth <= 0) return;
-    const activeIndex = Math.round(container.scrollLeft / cardWidth);
-    const dots = document.querySelectorAll('#archive-mobile-dots-container .archive-dot');
-    dots.forEach((dot, idx) => {
-        if (idx === activeIndex) dot.classList.add('active');
-        else dot.classList.remove('active');
-    });
-    document.querySelectorAll('.archive-poster').forEach(poster => poster.classList.remove('show-desc'));
-}
-function toggleArchiveDesc(posterElement) {
-    if (!posterElement) return;
-    posterElement.classList.toggle('show-desc');
-}
-function moveArchiveScrollSlide(direction) {
-    const container = document.getElementById('archive-scroll-container');
-    if (!container) return;
-    const cardWidth = container.clientWidth;
-    if (cardWidth <= 0) return;
-    const currentIndex = Math.round(container.scrollLeft / cardWidth);
-    let nextIndex = currentIndex + direction;
-    if (nextIndex < 0) nextIndex = archiveDataset.length - 1;
-    if (nextIndex >= archiveDataset.length) nextIndex = 0;
-    container.scrollTo({ left: nextIndex * cardWidth, behavior: 'smooth' });
-}
-function initArchiveScroll() {
+// 기존 initArchiveScrollMobile 함수 교체
+function initArchiveScrollMobile() {
     const container = document.getElementById('archive-scroll-container');
     if (!container) return;
     container.innerHTML = '';
+    
     archiveDataset.forEach(data => {
         const card = document.createElement('article');
         card.className = 'archive-card';
@@ -350,9 +312,9 @@ function initArchiveScroll() {
             <div class="archive-visual-area">
                 <div class="archive-poster-wrapper">
                     <p class="archive-year-display" style="background-color: ${data.bgColor};">${data.year}</p>
-                    <figure class="archive-poster" onclick="toggleArchiveDesc(this)">
+                    <figure class="archive-poster" onclick="toggleArchiveDescMobile(this)">
                         <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
-                        <div class="archive-desc-overlay">
+                        <div class="archive-desc-overlay" style="background-color: ${hexToRgba(data.bgColor, 0.5)};">
                             <p class="archive-overlay-desc">${(data.desc || '').replace(/\n/g, '<br>')}</p>
                             <span class="archive-link-text" onclick="window.open('${data.link}', '_blank'); event.stopPropagation();">VIEW EXHIBITION →</span>
                         </div>
@@ -364,7 +326,7 @@ function initArchiveScroll() {
         container.appendChild(card);
     });
 
-    const dotsContainer = document.getElementById('archive-mobile-dots-container');
+    const dotsContainer = document.getElementById('archive-dots-container-mobile');
     if (dotsContainer) {
         dotsContainer.innerHTML = '';
         archiveDataset.forEach((_, idx) => {
@@ -377,16 +339,50 @@ function initArchiveScroll() {
             dotsContainer.appendChild(dot);
         });
     }
-    container.removeEventListener('scroll', updateArchiveDotsOnScroll);
-    container.addEventListener('scroll', updateArchiveDotsOnScroll);
+    container.removeEventListener('scroll', updateArchiveDotsOnScrollMobile);
+    container.addEventListener('scroll', updateArchiveDotsOnScrollMobile);
+}
+function updateArchiveDotsOnScrollMobile() {
+    const container = document.getElementById('archive-scroll-container');
+    if (!container) return;
+    const cardWidth = container.clientWidth;
+    if (cardWidth <= 0) return;
+    const activeIndex = Math.round(container.scrollLeft / cardWidth);
+    
+    document.querySelectorAll('#archive-dots-container-mobile .archive-dot').forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === activeIndex);
+    });
+    document.querySelectorAll('.archive-poster').forEach(poster => { poster.classList.remove('show-desc'); });
+}
+
+function toggleArchiveDescMobile(posterElement) {
+    if (!posterElement) return;
+    posterElement.classList.toggle('show-desc');
+}
+
+function moveArchiveSlideMobile(direction) {
+    const container = document.getElementById('archive-scroll-container');
+    if (!container) return;
+    const cardWidth = container.clientWidth;
+    if (cardWidth <= 0) return;
+    const currentIndex = Math.round(container.scrollLeft / cardWidth);
+    let nextIndex = currentIndex + direction;
+    if (nextIndex < 0) nextIndex = archiveDataset.length - 1;
+    if (nextIndex >= archiveDataset.length) nextIndex = 0;
+    container.scrollTo({ left: nextIndex * cardWidth, behavior: 'smooth' });
+}
+
+function openArchiveExternalLink() {
+    const data = archiveDataset[archiveIndex];
+    if (data && data.link) window.open(data.link, '_blank');
 }
 
 
-/* -----------------------------------------------------------
+/* ===========================================================
    페이지 네비게이션 로직
------------------------------------------------------------ */
+=========================================================== */
 let isNavigating = false;
-const loadingCombinations = [
+const loadingCombinationsDesktop = [
     ['loding/ld-01.png', 'loding/ld-02.png', 'loding/ld-03.png'],
     ['loding/ld-04.png', 'loding/ld-05.png', 'loding/ld-06.png'],
     ['loding/ld-07.png', 'loding/ld-08.png', 'loding/ld-09.png'],
@@ -396,6 +392,7 @@ const loadingCombinations = [
 function navigateToPage(pageName, skipLoading = false) {
     const targetId = `section-${pageName}`;
     const targetSection = document.getElementById(targetId);
+    
     if (targetSection && targetSection.classList.contains('active') && !skipLoading) return;
     if (isNavigating) return;
 
@@ -404,16 +401,12 @@ function navigateToPage(pageName, skipLoading = false) {
     if (pageName === 'main') skipLoading = true;
 
     const detailSection = document.getElementById('section-detail');
-    if (detailSection && detailSection.classList.contains('active') && pageName === 'works') {
-        skipLoading = true;
-    }
+    if (detailSection && detailSection.classList.contains('active') && pageName === 'works') { skipLoading = true; }
 
-    if (skipLoading) {
-        completeNavigation(pageName);
-        return;
-    }
+    if (skipLoading) { completeNavigation(pageName); return; }
 
     isNavigating = true;
+    
     const loadingScreen = document.getElementById('loading-screen');
     const charsWrap = document.getElementById('loading-chars');
     const finalImg = document.getElementById('loading-final-img');
@@ -422,22 +415,28 @@ function navigateToPage(pageName, skipLoading = false) {
     const loaderImg3 = document.getElementById('loader-img-3');
     
     if (loadingScreen && charsWrap && finalImg && loaderImg1 && loaderImg2 && loaderImg3) {
-        const randomComboIndex = Math.floor(Math.random() * loadingCombinations.length);
-        const selectedCombo = loadingCombinations[randomComboIndex];
+        const randomComboIndex = Math.floor(Math.random() * loadingCombinationsDesktop.length);
+        const selectedCombo = loadingCombinationsDesktop[randomComboIndex];
+        loaderImg1.src = selectedCombo[0];
+        loaderImg2.src = selectedCombo[1];
+        loaderImg3.src = selectedCombo[2];
         
-        loaderImg1.src = selectedCombo[0]; loaderImg2.src = selectedCombo[1]; loaderImg3.src = selectedCombo[2];
-        charsWrap.style.display = 'flex'; finalImg.style.display = 'none'; finalImg.style.opacity = '0';
+        finalImg.src = window.innerWidth <= 768 ? 'loding-mb.png' : 'loding.png';
+        
+        charsWrap.style.display = 'flex';
+        finalImg.style.display = 'none';
+        finalImg.style.opacity = '0';
         loadingScreen.classList.remove('hidden');
         
-        const timeoutMs = isMobile() ? 1200 : 1500;
-        const fadeMs = isMobile() ? 850 : 1000;
+        const delayTime = window.innerWidth <= 768 ? 1200 : 1500;
+        const fadeTime = window.innerWidth <= 768 ? 850 : 1000;
 
         setTimeout(() => {
             charsWrap.style.display = 'none';
             finalImg.style.display = 'block';
-            requestAnimationFrame(() => requestAnimationFrame(() => finalImg.style.opacity = '1'));
-            setTimeout(() => completeNavigation(pageName), fadeMs);
-        }, timeoutMs);
+            requestAnimationFrame(() => { requestAnimationFrame(() => { finalImg.style.opacity = '1'; }); });
+            setTimeout(() => { completeNavigation(pageName); }, fadeTime);
+        }, delayTime);
     } else {
         completeNavigation(pageName);
     }
@@ -447,8 +446,11 @@ function completeNavigation(pageName) {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) loadingScreen.classList.add('hidden');
 
-    document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    const sections = document.querySelectorAll('.page-section');
+    sections.forEach(sec => sec.classList.remove('active'));
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.classList.remove('active'));
 
     const targetSection = document.getElementById(`section-${pageName}`);
     if (targetSection) targetSection.classList.add('active');
@@ -469,15 +471,15 @@ function completeNavigation(pageName) {
     if (gbStage) gbStage.style.pointerEvents = (pageName === 'guestbook') ? 'auto' : 'none';
 
     if (pageName === 'guestbook' && !window.__guestbookPhysicsInitialized) {
-        requestAnimationFrame(() => requestAnimationFrame(() => initGuestbookPhysics()));
+        requestAnimationFrame(() => { requestAnimationFrame(() => initGuestbookPhysics()); });
     }
     
     if (pageName === 'archive') {
-        if (isMobile()) {
+        if(window.innerWidth <= 768) {
             const scrollContainer = document.getElementById('archive-scroll-container');
             if (scrollContainer) scrollContainer.scrollLeft = 0;
         } else {
-            archiveIndex = 0; updateArchiveView();
+            archiveIndex = 0; updateArchiveViewDesktop();
         }
     }
     
@@ -498,15 +500,16 @@ function toggleMobileMenu() {
     const hamburgerBtn = document.querySelector('.hamburger-btn');
     navMenu.classList.toggle('active');
     if (navMenu.classList.contains('active')) {
-        hamburgerBtn.innerText = '✕'; document.body.style.overflow = 'hidden'; 
+        hamburgerBtn.innerText = '✕';
+        document.body.style.overflow = 'hidden'; 
     } else {
-        hamburgerBtn.innerText = '☰'; document.body.style.overflow = 'auto'; 
+        hamburgerBtn.innerText = '☰';
+        document.body.style.overflow = 'auto'; 
     }
 }
 
-
 /* ===========================================================
-   방명록 데이터 및 팝업
+   방명록 데이터 및 팝업 (새로고침 원상복구)
 =========================================================== */
 const guestbookStorageKey = 'gsdd-guestbook-entries';
 const gbColors = ['#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', '#F6C3D9', '#009DDA', '#6D7F88', '#14A146', '#AAA1CE', '#73BEA2', '#9A87BE', '#0068AD'];
@@ -515,502 +518,828 @@ const textBgColors = ['#F6A700', '#E6E6E6', '#E72F4C', '#EA5703', '#FBEE00', '#F
 let gbDraft = { shapeColorIdx: 1, shapeIdx: null };
 let gbFaces = []; 
 let activeFaceId = null; 
+
 const totalShapes = 12; 
 const totalFaces = 11;  
 
 function getGuestbookEntries() {
-    try { return JSON.parse(localStorage.getItem(guestbookStorageKey)) || []; } catch { return []; }
+    try { return JSON.parse(localStorage.getItem(guestbookStorageKey)) || []; }
+    catch { return []; }
 }
 
 function openGuestbookPopup() {
     const popup = document.getElementById('guestbook-popup');
     if (popup) {
-        popup.classList.remove('hidden'); document.body.style.overflow = 'hidden'; 
-        gbDraft = { shapeColorIdx: 1, shapeIdx: null }; gbFaces = []; activeFaceId = null;
-        document.getElementById('gb-name').value = ''; document.getElementById('gb-message').value = '';
-        setGuestbookTab('shape'); updateGuestbookPreview(); renderFacesDOM(); 
+        popup.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
+        gbDraft = { shapeColorIdx: 1, shapeIdx: null };
+        gbFaces = [];
+        activeFaceId = null;
+        document.getElementById('gb-name').value = '';
+        document.getElementById('gb-message').value = '';
+        setGuestbookTab('shape'); 
+        updateGuestbookPreview(); 
+        renderFacesDOM(); 
     }
 }
+
 function closeGuestbookPopup() {
     const popup = document.getElementById('guestbook-popup');
-    if (popup) { popup.classList.add('hidden'); document.body.style.overflow = ''; }
+    if (popup) {
+        popup.classList.add('hidden');
+        document.body.style.overflow = ''; 
+    }
 }
+
 function setGuestbookTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabName));
     document.querySelectorAll('.gb-tab-panel').forEach(panel => panel.classList.toggle('active', panel.id === `gb-panel-${tabName}`));
 }
+
 function initGuestbookControls() {
     const renderPalette = (containerId, type) => {
         const container = document.getElementById(containerId);
-        if(!container) return; container.innerHTML = ''; 
+        if(!container) return;
+        container.innerHTML = ''; 
         gbColors.forEach((color, idx) => {
             const btn = document.createElement('div');
-            btn.className = 'color-swatch'; btn.style.backgroundColor = color; btn.dataset.idx = idx + 1;
+            btn.className = 'color-swatch';
+            btn.style.backgroundColor = color;
+            btn.dataset.idx = idx + 1;
             btn.onclick = () => { 
-                if(type === 'shape') { gbDraft.shapeColorIdx = idx + 1; updateGuestbookPreview(); } 
-                else if(type === 'face' && activeFaceId !== null) {
+                if(type === 'shape') {
+                    gbDraft.shapeColorIdx = idx + 1; updateGuestbookPreview(); 
+                } else if(type === 'face' && activeFaceId !== null) {
                     const face = gbFaces.find(f => f.id === activeFaceId);
-                    if (face) { face.colorIdx = idx + 1; const wrapper = document.getElementById(`face-wrapper-${activeFaceId}`); if (wrapper) wrapper.querySelector('img').src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`; }
+                    if (face) {
+                        face.colorIdx = idx + 1;
+                        const wrapper = document.getElementById(`face-wrapper-${activeFaceId}`);
+                        if (wrapper) wrapper.querySelector('img').src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`;
+                    }
                 }
                 updatePaletteActiveStates(); 
             };
             container.appendChild(btn);
         });
     };
-    renderPalette('gb-shape-colors', 'shape'); renderPalette('gb-face-colors', 'face');
+    renderPalette('gb-shape-colors', 'shape');
+    renderPalette('gb-face-colors', 'face');
 
     const shapePicker = document.getElementById('gb-shape-picker');
     for (let i = 1; i <= totalShapes; i++) {
-        const btn = document.createElement('button'); btn.className = 'shape-choice'; btn.innerHTML = `<img src="guestbook/pvf${i}.png" alt="형태${i}">`;
-        btn.onclick = () => { gbDraft.shapeIdx = i; updateGuestbookPreview(); }; shapePicker.appendChild(btn);
+        const btn = document.createElement('button');
+        btn.className = 'shape-choice';
+        btn.innerHTML = `<img src="guestbook/pvf${i}.png" alt="형태${i}">`;
+        btn.onclick = () => { gbDraft.shapeIdx = i; updateGuestbookPreview(); };
+        shapePicker.appendChild(btn);
     }
     const facePicker = document.getElementById('gb-face-picker');
     for (let i = 1; i <= totalFaces; i++) {
-        const btn = document.createElement('button'); btn.className = 'face-choice'; btn.innerHTML = `<img src="guestbook/pvc${i}.png" alt="표정${i}">`;
+        const btn = document.createElement('button');
+        btn.className = 'face-choice';
+        btn.innerHTML = `<img src="guestbook/pvc${i}.png" alt="표정${i}">`;
         btn.onclick = () => { 
             const newFace = { id: Date.now() + Math.random(), faceIdx: i, colorIdx: 1, x: 0, y: 0, scale: 0.6, rotation: 0 };
             gbFaces.push(newFace); activeFaceId = newFace.id; renderFacesDOM(); updatePaletteActiveStates();
-        }; facePicker.appendChild(btn);
+        };
+        facePicker.appendChild(btn);
     }
 }
+
 function updatePaletteActiveStates() {
     const shapeColors = document.getElementById('gb-shape-colors');
     if(shapeColors) shapeColors.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', parseInt(el.dataset.idx) === gbDraft.shapeColorIdx));
-    const activeFace = gbFaces.find(f => f.id === activeFaceId); const activeColorIdx = activeFace ? activeFace.colorIdx : 0;
+    const activeFace = gbFaces.find(f => f.id === activeFaceId);
+    const activeColorIdx = activeFace ? activeFace.colorIdx : 0;
     const faceColors = document.getElementById('gb-face-colors');
     if(faceColors) faceColors.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', parseInt(el.dataset.idx) === activeColorIdx));
     document.querySelectorAll('.shape-choice').forEach((el, idx) => el.classList.toggle('active', idx + 1 === gbDraft.shapeIdx));
 }
+
 function deselectFace(e) {
-    if (e.target.id === 'gb-preview-area' || e.target.id === 'gb-preview-character' || e.target.id === 'gb-preview-shape' || e.target.id === 'gb-faces-container') { makeFaceActive(null); }
+    if (['gb-preview-area', 'gb-preview-character', 'gb-preview-shape', 'gb-faces-container'].includes(e.target.id)) {
+        makeFaceActive(null);
+    }
 }
 function makeFaceActive(id) {
-    activeFaceId = id; document.querySelectorAll('.preview-face-controller').forEach(el => el.classList.remove('active'));
-    if (id) { const activeEl = document.getElementById(`face-wrapper-${id}`); if (activeEl) activeEl.classList.add('active'); }
+    activeFaceId = id;
+    document.querySelectorAll('.preview-face-controller').forEach(el => el.classList.remove('active'));
+    if (id) {
+        const activeEl = document.getElementById(`face-wrapper-${id}`);
+        if (activeEl) activeEl.classList.add('active');
+    }
     updatePaletteActiveStates();
 }
 function updateGuestbookPreview() {
     const shapeImg = document.getElementById('gb-preview-shape');
-    if (!gbDraft.shapeIdx) { shapeImg.style.display = 'none'; } else { shapeImg.style.display = 'block'; shapeImg.src = `guestbook/guestbook${gbDraft.shapeColorIdx}-${gbDraft.shapeIdx}.png`; }
+    if (!gbDraft.shapeIdx) { shapeImg.style.display = 'none'; } 
+    else { shapeImg.style.display = 'block'; shapeImg.src = `guestbook/guestbook${gbDraft.shapeColorIdx}-${gbDraft.shapeIdx}.png`; }
     updatePaletteActiveStates();
 }
 
 function renderFacesDOM() {
-    const facesContainer = document.getElementById('gb-faces-container'); facesContainer.innerHTML = '';
+    const facesContainer = document.getElementById('gb-faces-container');
+    facesContainer.innerHTML = '';
+    
     gbFaces.forEach(face => {
         const wrapper = document.createElement('div');
-        wrapper.id = `face-wrapper-${face.id}`; wrapper.className = `preview-face-controller ${face.id === activeFaceId ? 'active' : ''}`; wrapper.style.pointerEvents = 'auto';
-        const baseSize = isMobile() ? 130 : 190; const currentSize = baseSize * face.scale;
-        wrapper.style.width = `${currentSize}px`; wrapper.style.height = `${currentSize}px`; wrapper.style.left = `calc(50% + ${face.x}px)`; wrapper.style.top = `calc(50% + ${face.y}px)`; wrapper.style.transform = `translate(-50%, -50%) rotate(${face.rotation}deg)`;
-        const img = document.createElement('img'); img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`; wrapper.appendChild(img);
+        wrapper.id = `face-wrapper-${face.id}`;
+        wrapper.className = `preview-face-controller ${face.id === activeFaceId ? 'active' : ''}`;
+        wrapper.style.pointerEvents = 'auto';
+        
+        const baseSize = window.innerWidth <= 768 ? 130 : 190; 
+        const currentSize = baseSize * face.scale;
+        wrapper.style.width = `${currentSize}px`;
+        wrapper.style.height = `${currentSize}px`;
+        wrapper.style.left = `calc(50% + ${face.x}px)`;
+        wrapper.style.top = `calc(50% + ${face.y}px)`;
+        wrapper.style.transform = `translate(-50%, -50%) rotate(${face.rotation}deg)`;
 
-        const moveHandle = document.createElement('div'); moveHandle.className = 'move-handle';
-        moveHandle.onmousedown = (e) => startDragFace(e, face.id); moveHandle.ontouchstart = (e) => startDragFace(e, face.id); wrapper.appendChild(moveHandle);
+        const img = document.createElement('img');
+        img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`;
+        wrapper.appendChild(img);
 
-        const delHandle = document.createElement('div'); delHandle.className = 'face-handle face-handle-delete'; delHandle.innerHTML = '✕';
+        const moveHandle = document.createElement('div');
+        moveHandle.className = 'move-handle';
+        moveHandle.onmousedown = (e) => startDragFace(e, face.id);
+        moveHandle.ontouchstart = (e) => startDragFace(e, face.id);
+        wrapper.appendChild(moveHandle);
+
+        const delHandle = document.createElement('div');
+        delHandle.className = 'face-handle face-handle-delete';
+        delHandle.innerHTML = '✕';
         delHandle.onmousedown = (e) => { e.stopPropagation(); gbFaces = gbFaces.filter(f => f.id !== face.id); activeFaceId = null; renderFacesDOM(); updatePaletteActiveStates(); };
-        delHandle.ontouchstart = (e) => { e.stopPropagation(); gbFaces = gbFaces.filter(f => f.id !== face.id); activeFaceId = null; renderFacesDOM(); updatePaletteActiveStates(); };
+        delHandle.ontouchstart = delHandle.onmousedown;
         wrapper.appendChild(delHandle);
 
-        const resHandle = document.createElement('div'); resHandle.className = 'face-handle face-handle-resize'; resHandle.innerHTML = '↔';
-        resHandle.onmousedown = (e) => startScaleFace(e, face.id); resHandle.ontouchstart = (e) => startScaleFace(e, face.id); wrapper.appendChild(resHandle);
+        const resHandle = document.createElement('div');
+        resHandle.className = 'face-handle face-handle-resize';
+        resHandle.innerHTML = '↔';
+        resHandle.onmousedown = (e) => startScaleFace(e, face.id);
+        resHandle.ontouchstart = resHandle.onmousedown;
+        wrapper.appendChild(resHandle);
 
-        const rotHandle = document.createElement('div'); rotHandle.className = 'face-handle face-handle-rotate'; rotHandle.innerHTML = '↻';
-        rotHandle.onmousedown = (e) => startRotateFace(e, face.id); rotHandle.ontouchstart = (e) => startRotateFace(e, face.id); wrapper.appendChild(rotHandle);
+        const rotHandle = document.createElement('div');
+        rotHandle.className = 'face-handle face-handle-rotate';
+        rotHandle.innerHTML = '↻';
+        rotHandle.onmousedown = (e) => startRotateFace(e, face.id);
+        rotHandle.ontouchstart = rotHandle.onmousedown;
+        wrapper.appendChild(rotHandle);
 
         facesContainer.appendChild(wrapper);
     });
 }
+
 function startDragFace(e, id) {
     e.preventDefault(); e.stopPropagation(); makeFaceActive(id);
-    const face = gbFaces.find(f => f.id === id); const wrapper = document.getElementById(`face-wrapper-${id}`); if (!wrapper) return;
-    const isTouch = e.type.startsWith('touch'); const startEvent = isTouch ? e.touches[0] : e;
-    let startX = startEvent.clientX; let startY = startEvent.clientY; let initialX = face.x; let initialY = face.y;
+    const face = gbFaces.find(f => f.id === id);
+    const wrapper = document.getElementById(`face-wrapper-${id}`);
+    if (!wrapper) return;
+    const isTouch = e.type.startsWith('touch');
+    const startEvent = isTouch ? e.touches[0] : e;
+    let startX = startEvent.clientX; let startY = startEvent.clientY;
+    let initialX = face.x; let initialY = face.y;
     const onMouseMove = (event) => {
         const moveEvent = isTouch ? event.touches[0] : event;
-        face.x = initialX + (moveEvent.clientX - startX); face.y = initialY + (moveEvent.clientY - startY);
-        wrapper.style.left = `calc(50% + ${face.x}px)`; wrapper.style.top = `calc(50% + ${face.y}px)`;
+        face.x = initialX + (moveEvent.clientX - startX);
+        face.y = initialY + (moveEvent.clientY - startY);
+        wrapper.style.left = `calc(50% + ${face.x}px)`;
+        wrapper.style.top = `calc(50% + ${face.y}px)`;
     };
-    const onMouseUp = () => { document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); };
-    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false }); document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
+    const onMouseUp = () => { 
+        document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); 
+        document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); 
+    };
+    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false });
+    document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
 }
+
 function startScaleFace(e, id) {
     e.preventDefault(); e.stopPropagation(); makeFaceActive(id);
-    const face = gbFaces.find(f => f.id === id); const wrapper = document.getElementById(`face-wrapper-${id}`); if (!wrapper) return;
-    const rect = wrapper.getBoundingClientRect(); const cx = rect.left + rect.width / 2; const cy = rect.top + rect.height / 2;
-    const isTouch = e.type.startsWith('touch'); const startEvent = isTouch ? e.touches[0] : e;
-    const startDist = Math.hypot(startEvent.clientX - cx, startEvent.clientY - cy); const startScale = face.scale;
+    const face = gbFaces.find(f => f.id === id);
+    const wrapper = document.getElementById(`face-wrapper-${id}`);
+    if (!wrapper) return;
+    const rect = wrapper.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2; const cy = rect.top + rect.height / 2;
+    const isTouch = e.type.startsWith('touch');
+    const startEvent = isTouch ? e.touches[0] : e;
+    const startDist = Math.hypot(startEvent.clientX - cx, startEvent.clientY - cy);
+    const startScale = face.scale;
     const onMouseMove = (event) => {
         const moveEvent = isTouch ? event.touches[0] : event;
         const currentDist = Math.hypot(moveEvent.clientX - cx, moveEvent.clientY - cy);
         face.scale = Math.max(0.2, Math.min(3.0, startScale * (currentDist / startDist)));
-        const baseSize = isMobile() ? 130 : 190; const currentSize = baseSize * face.scale;
+        const baseSize = window.innerWidth <= 768 ? 130 : 190; 
+        const currentSize = baseSize * face.scale;
         wrapper.style.width = `${currentSize}px`; wrapper.style.height = `${currentSize}px`;
     };
-    const onMouseUp = () => { document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); };
-    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false }); document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
+    const onMouseUp = () => { 
+        document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); 
+        document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); 
+    };
+    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false });
+    document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
 }
+
 function startRotateFace(e, id) {
     e.preventDefault(); e.stopPropagation(); makeFaceActive(id);
-    const face = gbFaces.find(f => f.id === id); const wrapper = document.getElementById(`face-wrapper-${id}`); if (!wrapper) return;
-    const rect = wrapper.getBoundingClientRect(); const cx = rect.left + rect.width / 2; const cy = rect.top + rect.height / 2;
-    const isTouch = e.type.startsWith('touch'); const startEvent = isTouch ? e.touches[0] : e;
-    const startAngle = Math.atan2(startEvent.clientY - cy, startEvent.clientX - cx) * (180 / Math.PI); const startRot = face.rotation;
+    const face = gbFaces.find(f => f.id === id);
+    const wrapper = document.getElementById(`face-wrapper-${id}`);
+    if (!wrapper) return;
+    const rect = wrapper.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2; const cy = rect.top + rect.height / 2;
+    const isTouch = e.type.startsWith('touch');
+    const startEvent = isTouch ? e.touches[0] : e;
+    const startAngle = Math.atan2(startEvent.clientY - cy, startEvent.clientX - cx) * (180 / Math.PI);
+    const startRot = face.rotation;
     const onMouseMove = (event) => {
         const moveEvent = isTouch ? event.touches[0] : event;
         const currentAngle = Math.atan2(moveEvent.clientY - cy, moveEvent.clientX - cx) * (180 / Math.PI);
-        face.rotation = startRot + (currentAngle - startAngle); wrapper.style.transform = `translate(-50%, -50%) rotate(${face.rotation}deg)`;
+        face.rotation = startRot + (currentAngle - startAngle);
+        wrapper.style.transform = `translate(-50%, -50%) rotate(${face.rotation}deg)`;
     };
-    const onMouseUp = () => { document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); };
-    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false }); document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
+    const onMouseUp = () => { 
+        document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove); 
+        document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp); 
+    };
+    document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove, { passive: false });
+    document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
 }
+
 function saveGuestbookEntry() {
-    const name = document.getElementById('gb-name').value.trim(); const msg = document.getElementById('gb-message').value.trim();
-    if (!gbDraft.shapeIdx) { alert("형태를 선택해주세요!"); return; } if (gbFaces.length === 0) { alert("최소 1개 이상의 표정을 넣어주세요!"); return; } if (!name || !msg) { alert("이름과 메시지를 입력해주세요."); setGuestbookTab('message'); return; }
+    const name = document.getElementById('gb-name').value.trim();
+    const msg = document.getElementById('gb-message').value.trim();
+    if (!gbDraft.shapeIdx) { alert("형태를 선택해주세요!"); return; }
+    if (gbFaces.length === 0) { alert("최소 1개 이상의 표정을 넣어주세요!"); return; }
+    if (!name || !msg) { alert("이름과 메시지를 입력해주세요."); setGuestbookTab('message'); return; }
+
     const entries = getGuestbookEntries();
-    entries.unshift({ shapeColorIdx: gbDraft.shapeColorIdx, shapeIdx: gbDraft.shapeIdx, faces: gbFaces, name, message: msg, nameBg: textBgColors[Math.floor(Math.random() * textBgColors.length)], msgBg: textBgColors[Math.floor(Math.random() * textBgColors.length)] });
-    localStorage.setItem(guestbookStorageKey, JSON.stringify(entries)); closeGuestbookPopup(); location.reload(); 
+    entries.unshift({ 
+        shapeColorIdx: gbDraft.shapeColorIdx, shapeIdx: gbDraft.shapeIdx, faces: gbFaces, 
+        name, message: msg, nameBg: textBgColors[Math.floor(Math.random() * textBgColors.length)], msgBg: textBgColors[Math.floor(Math.random() * textBgColors.length)]
+    });
+    localStorage.setItem(guestbookStorageKey, JSON.stringify(entries));
+    closeGuestbookPopup(); 
+    location.reload(); 
 }
 
 const customCursor = document.getElementById('custom-cursor');
 if (customCursor) {
     document.addEventListener('mousemove', (e) => {
-        if(isMobile()) return;
-        customCursor.style.display = 'block'; customCursor.style.left = `${e.clientX}px`; customCursor.style.top = `${e.clientY}px`;
+        if(window.innerWidth > 768) {
+            customCursor.style.display = 'block';
+            customCursor.style.left = `${e.clientX}px`; customCursor.style.top = `${e.clientY}px`;
+        }
     });
     document.addEventListener('mouseleave', () => { customCursor.style.display = 'none'; });
-    document.addEventListener('mousedown', () => { const randomNum = Math.floor(Math.random() * 13) + 1; customCursor.src = `mouse/mouse${randomNum}.png`; });
+    document.addEventListener('mousedown', () => {
+        if(window.innerWidth > 768) {
+            const randomNum = Math.floor(Math.random() * 13) + 1;
+            customCursor.src = `mouse/mouse${randomNum}.png`;
+        }
+    });
 }
 
 /* ===========================================================
-   물리엔진 라우터 (Main & Guestbook)
+   과제 1: 메인 화면 물리엔진 (모바일/데스크탑 분기)
 =========================================================== */
 function initPhysics() {
-    if (isMobile()) initMobilePhysics(); else initDesktopPhysics();
-}
-function initGuestbookPhysics() {
-    if (isMobile()) initMobileGuestbookPhysics(); else initDesktopGuestbookPhysics();
-}
+    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
+          Bodies = Matter.Bodies, Composite = Matter.Composite,
+          Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint,
+          Events = Matter.Events, Query = Matter.Query;
 
-// ---------------------- Desktop Physics ----------------------
-function initDesktopPhysics() {
-    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner, Bodies = Matter.Bodies, Composite = Matter.Composite, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint, Events = Matter.Events, Query = Matter.Query;
-    const engine = Engine.create(); const world = engine.world; engine.positionIterations = 20; engine.velocityIterations = 20; engine.world.gravity.y = 1.2; 
-    const stage = document.getElementById('physics-stage'); const gbStage = document.getElementById('main-guestbook-stage'); if(!stage) return;
-    if(gbStage) { gbStage.style.left = 'calc(50% - 50vw)'; gbStage.style.width = '100vw'; gbStage.style.height = 'calc(100vh - 80px)'; }
-    const randomXForWidth = (width) => (width >= stage.clientWidth) ? stage.clientWidth / 2 : Math.random() * (stage.clientWidth - width) + (width / 2);
-    const render = Render.create({ element: stage, engine: engine, options: { width: stage.clientWidth, height: stage.clientHeight, wireframes: false, background: 'transparent', pixelRatio: window.devicePixelRatio || 1 } });
-    Render.run(render); const runner = Runner.create(); Runner.run(runner, engine);
+    const engine = Engine.create();
+    const world = engine.world;
+    const isMobile = window.innerWidth <= 768;
+    
+    engine.positionIterations = isMobile ? 12 : 20; 
+    engine.velocityIterations = isMobile ? 12 : 20; 
+    engine.world.gravity.y = 1.2; 
+    
+    const stage = document.getElementById('physics-stage');
+    const gbStage = document.getElementById('main-guestbook-stage');
+    if(!stage) return;
+
+    let stageHeight = stage.clientHeight;
+    if (isMobile) {
+        const bottomNav = document.querySelector('.bottom-nav');
+        const bottomNavHeight = bottomNav ? bottomNav.offsetHeight : 55;
+        stageHeight = window.innerHeight - bottomNavHeight;
+        stage.style.height = `${stageHeight}px`;
+        if(gbStage) {
+            gbStage.style.left = '0'; gbStage.style.width = '100vw'; gbStage.style.height = `${stageHeight}px`;
+        }
+    } else {
+        if(gbStage) {
+            gbStage.style.left = 'calc(50% - 50vw)'; gbStage.style.width = '100vw'; gbStage.style.height = 'calc(100vh - 80px)';
+        }
+    }
+
+    const currentWidth = stage.clientWidth || window.innerWidth;
+    const screenScale = isMobile ? Math.max(0.75, Math.min(1.25, currentWidth / 390)) : 1;
+
+    const randomXForWidth = (width) => {
+        if (width >= stage.clientWidth) return stage.clientWidth / 2;
+        return Math.random() * (stage.clientWidth - width) + (width / 2);
+    };
+
+    const render = Render.create({
+        element: stage,
+        engine: engine,
+        options: {
+            width: stage.clientWidth,
+            height: isMobile ? stageHeight : stage.clientHeight,
+            wireframes: false, background: 'transparent',
+            pixelRatio: Math.min(2, window.devicePixelRatio || 1)
+        }
+    });
+
+    Render.run(render);
+    const runner = Runner.create({ isFixed: isMobile });
+    Runner.run(runner, engine);
+
+    const floorY = (isMobile ? stageHeight : stage.clientHeight) + 250; 
     const wallOptions = { isStatic: true, restitution: 0.1, friction: 0.8, render: { visible: false } };
-    const floorY = stage.clientHeight + 250; const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 2, 500, wallOptions); const leftWall = Bodies.rectangle(-250, stage.clientHeight / 2, 500, stage.clientHeight * 5, wallOptions); const rightWall = Bodies.rectangle(stage.clientWidth + 250, stage.clientHeight / 2, 500, stage.clientHeight * 5, wallOptions);
+    const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 2, 500, wallOptions);
+    const leftWall = Bodies.rectangle(-250, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 5, wallOptions);
+    const rightWall = Bodies.rectangle(stage.clientWidth + 250, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 5, wallOptions);
     Composite.add(world, [floor, leftWall, rightWall]);
-    const recentGbEntries = getGuestbookEntries().slice(0, 10); const domPhysicsItems = []; 
+
+    const recentGbEntries = getGuestbookEntries().slice(0, 10); 
+    const domPhysicsItems = []; 
     if(gbStage) {
         gbStage.innerHTML = ''; 
         recentGbEntries.forEach((entry, idx) => {
             if (idx >= 10) return; 
-            const visualSize = 200; const hitBoxSize = 130; const startX = randomXForWidth(hitBoxSize); const startY = -800 - (idx * 250); 
-            const gbBody = Bodies.rectangle(startX, startY, hitBoxSize, hitBoxSize, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 10 }, render: { visible: false } }); Composite.add(world, gbBody);
-            const wrapper = document.createElement('div'); wrapper.className = 'guestbook-stack-item'; wrapper.style.position = 'absolute'; wrapper.style.width = `${visualSize}px`; wrapper.style.height = `${visualSize}px`; wrapper.style.pointerEvents = 'none'; 
-            const shapeImg = document.createElement('img'); shapeImg.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; shapeImg.style.position = 'absolute'; shapeImg.style.width = '100%'; shapeImg.style.height = '100%'; shapeImg.style.objectFit = 'contain'; wrapper.appendChild(shapeImg);
+            const visualSize = isMobile ? (70 * screenScale) : 200; 
+            const hitBoxSize = isMobile ? (70 * screenScale) : 130; 
+            const startX = randomXForWidth(hitBoxSize);
+            const startY = isMobile ? (-600 - (idx * 180)) : (-800 - (idx * 250)); 
+            
+            const isCircle = isMobile && [1, 3, 8].includes(Number(entry.shapeIdx));
+            let gbBody;
+            const bodyOptions = { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, render: { visible: false } };
+            
+            if(isCircle) {
+                gbBody = Bodies.circle(startX, startY, hitBoxSize/2, bodyOptions);
+            } else {
+                gbBody = Bodies.rectangle(startX, startY, hitBoxSize, hitBoxSize, { ...bodyOptions, chamfer: { radius: isMobile ? 6 : 10 } });
+            }
+            Composite.add(world, gbBody);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'guestbook-stack-item';
+            wrapper.style.position = 'absolute';
+            wrapper.style.width = `${visualSize}px`; wrapper.style.height = `${visualSize}px`;
+            wrapper.style.pointerEvents = 'none'; 
+            
+            const shapeImg = document.createElement('img');
+            shapeImg.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`;
+            shapeImg.style.position = 'absolute'; shapeImg.style.width = '100%'; shapeImg.style.height = '100%';
+            shapeImg.style.objectFit = 'contain';
+            wrapper.appendChild(shapeImg);
+            
             const stageScale = visualSize / 450; 
             entry.faces.forEach(f => {
-                const faceImg = document.createElement('img'); faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`; faceImg.style.position = 'absolute'; 
-                const faceWidth = 190 * f.scale * stageScale; faceImg.style.width = `${faceWidth}px`; faceImg.style.height = `${faceWidth}px`; faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`; faceImg.style.top = `calc(50% + ${f.y * stageScale}px)`; faceImg.style.objectFit = 'contain'; faceImg.style.transform = `translate(-50%, -50%) rotate(${f.rotation}deg)`; wrapper.appendChild(faceImg);
+                const faceImg = document.createElement('img');
+                faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`;
+                faceImg.style.position = 'absolute'; 
+                const faceWidth = 190 * f.scale * stageScale; 
+                faceImg.style.width = `${faceWidth}px`; faceImg.style.height = `${faceWidth}px`;
+                faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`; faceImg.style.top = `calc(50% + ${f.y * stageScale}px)`;
+                faceImg.style.objectFit = 'contain'; faceImg.style.transform = `translate(-50%, -50%) rotate(${f.rotation}deg)`; 
+                wrapper.appendChild(faceImg);
             });
-            gbStage.appendChild(wrapper); domPhysicsItems.push({ body: gbBody, el: wrapper, size: visualSize });
+            gbStage.appendChild(wrapper);
+            domPhysicsItems.push({ body: gbBody, el: wrapper, size: visualSize });
         });
-        Events.on(engine, 'afterUpdate', function() { domPhysicsItems.forEach(item => { const pos = item.body.position; const angle = item.body.angle; item.el.style.transform = `translate(${pos.x - item.size/2}px, ${pos.y - item.size/2}px) rotate(${angle}rad)`; }); });
+
+        Events.on(engine, 'afterUpdate', function() {
+            domPhysicsItems.forEach(item => {
+                const pos = item.body.position;
+                const angle = item.body.angle;
+                item.el.style.transform = `translate(${pos.x - item.size/2}px, ${pos.y - item.size/2}px) rotate(${angle}rad)`;
+            });
+        });
     }
+
     const mainGraphics = [
-        { src: 'maingraphic-01.png', width: 1063, height: 1063 }, { src: 'maingraphic-02.png', width: 1075, height: 963 }, { src: 'maingraphic-03.png', width: 746, height: 742 }, { src: 'maingraphic-04.png', width: 746, height: 742 },
-        { src: 'maingraphic-05.png', width: 1117, height: 1080 }, { src: 'maingraphic-06.png', width: 896, height: 646 }, { src: 'maingraphic-07.png', width: 880, height: 621 }, { src: 'maingraphic-08.png', width: 909, height: 767 },
-        { src: 'maingraphic-09.png', width: 621, height: 721 }, { src: 'maingraphic-10.png', width: 1259, height: 330 }, { src: 'maingraphic-11.png', width: 1125, height: 875 }, { src: 'maingraphic-12.png', width: 1338, height: 759 }, { src: 'maingraphic-13.png', width: 1000, height: 400 } 
+        { src: 'maingraphic-01.png', width: 1063, height: 1063, isCircle: true, hitboxScale: 1.03 },
+        { src: 'maingraphic-02.png', width: 1075, height: 963, hitboxScale: 1.03 },
+        { src: 'maingraphic-03.png', width: 746, height: 742, isCircle: true, hitboxScale: 1.03 },
+        { src: 'maingraphic-04.png', width: 746, height: 742, isCircle: true, hitboxScale: 1.03 },
+        { src: 'maingraphic-05.png', width: 1117, height: 1080, hitboxScale: 1.03 },
+        { src: 'maingraphic-06.png', width: 896, height: 646, hitboxScale: 1.03 },
+        { src: 'maingraphic-07.png', width: 880, height: 621, hitboxScale: 1.03 },
+        { src: 'maingraphic-08.png', width: 909, height: 760, hitboxScale: 1.03 },
+        { src: 'maingraphic-09.png', width: 621, height: 721, isCircle: true, hitboxScale: 1.03 },
+        { src: 'maingraphic-10.png', width: 1259, height: 330, hitboxScale: 1.03 },
+        { src: 'maingraphic-11.png', width: 1125, height: 875, hitboxScale: 1.01 },
+        { src: 'maingraphic-12.png', width: 1338, height: 759, hitboxScale: 1.01 },
+        { src: 'maingraphic-13.png', width: isMobile ? 1400 : 1000, height: isMobile ? 575 : 400, hitboxScale: 1.03 } 
     ];
-    mainGraphics.forEach((image) => {
-        const minScale = 0.25; const maxScale = 0.1; const randomScale = Math.random() * (maxScale - minScale) + minScale;
-        const hitBoxWidth = image.width * randomScale; const hitBoxHeight = image.height * randomScale; const startX = randomXForWidth(hitBoxWidth); const startY = (Math.random() * -1500) - 200; 
-        const graphic = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 4 }, render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } } }); Composite.add(world, graphic);
+
+    mainGraphics.forEach((image, index) => {
+        let randomScale;
+        if(isMobile) {
+            const minScale = 0.06 * screenScale; const maxScale = 0.11 * screenScale;
+            randomScale = Math.random() * (maxScale - minScale) + minScale;
+        } else {
+            const minScale = 0.25; const maxScale = 0.1;
+            randomScale = Math.random() * (maxScale - minScale) + minScale;
+        }
+
+        const hitBoxScale = isMobile ? (image.hitboxScale || 1.0) : 1.0;
+        const hitBoxWidth = isMobile ? Math.max(30 * screenScale, image.width * randomScale * hitBoxScale) : (image.width * randomScale);
+        const hitBoxHeight = isMobile ? Math.max(30 * screenScale, image.height * randomScale * hitBoxScale) : (image.height * randomScale);
+        const startX = randomXForWidth(hitBoxWidth);
+        const startY = isMobile ? (-150 - (index * 130) - (Math.random() * 40)) : ((Math.random() * -1500) - 200);
+
+        let graphic;
+        if (isMobile && image.isCircle) {
+            const radius = (hitBoxWidth + hitBoxHeight) / 4;
+            graphic = Bodies.circle(startX, startY, radius, {
+                restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0,
+                render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } }
+            });
+        } else {
+            graphic = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
+                restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0,
+                chamfer: { radius: isMobile ? 3 : 4 }, angle: (isMobile && index === 4) ? 45 * Math.PI / 180 : 0,
+                render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } }
+            });
+        }
+        Composite.add(world, graphic);
     });
-    const typoScale = 0.3; 
-    const typoGraphics = [ { src: 'typo-1.png', width: 3132, height: 500, customScale: 0.15 }, { src: 'typo-2.png', width: 925, height: 140 }, { src: 'typo-3.png', width: 1242, height: 395, customScale: 0.15 }, { src: 'typo-4.png', width: 884, height: 134 }, { src: 'typo-5.png', width: 423, height: 134 } ];
+
+    const typoScale = isMobile ? (0.12 * screenScale) : 0.3; 
+    const typoGraphics = [
+        { src: 'typo-1.png', width: 3132, height: isMobile ? 398 : 500, customScale: isMobile ? (0.08 * screenScale) : 0.15 },
+        { src: 'typo-2.png', width: 925, height: isMobile ? 134 : 140, customScale: isMobile ? (0.25 * screenScale) : null },
+        { src: 'typo-3.png', width: 1242, height: isMobile ? 350 : 395, customScale: isMobile ? (0.18 * screenScale) : 0.15 },
+        { src: 'typo-4.png', width: 884, height: 134, customScale: isMobile ? (0.26 * screenScale) : null },
+        { src: 'typo-5.png', width: 423, height: 134, customScale: isMobile ? (0.275 * screenScale) : null }
+    ];
+
     typoGraphics.forEach((typo, index) => {
-        const scale = typo.customScale || typoScale; const hitBoxWidth = typo.width * scale; const hitBoxHeight = typo.height * scale; const startX = randomXForWidth(hitBoxWidth); const startY = -300 - (index * 300); 
-        const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 4 }, render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } } }); Composite.add(world, typoBody);
+        const scale = typo.customScale || typoScale;
+        const hitBoxWidth = typo.width * scale;
+        const hitBoxHeight = isMobile ? Math.max(14 * screenScale, typo.height * scale) : (typo.height * scale);
+        const startX = randomXForWidth(hitBoxWidth);
+        const startY = isMobile ? (-2000 - (index * 180)) : (-300 - (index * 300)); 
+        const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, {
+            restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: isMobile ? 3 : 4 }, 
+            render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } }
+        });
+        Composite.add(world, typoBody);
     });
-    const clickBody = Bodies.circle(stage.clientWidth / 2, -1200, 86, { label: 'clickBtn', restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, render: { sprite: { texture: 'Click1.png', xScale: 0.3, yScale: 0.3 } } }); Composite.add(world, clickBody);
-    const mouse = Mouse.create(render.canvas); const mouseConstraint = MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.2, render: { visible: false } } }); Composite.add(world, mouseConstraint); render.mouse = mouse;
+
+    const clickBtnRadius = isMobile ? (35 * screenScale) : 86;
+    const clickBtnScale = isMobile ? (0.12 * screenScale) : 0.3;
+    const clickBody = Bodies.circle(stage.clientWidth / 2, isMobile ? -1800 : -1200, clickBtnRadius, {
+        label: 'clickBtn', restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0,
+        render: { sprite: { texture: 'Click1.png', xScale: clickBtnScale, yScale: clickBtnScale } }
+    });
+    Composite.add(world, clickBody);
+
+    const mouse = Mouse.create(render.canvas);
+    if(isMobile) mouse.pixelRatio = Math.min(2, window.devicePixelRatio || 1); 
+    const mouseConstraint = MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.2, render: { visible: false } } });
+    Composite.add(world, mouseConstraint);
+    render.mouse = mouse;
+    
+    if(isMobile) {
+        render.canvas.addEventListener('touchmove', (e) => {
+            const popup = document.getElementById('guestbook-popup');
+            if (popup && popup.classList.contains('hidden')) e.preventDefault();
+        }, { passive: false });
+    }
+
     Events.on(mouseConstraint, 'mousemove', function(event) {
-        const foundPhysics = Query.point(engine.world.bodies, event.mouse.position); let isHoveringClick = false;
-        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') { foundPhysics[0].render.sprite.texture = 'Click2.png'; isHoveringClick = true; }
+        const foundPhysics = Query.point(engine.world.bodies, event.mouse.position);
+        let isHoveringClick = false;
+        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') {
+            foundPhysics[0].render.sprite.texture = 'Click2.png'; isHoveringClick = true;
+        }
         if (!isHoveringClick && clickBody.render.sprite.texture !== 'Click1.png') { clickBody.render.sprite.texture = 'Click1.png'; }
     });
+
     let clickStartX = null; let clickStartY = null;
     Events.on(mouseConstraint, 'mousedown', function(event) {
         const foundPhysics = Query.point(engine.world.bodies, event.mouse.position);
-        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') { clickStartX = event.mouse.position.x; clickStartY = event.mouse.position.y; } else { clickStartX = null; }
+        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') {
+            clickStartX = event.mouse.position.x; clickStartY = event.mouse.position.y;
+        } else { clickStartX = null; }
     });
+
     Events.on(mouseConstraint, 'mouseup', function(event) {
         if (clickStartX !== null) {
-            const dx = event.mouse.position.x - clickStartX; const dy = event.mouse.position.y - clickStartY; const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 5) { openGuestbookPopup(); mouseConstraint.body = null; } clickStartX = null;
+            const dx = event.mouse.position.x - clickStartX; const dy = event.mouse.position.y - clickStartY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < (isMobile ? 10 : 5)) { openGuestbookPopup(); mouseConstraint.body = null; }
+            clickStartX = null;
         }
     });
-    Events.on(mouseConstraint, 'startdrag', () => { render.canvas.style.cursor = 'none'; }); Events.on(mouseConstraint, 'enddrag', () => { render.canvas.style.cursor = 'none'; });
+
+    if(!isMobile) {
+        Events.on(mouseConstraint, 'startdrag', () => { render.canvas.style.cursor = 'none'; });
+        Events.on(mouseConstraint, 'enddrag', () => { render.canvas.style.cursor = 'none'; });
+    }
+
     window.addEventListener('resize', () => {
-        if(isMobile()) return;
         if (stage.clientWidth === 0 || stage.clientHeight === 0) return; 
-        render.canvas.width = stage.clientWidth; render.canvas.height = stage.clientHeight;
-        Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: stage.clientHeight + 250 }); Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: stage.clientHeight / 2 }); Matter.Body.setPosition(leftWall, { x: -250, y: stage.clientHeight / 2 });
+        if (isMobile) {
+            const bottomNav = document.querySelector('.bottom-nav');
+            const currentBottomNavHeight = bottomNav ? bottomNav.offsetHeight : 55;
+            const currentStageHeight = window.innerHeight - currentBottomNavHeight;
+            stage.style.height = `${currentStageHeight}px`;
+            if (gbStage) gbStage.style.height = `${currentStageHeight}px`;
+            render.canvas.width = stage.clientWidth; render.canvas.height = currentStageHeight;
+            render.options.width = stage.clientWidth; render.options.height = currentStageHeight;
+            Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: currentStageHeight + 250 });
+            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: currentStageHeight / 2 });
+            Matter.Body.setPosition(leftWall, { x: -250, y: currentStageHeight / 2 });
+        } else {
+            render.canvas.width = stage.clientWidth; render.canvas.height = stage.clientHeight;
+            Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: stage.clientHeight + 250 });
+            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: stage.clientHeight / 2 });
+            Matter.Body.setPosition(leftWall, { x: -250, y: stage.clientHeight / 2 });
+        }
     });
 }
 
-// ---------------------- Desktop Guestbook Physics ----------------------
-function initDesktopGuestbookPhysics() {
-    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner, Bodies = Matter.Bodies, Composite = Matter.Composite, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint, Events = Matter.Events, Body = Matter.Body;
-    const stage = document.getElementById('guestbook-physics-stage'); const domStage = document.getElementById('guestbook-dom-stage'); if (!stage || !domStage) return;
-    window.__guestbookPhysicsInitialized = true; stage.innerHTML = ''; domStage.innerHTML = '';
-    const entries = getGuestbookEntries(); const CARD_W = 282; const CARD_H = 352; const GAP = 24;
-    const getColumns = () => { if (window.innerWidth <= 1100) return 3; return 5; };
-    const getTopMargin = () => 150; 
-    const getLayout = () => {
-        const currentWidth = stage.clientWidth || window.innerWidth; const columns = getColumns(); const available = Math.max(160, currentWidth - (columns - 1) * GAP);
-        const width = Math.min(CARD_W, available / columns); const scale = width / CARD_W; const height = CARD_H * scale; const totalWidth = columns * width + (columns - 1) * GAP; const left = Math.max(0, (currentWidth - totalWidth) / 2); return { columns, width, height, scale, left };
+/* ===========================================================
+   과제 2: 방명록 화면 전용 물리엔진
+=========================================================== */
+function initGuestbookPhysics() {
+    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
+          Bodies = Matter.Bodies, Composite = Matter.Composite, Mouse = Matter.Mouse,
+          MouseConstraint = Matter.MouseConstraint, Events = Matter.Events, Body = Matter.Body;
+
+    const stage = document.getElementById('guestbook-physics-stage');
+    const domStage = document.getElementById('guestbook-dom-stage');
+    if (!stage || !domStage) return;
+    if (window.__guestbookPhysicsInitialized) return;
+    window.__guestbookPhysicsInitialized = true;
+
+    stage.innerHTML = ''; domStage.innerHTML = '';
+    const entries = getGuestbookEntries();
+    const CARD_W = 282; const CARD_H = 352;
+    const isMobile = window.innerWidth <= 768;
+    const GAP = isMobile ? 10 : 24;
+
+    const getColumns = () => {
+        if (window.innerWidth <= 768) return 2;
+        if (window.innerWidth <= 1100) return 3;
+        return 5;
     };
-    let layout = getLayout(); const cardStates = [];
+
+    const getTopMargin = () => window.innerWidth <= 768 ? 18 : 150; 
+
+    const getLayout = () => {
+        const currentWidth = stage.clientWidth || window.innerWidth;
+        const columns = getColumns();
+        let width, left;
+        if(window.innerWidth <= 768) {
+            const sideMargin = 12;
+            const availableWidth = currentWidth - (sideMargin * 2) - (columns - 1) * GAP;
+            width = Math.max(120, availableWidth / columns); 
+            left = (currentWidth - (columns * width + (columns - 1) * GAP)) / 2;
+        } else {
+            const available = Math.max(160, currentWidth - (columns - 1) * GAP);
+            width = Math.min(CARD_W, available / columns);
+            const totalWidth = columns * width + (columns - 1) * GAP;
+            left = Math.max(0, (currentWidth - totalWidth) / 2);
+        }
+        const scale = width / CARD_W;
+        const height = CARD_H * scale;
+        return { columns, width, height, scale, left };
+    };
+
+    let layout = getLayout();
+    const cardStates = [];
+
     const updateContainerHeight = () => {
-        const currentLayout = getLayout(); const totalItems = entries.length + 1; const totalRows = Math.ceil(totalItems / currentLayout.columns); const requiredHeight = getTopMargin() + totalRows * (currentLayout.height + GAP) + 150;
-        const section = document.getElementById('section-guestbook'); if (section) { section.style.height = `${Math.max(window.innerHeight - 80, requiredHeight)}px`; }
-        const addBtn = document.querySelector('.guestbook-add-floating'); if (addBtn) { addBtn.style.left = `${currentLayout.left}px`; addBtn.style.top = `${getTopMargin()}px`; addBtn.style.width = `${currentLayout.width}px`; addBtn.style.height = `${currentLayout.height}px`; }
+        const currentLayout = getLayout();
+        const totalItems = entries.length + 1;
+        const totalRows = Math.ceil(totalItems / currentLayout.columns);
+        const requiredHeight = window.innerWidth <= 768 
+            ? (80 + getTopMargin() + totalRows * (currentLayout.height + GAP) + 120) 
+            : (getTopMargin() + totalRows * (currentLayout.height + GAP) + 150);
+        
+        const section = document.getElementById('section-guestbook');
+        if (section) section.style.height = `${Math.max(window.innerHeight - (window.innerWidth <= 768 ? 55 : 80), requiredHeight)}px`;
+
+        const addBtn = document.querySelector('.guestbook-add-floating');
+        if (addBtn) {
+            addBtn.style.left = `${currentLayout.left}px`;
+            addBtn.style.top = window.innerWidth <= 768 ? `calc(50px + env(safe-area-inset-top) + ${getTopMargin()}px)` : `${getTopMargin()}px`;
+            addBtn.style.width = `${currentLayout.width}px`; addBtn.style.height = `${currentLayout.height}px`;
+            if(window.innerWidth <= 768) {
+                const btnImg = addBtn.querySelector('img');
+                if (btnImg) { btnImg.style.width = `${currentLayout.width * 0.4}px`; btnImg.style.height = `${currentLayout.width * 0.4}px`; }
+            }
+        }
     };
     updateContainerHeight();
+
     const createCard = (entry, idx) => {
-        const slot = idx + 1; const row = Math.floor(slot / layout.columns); const col = slot % layout.columns;
-        const card = { x: layout.left + col * (layout.width + GAP), y: getTopMargin() + row * (layout.height + GAP), w: layout.width, h: layout.height, scale: layout.scale };
-        const frame = document.createElement('article'); frame.className = 'gb-fixed-frame'; frame.style.left = `${card.x}px`; frame.style.top = `${card.y}px`; frame.style.width = `${card.w}px`; frame.style.height = `${card.h}px`;
-        const physicsHost = document.createElement('div'); physicsHost.className = 'gb-card-physics-host'; physicsHost.style.cssText = 'position:absolute; inset:0; z-index:2; pointer-events:auto;';
-        const contentLayer = document.createElement('div'); contentLayer.className = 'gb-frame-content-layer'; contentLayer.style.zIndex = '20'; contentLayer.style.pointerEvents = 'none';
+        const slot = idx + 1; 
+        const row = Math.floor(slot / layout.columns); const col = slot % layout.columns;
+
+        const card = {
+            x: layout.left + col * (layout.width + GAP),
+            y: getTopMargin() + row * (layout.height + GAP), 
+            w: layout.width, h: layout.height, scale: layout.scale
+        };
+
+        const frame = document.createElement('article');
+        frame.className = 'gb-fixed-frame';
+        frame.style.left = `${card.x}px`; frame.style.top = `${card.y}px`;
+        frame.style.width = `${card.w}px`; frame.style.height = `${card.h}px`;
+        frame.setAttribute('aria-label', `${entry.name}의 방명록`);
+
+        const physicsHost = document.createElement('div');
+        physicsHost.className = 'gb-card-physics-host';
+        physicsHost.style.cssText = 'position:absolute; inset:0; z-index:2; pointer-events:auto;';
+
+        const contentLayer = document.createElement('div');
+        contentLayer.className = 'gb-frame-content-layer';
+        contentLayer.style.zIndex = '20'; contentLayer.style.pointerEvents = 'none';
+
         frame.appendChild(physicsHost); frame.appendChild(contentLayer); domStage.appendChild(frame);
         card.frame = frame; card.layer = contentLayer; card.physicsHost = physicsHost;
-        const engine = Engine.create(); engine.positionIterations = 12; engine.velocityIterations = 12; engine.world.gravity.y = 0.9;
-        const render = Render.create({ element: physicsHost, engine, options: { width: card.w, height: card.h, wireframes: false, background: 'transparent', pixelRatio: window.devicePixelRatio || 1 } });
-        render.canvas.style.position = 'absolute'; render.canvas.style.inset = '0'; render.canvas.style.width = '100%'; render.canvas.style.height = '100%'; render.canvas.style.background = 'transparent'; render.canvas.style.pointerEvents = 'auto';
-        const wallThickness = 60; const innerPadding = 16;  
-        const wallOptions = { isStatic: true, restitution: 0, friction: 0.95, render: { visible: false } };
-        Composite.add(engine.world, [ Bodies.rectangle(card.w / 2, card.h + wallThickness / 2 - innerPadding, card.w + wallThickness * 2, wallThickness, wallOptions), Bodies.rectangle(-wallThickness / 2 + innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions), Bodies.rectangle(card.w + wallThickness / 2 - innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions) ]);
+
+        const engine = Engine.create();
+        engine.positionIterations = window.innerWidth <= 768 ? 8 : 12;
+        engine.velocityIterations = window.innerWidth <= 768 ? 8 : 12;
+        engine.constraintIterations = window.innerWidth <= 768 ? 4 : 6;
+        engine.enableSleeping = true; engine.world.gravity.y = window.innerWidth <= 768 ? 0.8 : 0.9;
+
+        const render = Render.create({
+            element: physicsHost, engine,
+            options: { width: card.w, height: card.h, wireframes: false, background: 'transparent', pixelRatio: Math.min(2, window.devicePixelRatio || 1) }
+        });
+        render.canvas.style.position = 'absolute'; render.canvas.style.inset = '0';
+        render.canvas.style.width = '100%'; render.canvas.style.height = '100%';
+        render.canvas.style.background = 'transparent'; render.canvas.style.pointerEvents = 'auto';
+        if(window.innerWidth <= 768) render.canvas.addEventListener('touchmove', (e) => {}, { passive: true });
+
+        const wallThickness = 60; const innerPadding = window.innerWidth <= 768 ? 12 : 16;  
+        const wallOptions = { isStatic: true, restitution: 0, friction: 0.95, frictionStatic: 1, render: { visible: false } };
+        const walls = [
+            Bodies.rectangle(card.w / 2, card.h + wallThickness / 2 - innerPadding, card.w + wallThickness * 2, wallThickness, wallOptions),
+            Bodies.rectangle(-wallThickness / 2 + innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions),
+            Bodies.rectangle(card.w + wallThickness / 2 - innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions)
+        ];
+        Composite.add(engine.world, walls);
+
         const contentBodies = [];
-        const makeContentBody = (x, y, w, h) => Bodies.rectangle(x, y, w, h, { restitution: 0, friction: 0.92, frictionAir: 0.045, density: 0.05, chamfer: { radius: Math.min(8, Math.min(w, h) / 4) }, render: { visible: false } });
-        const registerContent = (body, element) => { body.plugin = { element, width: body.bounds.max.x - body.bounds.min.x, height: body.bounds.max.y - body.bounds.min.y }; contentBodies.push(body); Composite.add(engine.world, body); };
-        
-        const characterSize = 220 * card.scale; const character = document.createElement('div'); character.className = 'gb-content-item gb-character-content'; character.style.width = `${characterSize}px`; character.style.height = `${characterSize}px`;
-        const shape = document.createElement('img'); shape.className = 'gb-content-shape'; shape.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; character.appendChild(shape);
-        (entry.faces || []).forEach(face => { const img = document.createElement('img'); img.className = 'gb-content-face'; img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`; const faceScale = (characterSize / 850); const faceSize = 190 * (Number(face.scale) || 1) * faceScale; img.style.width = `${faceSize}px`; img.style.height = `${faceSize}px`; img.style.left = `calc(50% + ${(Number(face.x) || 0) * faceScale}px)`; img.style.top = `calc(50% + ${(Number(face.y) || 0) * faceScale}px)`; img.style.transform = `translate(-50%, -50%) rotate(${Number(face.rotation) || 0}deg)`; character.appendChild(img); });
+        const makeContentBody = (x, y, w, h) => Bodies.rectangle(x, y, w, h, {
+            restitution: 0, friction: 0.92, frictionStatic: 1, frictionAir: window.innerWidth <= 768 ? 0.05 : 0.045, density: 0.05,
+            sleepThreshold: window.innerWidth <= 768 ? 30 : 45, chamfer: { radius: Math.min(window.innerWidth <= 768 ? 6 : 8, Math.min(w, h) / 4) }, render: { visible: false }
+        });
+        const registerContent = (body, element) => {
+            body.plugin = { guestbookContent: true, element, width: body.bounds.max.x - body.bounds.min.x, height: body.bounds.max.y - body.bounds.min.y };
+            contentBodies.push(body); Composite.add(engine.world, body);
+        };
+
+        const characterSize = (window.innerWidth <= 768 ? 200 : 220) * card.scale; 
+        const character = document.createElement('div');
+        character.className = 'gb-content-item gb-character-content';
+        character.style.width = `${characterSize}px`; character.style.height = `${characterSize}px`;
+        const shape = document.createElement('img');
+        shape.className = 'gb-content-shape'; shape.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; shape.alt = '방명록 캐릭터';
+        character.appendChild(shape);
+
+        (entry.faces || []).forEach(face => {
+            const img = document.createElement('img'); img.className = 'gb-content-face'; img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`;
+            const faceScale = (characterSize / 850);
+            const faceSize = 190 * (Number(face.scale) || 1) * faceScale; 
+            img.style.width = `${faceSize}px`; img.style.height = `${faceSize}px`;
+            img.style.left = `calc(50% + ${(Number(face.x) || 0) * faceScale}px)`; img.style.top = `calc(50% + ${(Number(face.y) || 0) * faceScale}px)`;
+            img.style.transform = `translate(-50%, -50%) rotate(${Number(face.rotation) || 0}deg)`;
+            character.appendChild(img);
+        });
         contentLayer.appendChild(character);
-        const characterBody = makeContentBody(card.w / 2, 60, characterSize * 0.85, characterSize * 0.5); registerContent(characterBody, character); Body.setInertia(characterBody, Infinity); Body.setAngularVelocity(characterBody, 0);
 
-        const name = document.createElement('div'); name.className = 'gb-content-item gb-content-name'; name.textContent = entry.name || ''; name.style.backgroundColor = entry.nameBg || '#ffcc00'; name.style.fontSize = `${Math.max(12, 16 * card.scale)}px`; name.style.width = 'max-content'; name.style.maxWidth = `${card.w * 0.8}px`; contentLayer.appendChild(name);
-        requestAnimationFrame(() => { const nameBody = makeContentBody(30 + (name.offsetWidth || 80) / 2, -20, name.offsetWidth || 80, name.offsetHeight || 30); Body.setAngle(nameBody, (Math.random() * 12 - 6) * Math.PI / 180); registerContent(nameBody, name); });
+        let characterBody;
+        if(window.innerWidth <= 768) {
+            const isCircle = [1, 3, 8].includes(Number(entry.shapeIdx));
+            const charX = card.w / 2 + (Math.random() - 0.5) * card.w * 0.12; const charY = 50;
+            const bodyOptions = { restitution: 0, friction: 0.92, frictionStatic: 1, frictionAir: 0.05, density: 0.05, sleepThreshold: 30, render: { visible: false } };
+            if (isCircle) { characterBody = Bodies.circle(charX, charY, characterSize / 2, bodyOptions); } 
+            else { characterBody = Bodies.rectangle(charX, charY, characterSize, characterSize, { ...bodyOptions, chamfer: { radius: Math.min(6, characterSize / 4) } }); }
+        } else {
+            const characterBodyWidth = characterSize * 0.85; const characterBodyHeight = characterSize * 0.5; 
+            characterBody = makeContentBody(card.w / 2 + (Math.random() - 0.5) * card.w * 0.16, 60, characterBodyWidth, characterBodyHeight);
+        }
+        registerContent(characterBody, character);
+        Body.setInertia(characterBody, Infinity); Body.setAngularVelocity(characterBody, 0);
 
-        const message = document.createElement('div'); message.className = 'gb-content-item gb-content-message'; message.textContent = entry.message || ''; message.style.backgroundColor = entry.msgBg || '#00a8e8'; message.style.fontSize = `${Math.max(12, 16 * card.scale)}px`; message.style.width = 'max-content'; message.style.maxWidth = `${card.w - 30 * card.scale}px`; contentLayer.appendChild(message);
-        requestAnimationFrame(() => { const messageBody = makeContentBody(card.w - 30 - (message.offsetWidth || 130) / 2, -80, message.offsetWidth || 130, message.offsetHeight || 40); Body.setAngle(messageBody, (Math.random() * 12 - 6) * Math.PI / 180); registerContent(messageBody, message); });
+        const name = document.createElement('div');
+        name.className = 'gb-content-item gb-content-name';
+        name.textContent = entry.name || '';
+        name.style.backgroundColor = entry.nameBg || '#ffcc00';
+        name.style.fontSize = `${Math.max(window.innerWidth <= 768 ? 10 : 12, (window.innerWidth <= 768 ? 14 : 16) * card.scale)}px`;
+        name.style.width = 'max-content'; name.style.maxWidth = `${card.w * 0.8}px`; 
+        contentLayer.appendChild(name);
 
-        Events.on(engine, 'afterUpdate', () => { contentBodies.forEach(body => { const meta = body.plugin; if (!meta || !meta.element) return; meta.element.style.left = `${body.position.x - meta.width / 2}px`; meta.element.style.top = `${body.position.y - meta.height / 2}px`; meta.element.style.transform = `rotate(${body.angle}rad)`; }); });
+        requestAnimationFrame(() => {
+            let nameW = name.offsetWidth || (window.innerWidth <= 768 ? 70 : 80);
+            let nameH = name.offsetHeight || (window.innerWidth <= 768 ? 24 : 30);
+            const nameBody = makeContentBody(30 + nameW / 2, -20, nameW, nameH);
+            Body.setAngle(nameBody, (Math.random() * (window.innerWidth <= 768 ? 10 : 12) - (window.innerWidth <= 768 ? 5 : 6)) * Math.PI / 180);
+            registerContent(nameBody, name);
+        });
 
-        const mouse = Mouse.create(render.canvas); mouse.pixelRatio = window.devicePixelRatio || 1;
-        const mouseConstraint = MouseConstraint.create(engine, { mouse, constraint: { stiffness: 0.24, damping: 0.08, render: { visible: false } } }); Composite.add(engine.world, mouseConstraint); render.mouse = mouse;
+        const message = document.createElement('div');
+        message.className = 'gb-content-item gb-content-message';
+        message.textContent = entry.message || '';
+        message.style.backgroundColor = entry.msgBg || '#00a8e8';
+        message.style.fontSize = `${Math.max(window.innerWidth <= 768 ? 10 : 12, (window.innerWidth <= 768 ? 14 : 16) * card.scale)}px`;
+        message.style.width = 'max-content'; message.style.maxWidth = `${card.w - (window.innerWidth <= 768 ? 20 : 30) * card.scale}px`;
+        contentLayer.appendChild(message);
+
+        requestAnimationFrame(() => {
+            let messageW = message.offsetWidth || (window.innerWidth <= 768 ? 110 : 130);
+            let messageH = message.offsetHeight || (window.innerWidth <= 768 ? 30 : 40);
+            const messageBody = makeContentBody(card.w - 30 - messageW / 2, -80, messageW, messageH);
+            Body.setAngle(messageBody, (Math.random() * (window.innerWidth <= 768 ? 10 : 12) - (window.innerWidth <= 768 ? 5 : 6)) * Math.PI / 180);
+            registerContent(messageBody, message);
+        });
+
+        Events.on(engine, 'afterUpdate', () => {
+            contentBodies.forEach(body => {
+                const meta = body.plugin; if (!meta || !meta.element) return;
+                const el = meta.element; const w = meta.width; const h = meta.height;
+                el.style.left = `${body.position.x - w / 2}px`; el.style.top = `${body.position.y - h / 2}px`;
+                el.style.width = `${w}px`; el.style.height = `${h}px`; el.style.transform = `rotate(${body.angle}rad)`;
+            });
+        });
+
+        const mouse = Mouse.create(render.canvas);
+        mouse.pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+        mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
+        mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
+        mouse.element.removeEventListener("wheel", mouse.mousewheel);
+
+        const mouseConstraint = MouseConstraint.create(engine, { mouse, constraint: { stiffness: 0.24, damping: 0.08, render: { visible: false } } });
+        Composite.add(engine.world, mouseConstraint);
+        render.mouse = mouse;
+
+        if(!isMobile) {
+            Events.on(mouseConstraint, 'mousemove', () => { render.canvas.style.cursor = 'none'; });
+            Events.on(mouseConstraint, 'startdrag', () => { render.canvas.style.cursor = 'none'; });
+            Events.on(mouseConstraint, 'enddrag', () => { render.canvas.style.cursor = 'none'; });
+        }
 
         Events.on(engine, 'afterUpdate', () => {
             contentBodies.forEach(body => {
                 const meta = body.plugin; if (!meta) return;
+                const halfW = meta.width / 2; const halfH = meta.height / 2; const margin = window.innerWidth <= 768 ? 2 : 4; 
+                const minX = halfW + margin; const maxX = card.w - halfW - margin;
+                const minY = halfH + margin; const maxY = card.h - halfH - margin;
                 let x = body.position.x; let y = body.position.y; let changed = false;
-                const minX = meta.width / 2 + 4; const maxX = card.w - meta.width / 2 - 4; const minY = meta.height / 2 + 4; const maxY = card.h - meta.height / 2 - 4;
-                if (x < minX) { x = minX; changed = true; } if (x > maxX) { x = maxX; changed = true; } if (y < minY) { y = minY; changed = true; } if (y > maxY) { y = maxY; changed = true; }
-                if (changed) { Body.setPosition(body, { x, y }); Body.setVelocity(body, { x: body.velocity.x * 0.15, y: body.velocity.y * 0.15 }); }
+
+                if (x < minX) { x = minX; changed = true; } if (x > maxX) { x = maxX; changed = true; }
+                if (y < minY) { y = minY; changed = true; } if (y > maxY) { y = maxY; changed = true; }
+
+                if (changed) {
+                    Body.setPosition(body, { x, y });
+                    Body.setVelocity(body, { x: body.velocity.x * 0.15, y: body.velocity.y * 0.15 });
+                    if (Math.abs(body.velocity.x) < 0.05 && Math.abs(body.velocity.y) < 0.05) { Body.setVelocity(body, { x: 0, y: 0 }); }
+                }
             });
         });
 
         Render.run(render); const runner = Runner.create(); Runner.run(runner, engine);
-        card.engine = engine; card.render = render; card.runner = runner; card.contentBodies = contentBodies; card.mouseConstraint = mouseConstraint; cardStates.push(card);
+        card.engine = engine; card.render = render; card.runner = runner;
+        card.contentBodies = contentBodies; card.mouseConstraint = mouseConstraint;
+        cardStates.push(card);
     };
+
     entries.forEach(createCard);
+
     window.addEventListener('resize', () => {
-        if(isMobile()) return;
         layout = getLayout(); const currentTop = getTopMargin(); updateContainerHeight(); 
         cardStates.forEach((card, idx) => {
             const slot = idx + 1; const row = Math.floor(slot / layout.columns); const col = slot % layout.columns;
-            card.x = layout.left + col * (layout.width + GAP); card.y = currentTop + row * (layout.height + GAP); card.w = layout.width; card.h = layout.height; card.scale = layout.scale;
-            card.frame.style.left = `${card.x}px`; card.frame.style.top = `${card.y}px`; card.frame.style.width = `${card.w}px`; card.frame.style.height = `${card.h}px`;
-            card.render.canvas.width = card.w; card.render.canvas.height = card.h; card.render.options.width = card.w; card.render.options.height = card.h;
-        });
-    });
-}
-
-// ---------------------- Mobile Physics ----------------------
-function initMobilePhysics() {
-    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner, Bodies = Matter.Bodies, Composite = Matter.Composite, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint, Events = Matter.Events, Query = Matter.Query;
-    const engine = Engine.create(); const world = engine.world; engine.positionIterations = 12; engine.velocityIterations = 12; engine.world.gravity.y = 1.2; 
-    const stage = document.getElementById('physics-stage'); const gbStage = document.getElementById('main-guestbook-stage'); if(!stage) return;
-    const bottomNav = document.querySelector('.bottom-nav'); const bottomNavHeight = bottomNav ? bottomNav.offsetHeight : 55; const stageHeight = window.innerHeight - bottomNavHeight;
-    stage.style.height = `${stageHeight}px`;
-    const baseWidth = 390; const currentWidth = stage.clientWidth || window.innerWidth || 390; const screenScale = Math.max(0.75, Math.min(1.25, currentWidth / baseWidth));
-    if(gbStage) { gbStage.style.left = '0'; gbStage.style.width = '100vw'; gbStage.style.height = `${stageHeight}px`; }
-    const randomXForWidth = (width) => (width >= stage.clientWidth) ? stage.clientWidth / 2 : Math.random() * (stage.clientWidth - width) + (width / 2);
-    const render = Render.create({ element: stage, engine: engine, options: { width: stage.clientWidth, height: stageHeight, wireframes: false, background: 'transparent', pixelRatio: Math.min(2, window.devicePixelRatio || 1) } });
-    Render.run(render); const runner = Runner.create({ isFixed: true }); Runner.run(runner, engine);
-    const wallOptions = { isStatic: true, restitution: 0.1, friction: 0.8, render: { visible: false } };
-    const floorY = stageHeight + 250; const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 2, 500, wallOptions); const leftWall = Bodies.rectangle(-250, stageHeight / 2, 500, stageHeight * 5, wallOptions); const rightWall = Bodies.rectangle(stage.clientWidth + 250, stageHeight / 2, 500, stageHeight * 5, wallOptions);
-    Composite.add(world, [floor, leftWall, rightWall]);
-    const recentGbEntries = getGuestbookEntries().slice(0, 10); const domPhysicsItems = []; 
-    if(gbStage) {
-        gbStage.innerHTML = ''; 
-        recentGbEntries.forEach((entry, idx) => {
-            if (idx >= 10) return; 
-            const visualSize = 70 * screenScale; const hitBoxSize = 70 * screenScale; const startX = randomXForWidth(hitBoxSize); const startY = -600 - (idx * 180); 
-            const isCircle = [1, 3, 8].includes(Number(entry.shapeIdx)); let gbBody;
-            const bodyOptions = { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, render: { visible: false } };
-            if (isCircle) { gbBody = Bodies.circle(startX, startY, hitBoxSize/2, bodyOptions); } else { gbBody = Bodies.rectangle(startX, startY, hitBoxSize, hitBoxSize, { ...bodyOptions, chamfer: { radius: 6 } }); }
-            Composite.add(world, gbBody);
-            const wrapper = document.createElement('div'); wrapper.className = 'guestbook-stack-item'; wrapper.style.position = 'absolute'; wrapper.style.width = `${visualSize}px`; wrapper.style.height = `${visualSize}px`; wrapper.style.pointerEvents = 'none'; 
-            const shapeImg = document.createElement('img'); shapeImg.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; shapeImg.style.position = 'absolute'; shapeImg.style.width = '100%'; shapeImg.style.height = '100%'; shapeImg.style.objectFit = 'contain'; wrapper.appendChild(shapeImg);
-            const stageScale = visualSize / 450; 
-            entry.faces.forEach(f => {
-                const faceImg = document.createElement('img'); faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`; faceImg.style.position = 'absolute'; 
-                const faceWidth = 190 * f.scale * stageScale; faceImg.style.width = `${faceWidth}px`; faceImg.style.height = `${faceWidth}px`; faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`; faceImg.style.top = `calc(50% + ${f.y * stageScale}px)`; faceImg.style.objectFit = 'contain'; faceImg.style.transform = `translate(-50%, -50%) rotate(${f.rotation}deg)`; wrapper.appendChild(faceImg);
-            });
-            gbStage.appendChild(wrapper); domPhysicsItems.push({ body: gbBody, el: wrapper, size: visualSize });
-        });
-        Events.on(engine, 'afterUpdate', function() { domPhysicsItems.forEach(item => { const pos = item.body.position; const angle = item.body.angle; item.el.style.transform = `translate(${pos.x - item.size/2}px, ${pos.y - item.size/2}px) rotate(${angle}rad)`; }); });
-    }
-    const mainGraphics = [
-        { src: 'maingraphic-01.png', width: 1063, height: 1063, isCircle: true, hitboxScale: 1.03 }, { src: 'maingraphic-02.png', width: 1075, height: 963, hitboxScale: 1.03 }, { src: 'maingraphic-03.png', width: 746, height: 742, isCircle: true, hitboxScale: 1.03 },
-        { src: 'maingraphic-04.png', width: 746, height: 742, isCircle: true, hitboxScale: 1.03 }, { src: 'maingraphic-05.png', width: 1117, height: 1080, hitboxScale: 1.03 }, { src: 'maingraphic-06.png', width: 896, height: 646, hitboxScale: 1.03 }, 
-        { src: 'maingraphic-07.png', width: 880, height: 621, hitboxScale: 1.03 }, { src: 'maingraphic-08.png', width: 909, height: 760, hitboxScale: 1.03 }, { src: 'maingraphic-09.png', width: 621, height: 721, isCircle: true, hitboxScale: 1.03 },
-        { src: 'maingraphic-10.png', width: 1259, height: 330, hitboxScale: 1.03 }, { src: 'maingraphic-11.png', width: 1125, height: 875, hitboxScale: 1.01 }, { src: 'maingraphic-12.png', width: 1338, height: 759, hitboxScale: 1.01 }, { src: 'maingraphic-13.png', width: 1400, height: 575, hitboxScale: 1.03 } 
-    ];
-    mainGraphics.forEach((image, index) => {
-        const minScale = 0.06 * screenScale; const maxScale = 0.11 * screenScale; const randomScale = Math.random() * (maxScale - minScale) + minScale;
-        const hitBoxScale = image.hitboxScale || 1.0; const hitBoxWidth = Math.max(30 * screenScale, image.width * randomScale * hitBoxScale); const hitBoxHeight = Math.max(30 * screenScale, image.height * randomScale * hitBoxScale);
-        const startX = randomXForWidth(hitBoxWidth); const startY = -150 - (index * 130) - (Math.random() * 40); 
-        let graphic;
-        if (image.isCircle) { const radius = (hitBoxWidth + hitBoxHeight) / 4; graphic = Bodies.circle(startX, startY, radius, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } } }); } 
-        else { graphic = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 3 }, angle: (index === 4) ? 45 * Math.PI / 180 : 0, render: { sprite: { texture: image.src, xScale: randomScale, yScale: randomScale } } }); }
-        Composite.add(world, graphic);
-    });
-    const typoScale = 0.12 * screenScale; 
-    const typoGraphics = [ { src: 'typo-1.png', width: 3132, height: 398, customScale: 0.08 * screenScale }, { src: 'typo-2.png', width: 925, height: 134, customScale: 0.25 * screenScale }, { src: 'typo-3.png', width: 1242, height: 350, customScale: 0.18 * screenScale }, { src: 'typo-4.png', width: 884, height: 134, customScale: 0.26 * screenScale }, { src: 'typo-5.png', width: 423, height: 134, customScale: 0.275 * screenScale } ];
-    typoGraphics.forEach((typo, index) => {
-        const scale = typo.customScale || typoScale; const hitBoxWidth = typo.width * scale; const hitBoxHeight = Math.max(14 * screenScale, typo.height * scale);
-        const startX = randomXForWidth(hitBoxWidth); const startY = -2000 - (index * 180); 
-        const typoBody = Bodies.rectangle(startX, startY, hitBoxWidth, hitBoxHeight, { restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, chamfer: { radius: 3 }, render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } } }); Composite.add(world, typoBody);
-    });
-    const clickBody = Bodies.circle(stage.clientWidth / 2, -1800, 35 * screenScale, { label: 'clickBtn', restitution: 0.01, friction: 1, frictionStatic: 10, frictionAir: 0.02, density: 2.0, render: { sprite: { texture: 'Click1.png', xScale: 0.12 * screenScale, yScale: 0.12 * screenScale } } }); Composite.add(world, clickBody);
-    const mouse = Mouse.create(render.canvas); mouse.pixelRatio = Math.min(2, window.devicePixelRatio || 1); 
-    const mouseConstraint = MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.2, render: { visible: false } } }); Composite.add(world, mouseConstraint); render.mouse = mouse;
-    render.canvas.addEventListener('touchmove', (e) => { const popup = document.getElementById('guestbook-popup'); if (popup && popup.classList.contains('hidden')) { e.preventDefault(); } }, { passive: false });
-    Events.on(mouseConstraint, 'mousemove', function(event) {
-        const foundPhysics = Query.point(engine.world.bodies, event.mouse.position); let isHoveringClick = false;
-        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') { foundPhysics[0].render.sprite.texture = 'Click2.png'; isHoveringClick = true; }
-        if (!isHoveringClick && clickBody.render.sprite.texture !== 'Click1.png') { clickBody.render.sprite.texture = 'Click1.png'; }
-    });
-    let clickStartX = null; let clickStartY = null;
-    Events.on(mouseConstraint, 'mousedown', function(event) {
-        const foundPhysics = Query.point(engine.world.bodies, event.mouse.position);
-        if (foundPhysics.length > 0 && foundPhysics[0].label === 'clickBtn') { clickStartX = event.mouse.position.x; clickStartY = event.mouse.position.y; } else { clickStartX = null; }
-    });
-    Events.on(mouseConstraint, 'mouseup', function(event) {
-        if (clickStartX !== null) {
-            const dx = event.mouse.position.x - clickStartX; const dy = event.mouse.position.y - clickStartY; const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 10) { openGuestbookPopup(); mouseConstraint.body = null; } clickStartX = null;
-        }
-    });
-    window.addEventListener('resize', () => {
-        if(!isMobile()) return;
-        if (stage.clientWidth === 0) return; 
-        const currentBottomNavHeight = bottomNav ? bottomNav.offsetHeight : 55; const currentStageHeight = window.innerHeight - currentBottomNavHeight;
-        stage.style.height = `${currentStageHeight}px`; if (gbStage) gbStage.style.height = `${currentStageHeight}px`;
-        render.canvas.width = stage.clientWidth; render.canvas.height = currentStageHeight; render.options.width = stage.clientWidth; render.options.height = currentStageHeight;
-        Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: currentStageHeight + 250 }); Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: currentStageHeight / 2 }); Matter.Body.setPosition(leftWall, { x: -250, y: currentStageHeight / 2 });
-    });
-}
-
-// ---------------------- Mobile Guestbook Physics ----------------------
-function initMobileGuestbookPhysics() {
-    const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner, Bodies = Matter.Bodies, Composite = Matter.Composite, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint, Events = Matter.Events, Body = Matter.Body;
-    const stage = document.getElementById('guestbook-physics-stage'); const domStage = document.getElementById('guestbook-dom-stage'); if (!stage || !domStage) return;
-    window.__guestbookPhysicsInitialized = true; stage.innerHTML = ''; domStage.innerHTML = '';
-    const entries = getGuestbookEntries(); const CARD_W = 282; const CARD_H = 352; const GAP = 10;
-    const getLayout = () => {
-        const currentWidth = stage.clientWidth || window.innerWidth; const columns = 2; const sideMargin = 12; const availableWidth = currentWidth - (sideMargin * 2) - (columns - 1) * GAP;
-        const width = Math.max(120, availableWidth / columns); const scale = width / CARD_W; const height = CARD_H * scale; const left = (currentWidth - (columns * width + (columns - 1) * GAP)) / 2;
-        return { columns, width, height, scale, left };
-    };
-    let layout = getLayout(); const cardStates = [];
-    const updateContainerHeight = () => {
-        const currentLayout = getLayout(); const totalItems = entries.length + 1; const totalRows = Math.ceil(totalItems / currentLayout.columns); const requiredHeight = 80 + 18 + totalRows * (currentLayout.height + GAP) + 120;
-        const section = document.getElementById('section-guestbook'); if (section) section.style.height = `${Math.max(window.innerHeight - 55, requiredHeight)}px`;
-        const addBtn = document.querySelector('.guestbook-add-floating'); 
-        if (addBtn) { addBtn.style.left = `${currentLayout.left}px`; addBtn.style.top = `calc(50px + env(safe-area-inset-top) + 18px)`; addBtn.style.width = `${currentLayout.width}px`; addBtn.style.height = `${currentLayout.height}px`; const btnImg = addBtn.querySelector('img'); if (btnImg) { btnImg.style.width = `${currentLayout.width * 0.4}px`; btnImg.style.height = `${currentLayout.width * 0.4}px`; } }
-    };
-    updateContainerHeight();
-    const createCard = (entry, idx) => {
-        const slot = idx + 1; const row = Math.floor(slot / layout.columns); const col = slot % layout.columns;
-        const card = { x: layout.left + col * (layout.width + GAP), y: 18 + row * (layout.height + GAP), w: layout.width, h: layout.height, scale: layout.scale };
-        const frame = document.createElement('article'); frame.className = 'gb-fixed-frame'; frame.style.left = `${card.x}px`; frame.style.top = `${card.y}px`; frame.style.width = `${card.w}px`; frame.style.height = `${card.h}px`;
-        const physicsHost = document.createElement('div'); physicsHost.className = 'gb-card-physics-host'; physicsHost.style.cssText = 'position:absolute; inset:0; z-index:2; pointer-events:auto;';
-        const contentLayer = document.createElement('div'); contentLayer.className = 'gb-frame-content-layer'; contentLayer.style.zIndex = '20'; contentLayer.style.pointerEvents = 'none';
-        frame.appendChild(physicsHost); frame.appendChild(contentLayer); domStage.appendChild(frame);
-        card.frame = frame; card.layer = contentLayer; card.physicsHost = physicsHost;
-        const engine = Engine.create(); engine.positionIterations = 8; engine.velocityIterations = 8; engine.world.gravity.y = 0.8;
-        const render = Render.create({ element: physicsHost, engine, options: { width: card.w, height: card.h, wireframes: false, background: 'transparent', pixelRatio: Math.min(2, window.devicePixelRatio || 1) } });
-        render.canvas.style.position = 'absolute'; render.canvas.style.inset = '0'; render.canvas.style.width = '100%'; render.canvas.style.height = '100%'; render.canvas.style.background = 'transparent'; render.canvas.style.pointerEvents = 'auto';
-        render.canvas.addEventListener('touchmove', (e) => {}, { passive: true });
-        const wallThickness = 60; const innerPadding = 12;  
-        const wallOptions = { isStatic: true, restitution: 0, friction: 0.95, render: { visible: false } };
-        Composite.add(engine.world, [ Bodies.rectangle(card.w / 2, card.h + wallThickness / 2 - innerPadding, card.w + wallThickness * 2, wallThickness, wallOptions), Bodies.rectangle(-wallThickness / 2 + innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions), Bodies.rectangle(card.w + wallThickness / 2 - innerPadding, card.h / 2, wallThickness, card.h + wallThickness * 2, wallOptions) ]);
-        const contentBodies = []; const makeContentBody = (x, y, w, h) => Bodies.rectangle(x, y, w, h, { restitution: 0, friction: 0.92, frictionAir: 0.05, density: 0.05, chamfer: { radius: Math.min(6, Math.min(w, h) / 4) }, render: { visible: false } });
-        const registerContent = (body, element) => { body.plugin = { element, width: body.bounds.max.x - body.bounds.min.x, height: body.bounds.max.y - body.bounds.min.y }; contentBodies.push(body); Composite.add(engine.world, body); };
-        
-        const characterSize = 200 * card.scale; const character = document.createElement('div'); character.className = 'gb-content-item gb-character-content'; character.style.width = `${characterSize}px`; character.style.height = `${characterSize}px`;
-        const shape = document.createElement('img'); shape.className = 'gb-content-shape'; shape.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; character.appendChild(shape);
-        (entry.faces || []).forEach(face => { const img = document.createElement('img'); img.className = 'gb-content-face'; img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`; const faceScale = (characterSize / 850); const faceSize = 190 * (Number(face.scale) || 1) * faceScale; img.style.width = `${faceSize}px`; img.style.height = `${faceSize}px`; img.style.left = `calc(50% + ${(Number(face.x) || 0) * faceScale}px)`; img.style.top = `calc(50% + ${(Number(face.y) || 0) * faceScale}px)`; img.style.transform = `translate(-50%, -50%) rotate(${Number(face.rotation) || 0}deg)`; character.appendChild(img); });
-        contentLayer.appendChild(character);
-        const isCircle = [1, 3, 8].includes(Number(entry.shapeIdx)); let characterBody; const charX = card.w / 2 + (Math.random() - 0.5) * card.w * 0.12; const charY = 50; const bodyOptions = { restitution: 0, friction: 0.92, frictionAir: 0.05, density: 0.05, render: { visible: false } };
-        if (isCircle) { characterBody = Bodies.circle(charX, charY, characterSize / 2, bodyOptions); } else { characterBody = Bodies.rectangle(charX, charY, characterSize, characterSize, { ...bodyOptions, chamfer: { radius: Math.min(6, characterSize / 4) } }); }
-        registerContent(characterBody, character); Body.setInertia(characterBody, Infinity); Body.setAngularVelocity(characterBody, 0);
-
-        const name = document.createElement('div'); name.className = 'gb-content-item gb-content-name'; name.textContent = entry.name || ''; name.style.backgroundColor = entry.nameBg || '#ffcc00'; name.style.fontSize = `${Math.max(10, 14 * card.scale)}px`; name.style.width = 'max-content'; name.style.maxWidth = `${card.w * 0.8}px`; contentLayer.appendChild(name);
-        requestAnimationFrame(() => { const nameBody = makeContentBody(30 + (name.offsetWidth || 70) / 2, -20, name.offsetWidth || 70, name.offsetHeight || 24); Body.setAngle(nameBody, (Math.random() * 10 - 5) * Math.PI / 180); registerContent(nameBody, name); });
-
-        const message = document.createElement('div'); message.className = 'gb-content-item gb-content-message'; message.textContent = entry.message || ''; message.style.backgroundColor = entry.msgBg || '#00a8e8'; message.style.fontSize = `${Math.max(10, 14 * card.scale)}px`; message.style.width = 'max-content'; message.style.maxWidth = `${card.w - 20 * card.scale}px`; contentLayer.appendChild(message);
-        requestAnimationFrame(() => { const messageBody = makeContentBody(card.w - 30 - (message.offsetWidth || 110) / 2, -80, message.offsetWidth || 110, message.offsetHeight || 30); Body.setAngle(messageBody, (Math.random() * 10 - 5) * Math.PI / 180); registerContent(messageBody, message); });
-
-        Events.on(engine, 'afterUpdate', () => { contentBodies.forEach(body => { const meta = body.plugin; if (!meta || !meta.element) return; meta.element.style.left = `${body.position.x - meta.width / 2}px`; meta.element.style.top = `${body.position.y - meta.height / 2}px`; meta.element.style.transform = `rotate(${body.angle}rad)`; }); });
-
-        const mouse = Mouse.create(render.canvas); mouse.pixelRatio = Math.min(2, window.devicePixelRatio || 1); mouse.element.removeEventListener("wheel", mouse.mousewheel);
-        const mouseConstraint = MouseConstraint.create(engine, { mouse, constraint: { stiffness: 0.24, damping: 0.08, render: { visible: false } } }); Composite.add(engine.world, mouseConstraint); render.mouse = mouse;
-
-        Events.on(engine, 'afterUpdate', () => {
-            contentBodies.forEach(body => {
+            card.x = layout.left + col * (layout.width + GAP); card.y = currentTop + row * (layout.height + GAP); 
+            card.w = layout.width; card.h = layout.height; card.scale = layout.scale;
+            card.frame.style.left = `${card.x}px`; card.frame.style.top = `${card.y}px`;
+            card.frame.style.width = `${card.w}px`; card.frame.style.height = `${card.h}px`;
+            card.render.canvas.width = card.w; card.render.canvas.height = card.h;
+            card.render.options.width = card.w; card.render.options.height = card.h;
+            card.contentBodies.forEach(body => {
                 const meta = body.plugin; if (!meta) return;
-                let x = body.position.x; let y = body.position.y; let changed = false;
-                const minX = meta.width / 2 + 2; const maxX = card.w - meta.width / 2 - 2; const minY = meta.height / 2 + 2; const maxY = card.h - meta.height / 2 - 2;
-                if (x < minX) { x = minX; changed = true; } if (x > maxX) { x = maxX; changed = true; } if (y < minY) { y = minY; changed = true; } if (y > maxY) { y = maxY; changed = true; }
-                if (changed) { Body.setPosition(body, { x, y }); Body.setVelocity(body, { x: body.velocity.x * 0.15, y: body.velocity.y * 0.15 }); }
+                const halfW = meta.width / 2; const halfH = meta.height / 2;
+                Body.setPosition(body, {
+                    x: Math.max(halfW + 2, Math.min(card.w - halfW - 2, body.position.x)),
+                    y: Math.max(halfH + 2, Math.min(card.h - halfH - 2, body.position.y))
+                });
             });
-        });
-
-        Render.run(render); const runner = Runner.create(); Runner.run(runner, engine);
-        card.engine = engine; card.render = render; card.runner = runner; card.contentBodies = contentBodies; card.mouseConstraint = mouseConstraint; cardStates.push(card);
-    };
-    entries.forEach(createCard);
-    window.addEventListener('resize', () => {
-        if(!isMobile()) return;
-        layout = getLayout(); updateContainerHeight(); 
-        cardStates.forEach((card, idx) => {
-            const slot = idx + 1; const row = Math.floor(slot / layout.columns); const col = slot % layout.columns;
-            card.x = layout.left + col * (layout.width + GAP); card.y = 18 + row * (layout.height + GAP); card.w = layout.width; card.h = layout.height; card.scale = layout.scale;
-            card.frame.style.left = `${card.x}px`; card.frame.style.top = `${card.y}px`; card.frame.style.width = `${card.w}px`; card.frame.style.height = `${card.h}px`;
-            card.render.canvas.width = card.w; card.render.canvas.height = card.h; card.render.options.width = card.w; card.render.options.height = card.h;
         });
     });
 }
