@@ -273,11 +273,17 @@ body.is-main-page .nav-link { color: #000; }
     .top-title-img { height: 28px; } 
     
     .global-header.bottom-nav { border-top: 2px solid #111; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-wrapper { height: 55px; padding: 0 var(--site-margin); justify-content: flex-end; }
-    
-    .hamburger-btn { display: block !important; position: static; font-size: 26px; padding: 5px; background: transparent; z-index: 10002; }
-    
-    .nav-menu { position: fixed; left: 0; bottom: calc(55px + env(safe-area-inset-bottom)); width: 100%; background: var(--color-background); border-top: 2px solid #111; padding: 20px 0 10px; gap: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); flex-direction: column; z-index: 10001; }
+    /* 기존 .nav-menu 부분 교체 및 .nav-menu.active 추가 */
+    .nav-menu { 
+        display: none; /* 기본적으로 숨김 처리 */
+        position: fixed; left: 0; bottom: calc(55px + env(safe-area-inset-bottom)); 
+        width: 100%; background: var(--color-background); border-top: 2px solid #111; 
+        padding: 20px 0 10px; gap: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
+        flex-direction: column; z-index: 10001; 
+    }
+    .nav-menu.active { 
+        display: flex; /* 햄버거 버튼 클릭 시 나타남 */
+    }
     .nav-menu li { text-align: center; width: 100%; }
     .nav-link { font-size: 17px; padding: 8px 0; } 
     .nav-link:hover { animation: none; }
