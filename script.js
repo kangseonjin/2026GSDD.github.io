@@ -312,7 +312,6 @@ function initArchiveScrollMobile() {
             <div class="archive-visual-area">
                 <div class="archive-poster-wrapper">
                     <p class="archive-year-display" style="background-color: ${data.bgColor};">${data.year}</p>
-               // initArchiveScrollMobile() 함수 내부의 figure 태그 부분 교체
     <figure class="archive-poster" onclick="toggleArchiveDescMobile(this)">
         <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
         

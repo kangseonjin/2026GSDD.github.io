@@ -330,17 +330,16 @@ body.is-main-page .nav-link { color: #000; }
     .works-hover-content { gap: 8px; }
     .works-hover-title, .works-hover-name { font-size: 12px; font-weight: 700; }
     .works-hover-category { font-size: 9px; }
+.detail-container { display: flex; flex-direction: column; padding: 0; gap: 20px; }
+    .detail-text-area { max-width: 100%; position: static; padding-bottom: 10px; order: 1; }
+    .detail-image-area { width: 100%; order: 2; }
     
-    .detail-container { flex-direction: column; padding: 0; gap: 20px; }
-    .detail-text-area { max-width: 100%; position: static; padding-bottom: 10px; }
-    .detail-image-area { width: 100%; }
     .detail-img-placeholder { width: 100%; aspect-ratio: 588 / 750; min-height: auto; margin-bottom: 12px; font-size: 13px; }
     .detail-title { font-size: 18px; }
     .detail-close-btn { font-size: 20px; }
     .detail-author { font-size: 16px; margin-bottom: 6px; }
     .detail-contact { font-size: 12px; margin-bottom: 3px; }
     .detail-desc { font-size: 13px; }
-    
     /* 아카이브 반응형 분기 */
     .archive-desktop-view { display: none; }
     .archive-mobile-view { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; }
@@ -356,10 +355,26 @@ body.is-main-page .nav-link { color: #000; }
     .archive-poster-wrapper { width: 100%; max-width: 340px; min-width: 200px; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; }
     
     .archive-year-display { font-size: 13px; padding: 6px 10px; border-radius: 0 !important; align-self: flex-start; margin: 0; z-index: 5; text-align: center; } 
-    .archive-poster { width: 100%; background-color: transparent; border: none; cursor: pointer; aspect-ratio: auto; }
+/* Archive 포스터 오버레이가 화면 전체를 덮지 않고 포스터 영역에만 갇히게 수정 */
+    .archive-poster { 
+        position: relative; /* 화면 덮어버림 방지 (기준점 고정) */
+        overflow: hidden;   /* 포스터 밖으로 삐져나가는 배경 자르기 */
+        width: 100%; 
+        background-color: transparent; 
+        border: none; 
+        cursor: pointer; 
+        aspect-ratio: auto; 
+    }
     .archive-poster-img { width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: filter 0.3s ease; display: block; }
     
-    .archive-desc-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; padding: 20px 15px; box-sizing: border-box; pointer-events: none; z-index: 2; }
+    .archive-desc-overlay { 
+        position: absolute; 
+        top: 0; left: 0; 
+        width: 100%; height: 100%; 
+        display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        opacity: 0; transition: opacity 0.3s ease; 
+        padding: 20px 15px; box-sizing: border-box; pointer-events: none; z-index: 2; 
+    }
     .archive-poster.show-desc .archive-poster-img { filter: blur(5px) brightness(75%); }
     .archive-poster.show-desc .archive-desc-overlay { opacity: 1; pointer-events: auto; }
     .archive-overlay-desc { font-size: 12px; line-height: 1.6; font-weight: 300; text-align: center; color: #ffffff; margin: 0 0 12px 0; word-break: keep-all; }
