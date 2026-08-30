@@ -13,11 +13,10 @@
     <img id="custom-cursor" src="mouse/mouse1.png" alt="커서" class="custom-cursor">
     
     <!-- 최초 접속 시 나오는 오프닝 영상 영역 (새로고침 시 항상 재생) -->
-   <div id="intro-screen">
-        <video id="intro-video" muted playsinline>
-            <!-- 모바일(768px 이하)일 때 모바일 영상 로드 -->
+<div id="intro-screen">
+        <!-- 👇 autoplay와 preload="auto" 추가 -->
+        <video id="intro-video" autoplay muted playsinline preload="auto">
             <source src="op_mobile.mp4" type="video/mp4" media="all and (max-width: 768px)">
-            <!-- 데스크탑일 때 기본 영상 로드 -->
             <source src="op.mp4" type="video/mp4">
         </video>
     </div>

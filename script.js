@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         if (introVideo) {
             introVideo.currentTime = 0; 
-            introVideo.play().catch(error => { hideIntro(); });
+            introVideo.play();
             introVideo.onended = hideIntro;
             introVideo.onerror = hideIntro;
         } else {
@@ -291,7 +291,6 @@ function updateArchiveViewDesktop() {
     });
 }
 
-// 색상 변환 헬퍼 함수 추가
 function hexToRgba(hex, alpha) {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -299,7 +298,6 @@ function hexToRgba(hex, alpha) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// 기존 initArchiveScrollMobile 함수 교체
 function initArchiveScrollMobile() {
     const container = document.getElementById('archive-scroll-container');
     if (!container) return;
@@ -312,15 +310,13 @@ function initArchiveScrollMobile() {
             <div class="archive-visual-area">
                 <div class="archive-poster-wrapper">
                     <p class="archive-year-display" style="background-color: ${data.bgColor};">${data.year}</p>
-    <figure class="archive-poster" onclick="toggleArchiveDescMobile(this)">
-        <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
-        
-        <!-- 투명도를 만들던 hexToRgba 함수를 제거하고 data.bgColor 원본을 100% 불투명하게 적용 -->
-        <div class="archive-desc-overlay" style="background-color: ${data.bgColor};">
-            <p class="archive-overlay-desc">${(data.desc || '').replace(/\n/g, '<br>')}</p>
-            <span class="archive-link-text" onclick="window.open('${data.link}', '_blank'); event.stopPropagation();">VIEW EXHIBITION →</span>
-        </div>
-    </figure>
+                    <figure class="archive-poster" onclick="toggleArchiveDescMobile(this)">
+                        <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
+                        <div class="archive-desc-overlay" style="background-color: ${data.bgColor};">
+                            <p class="archive-overlay-desc">${(data.desc || '').replace(/\n/g, '<br>')}</p>
+                            <span class="archive-link-text" onclick="window.open('${data.link}', '_blank'); event.stopPropagation();">VIEW EXHIBITION →</span>
+                        </div>
+                    </figure>
                 </div>
             </div>
             <div class="archive-text-area"><h2 class="archive-title">${data.title}</h2></div>
@@ -344,6 +340,7 @@ function initArchiveScrollMobile() {
     container.removeEventListener('scroll', updateArchiveDotsOnScrollMobile);
     container.addEventListener('scroll', updateArchiveDotsOnScrollMobile);
 }
+
 function updateArchiveDotsOnScrollMobile() {
     const container = document.getElementById('archive-scroll-container');
     if (!container) return;
@@ -379,7 +376,6 @@ function openArchiveExternalLink() {
     if (data && data.link) window.open(data.link, '_blank');
 }
 
-
 /* ===========================================================
    페이지 네비게이션 로직
 =========================================================== */
@@ -393,7 +389,7 @@ const loadingCombinationsDesktop = [
 
 function navigateToPage(pageName, skipLoading = false) {
     const targetId = `section-${pageName}`;
-    const targetSection = document.getElementById(targetId);
+    const targetSection = document.getElementById(`section-${pageName}`);
     
     if (targetSection && targetSection.classList.contains('active') && !skipLoading) return;
     if (isNavigating) return;
@@ -457,10 +453,7 @@ function completeNavigation(pageName) {
     const targetSection = document.getElementById(`section-${pageName}`);
     if (targetSection) targetSection.classList.add('active');
 
-    const targetNavLink = document.getElementById(`link-${pageName}`);
-    if (targetNavLink) targetNavLink.classList.add('active');
-
-if (pageName === 'detail') {
+    if (pageName === 'detail') {
         const parentPage = window.detailBackPage || 'works';
         const parentNavLink = document.getElementById(`link-${parentPage}`);
         if (parentNavLink) parentNavLink.classList.add('active');
@@ -807,7 +800,7 @@ if (customCursor) {
 }
 
 /* ===========================================================
-   과제 1: 메인 화면 물리엔진 (모바일/데스크탑 분기)
+   메인 화면 물리엔진
 =========================================================== */
 function initPhysics() {
     const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
@@ -819,13 +812,17 @@ function initPhysics() {
     const world = engine.world;
     const isMobile = window.innerWidth <= 768;
     
-    engine.positionIterations = isMobile ? 12 : 20; 
-    engine.velocityIterations = isMobile ? 12 : 20; 
-    engine.world.gravity.y = 1.2; 
-    
     const stage = document.getElementById('physics-stage');
     const gbStage = document.getElementById('main-guestbook-stage');
     if(!stage) return;
+    
+    let previousWidth = stage.clientWidth || window.innerWidth || 390;
+    const initialStageWidth = stage.clientWidth || window.innerWidth || 390;
+    const scalableBodies = [];
+    
+    engine.positionIterations = isMobile ? 12 : 20; 
+    engine.velocityIterations = isMobile ? 12 : 20; 
+    engine.world.gravity.y = 1.2; 
 
     let stageHeight = stage.clientHeight;
     if (isMobile) {
@@ -850,6 +847,7 @@ function initPhysics() {
         return Math.random() * (stage.clientWidth - width) + (width / 2);
     };
 
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
     const render = Render.create({
         element: stage,
         engine: engine,
@@ -857,7 +855,7 @@ function initPhysics() {
             width: stage.clientWidth,
             height: isMobile ? stageHeight : stage.clientHeight,
             wireframes: false, background: 'transparent',
-            pixelRatio: Math.min(2, window.devicePixelRatio || 1)
+            pixelRatio: dpr
         }
     });
 
@@ -867,9 +865,9 @@ function initPhysics() {
 
     const floorY = (isMobile ? stageHeight : stage.clientHeight) + 250; 
     const wallOptions = { isStatic: true, restitution: 0.1, friction: 0.8, render: { visible: false } };
-    const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 2, 500, wallOptions);
-    const leftWall = Bodies.rectangle(-250, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 5, wallOptions);
-    const rightWall = Bodies.rectangle(stage.clientWidth + 250, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 5, wallOptions);
+    const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 10, 500, wallOptions);
+    const leftWall = Bodies.rectangle(-500, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
+    const rightWall = Bodies.rectangle(stage.clientWidth + 500, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
     Composite.add(world, [floor, leftWall, rightWall]);
 
     const recentGbEntries = getGuestbookEntries().slice(0, 10); 
@@ -906,19 +904,30 @@ function initPhysics() {
             shapeImg.style.objectFit = 'contain';
             wrapper.appendChild(shapeImg);
             
-            const stageScale = visualSize / 450; 
+            const popupCharSize = isMobile ? 240 : 360;
+            const popupFaceBase = isMobile ? 130 : 190;
+            
             entry.faces.forEach(f => {
                 const faceImg = document.createElement('img');
                 faceImg.src = `guestbook/gb${f.colorIdx}-${f.faceIdx}.png`;
                 faceImg.style.position = 'absolute'; 
-                const faceWidth = 190 * f.scale * stageScale; 
-                faceImg.style.width = `${faceWidth}px`; faceImg.style.height = `${faceWidth}px`;
-                faceImg.style.left = `calc(50% + ${f.x * stageScale}px)`; faceImg.style.top = `calc(50% + ${f.y * stageScale}px)`;
-                faceImg.style.objectFit = 'contain'; faceImg.style.transform = `translate(-50%, -50%) rotate(${f.rotation}deg)`; 
+                
+                const pctWidth = (popupFaceBase * (Number(f.scale) || 1) / popupCharSize) * 100;
+                const pctX = ((Number(f.x) || 0) / popupCharSize) * 100;
+                const pctY = ((Number(f.y) || 0) / popupCharSize) * 100;
+                
+                faceImg.style.width = `${pctWidth}%`; 
+                faceImg.style.height = `${pctWidth}%`;
+                faceImg.style.left = `calc(50% + ${pctX}%)`; 
+                faceImg.style.top = `calc(50% + ${pctY}%)`;
+                faceImg.style.objectFit = 'contain'; 
+                faceImg.style.transform = `translate(-50%, -50%) rotate(${Number(f.rotation) || 0}deg)`; 
+                
                 wrapper.appendChild(faceImg);
             });
             gbStage.appendChild(wrapper);
             domPhysicsItems.push({ body: gbBody, el: wrapper, size: visualSize });
+            scalableBodies.push({ type: 'dom', item: { body: gbBody, el: wrapper }, initialSize: visualSize, bodyTotalScale: 1 });
         });
 
         Events.on(engine, 'afterUpdate', function() {
@@ -977,15 +986,16 @@ function initPhysics() {
             });
         }
         Composite.add(world, graphic);
+        scalableBodies.push({ type: 'canvas', body: graphic, initialXScale: graphic.render.sprite.xScale, initialYScale: graphic.render.sprite.yScale, bodyTotalScale: 1 });
     });
 
-    const typoScale = isMobile ? (0.12 * screenScale) : 0.3; 
+    const typoScale = isMobile ? (0.09 * screenScale) : 0.3; 
     const typoGraphics = [
-        { src: 'typo-1.png', width: 3132, height: isMobile ? 398 : 500, customScale: isMobile ? (0.08 * screenScale) : 0.15 },
-        { src: 'typo-2.png', width: 925, height: isMobile ? 134 : 140, customScale: isMobile ? (0.25 * screenScale) : null },
-        { src: 'typo-3.png', width: 1242, height: isMobile ? 350 : 395, customScale: isMobile ? (0.18 * screenScale) : 0.15 },
-        { src: 'typo-4.png', width: 884, height: 134, customScale: isMobile ? (0.26 * screenScale) : null },
-        { src: 'typo-5.png', width: 423, height: 134, customScale: isMobile ? (0.275 * screenScale) : null }
+        { src: 'typo-1.png', width: 3132, height: isMobile ? 398 : 500, customScale: isMobile ? (0.06 * screenScale) : 0.15 },
+        { src: 'typo-2.png', width: 925, height: isMobile ? 134 : 140, customScale: isMobile ? (0.18 * screenScale) : null },
+        { src: 'typo-3.png', width: 1242, height: isMobile ? 350 : 395, customScale: isMobile ? (0.14 * screenScale) : 0.15 },
+        { src: 'typo-4.png', width: 884, height: 134, customScale: isMobile ? (0.20 * screenScale) : null },
+        { src: 'typo-5.png', width: 423, height: 134, customScale: isMobile ? (0.21 * screenScale) : null }
     ];
 
     typoGraphics.forEach((typo, index) => {
@@ -999,6 +1009,7 @@ function initPhysics() {
             render: { sprite: { texture: typo.src, xScale: scale, yScale: scale } }
         });
         Composite.add(world, typoBody);
+        scalableBodies.push({ type: 'canvas', body: typoBody, initialXScale: typoBody.render.sprite.xScale, initialYScale: typoBody.render.sprite.yScale, bodyTotalScale: 1 });
     });
 
     const clickBtnRadius = isMobile ? (35 * screenScale) : 86;
@@ -1008,6 +1019,7 @@ function initPhysics() {
         render: { sprite: { texture: 'Click1.png', xScale: clickBtnScale, yScale: clickBtnScale } }
     });
     Composite.add(world, clickBody);
+    scalableBodies.push({ type: 'canvas', body: clickBody, initialXScale: clickBody.render.sprite.xScale, initialYScale: clickBody.render.sprite.yScale, bodyTotalScale: 1 });
 
     const mouse = Mouse.create(render.canvas);
     if(isMobile) mouse.pixelRatio = Math.min(2, window.devicePixelRatio || 1); 
@@ -1053,30 +1065,88 @@ function initPhysics() {
         Events.on(mouseConstraint, 'enddrag', () => { render.canvas.style.cursor = 'none'; });
     }
 
+    // 윈도우 리사이징 핸들러 (픽셀 배율 및 뷰포트 Bounds 갱신 보정)
     window.addEventListener('resize', () => {
         if (stage.clientWidth === 0 || stage.clientHeight === 0) return; 
+
+        const currentWidth = stage.clientWidth;
+        const widthRatio = currentWidth / previousWidth;
+        previousWidth = currentWidth;
+        
+        const targetTotalScale = currentWidth / initialStageWidth;
+
+        scalableBodies.forEach(obj => {
+            const body = obj.type === 'canvas' ? obj.body : obj.item.body;
+            const safeRelativeScale = targetTotalScale / obj.bodyTotalScale;
+            
+            let newX = body.position.x * widthRatio;
+            let newY = body.position.y;
+            
+            Matter.Body.scale(body, safeRelativeScale, safeRelativeScale);
+            Matter.Body.setPosition(body, { x: newX, y: newY });
+            
+            body.positionPrev.x = newX;
+            body.positionPrev.y = newY;
+            Matter.Body.setVelocity(body, {x: 0, y: 0});
+            Matter.Body.setAngularVelocity(body, 0);
+
+            obj.bodyTotalScale = targetTotalScale;
+
+            if (obj.type === 'canvas' && body.render.sprite) {
+                body.render.sprite.xScale = obj.initialXScale * targetTotalScale;
+                body.render.sprite.yScale = obj.initialYScale * targetTotalScale;
+            } else if (obj.type === 'dom') {
+                const newSize = obj.initialSize * targetTotalScale;
+                obj.item.size = newSize; 
+                obj.item.el.style.width = `${newSize}px`;
+                obj.item.el.style.height = `${newSize}px`;
+            }
+        });
+
+        const currentPixelRatio = render.options.pixelRatio || Math.min(2, window.devicePixelRatio || 1);
+
         if (isMobile) {
             const bottomNav = document.querySelector('.bottom-nav');
             const currentBottomNavHeight = bottomNav ? bottomNav.offsetHeight : 55;
             const currentStageHeight = window.innerHeight - currentBottomNavHeight;
             stage.style.height = `${currentStageHeight}px`;
             if (gbStage) gbStage.style.height = `${currentStageHeight}px`;
-            render.canvas.width = stage.clientWidth; render.canvas.height = currentStageHeight;
-            render.options.width = stage.clientWidth; render.options.height = currentStageHeight;
+            
+            render.options.width = stage.clientWidth; 
+            render.options.height = currentStageHeight;
+            render.bounds.max.x = stage.clientWidth;
+            render.bounds.max.y = currentStageHeight;
+            render.canvas.width = stage.clientWidth * currentPixelRatio; 
+            render.canvas.height = currentStageHeight * currentPixelRatio;
+            render.canvas.style.width = `${stage.clientWidth}px`;
+            render.canvas.style.height = `${currentStageHeight}px`;
+            
             Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: currentStageHeight + 250 });
-            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: currentStageHeight / 2 });
-            Matter.Body.setPosition(leftWall, { x: -250, y: currentStageHeight / 2 });
+            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 500, y: currentStageHeight / 2 });
+            Matter.Body.setPosition(leftWall, { x: -500, y: currentStageHeight / 2 });
         } else {
-            render.canvas.width = stage.clientWidth; render.canvas.height = stage.clientHeight;
+            render.options.width = stage.clientWidth; 
+            render.options.height = stage.clientHeight;
+            render.bounds.max.x = stage.clientWidth;
+            render.bounds.max.y = stage.clientHeight;
+            render.canvas.width = stage.clientWidth * currentPixelRatio; 
+            render.canvas.height = stage.clientHeight * currentPixelRatio;
+            render.canvas.style.width = `${stage.clientWidth}px`;
+            render.canvas.style.height = `${stage.clientHeight}px`;
+            
             Matter.Body.setPosition(floor, { x: stage.clientWidth / 2, y: stage.clientHeight + 250 });
-            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 250, y: stage.clientHeight / 2 });
-            Matter.Body.setPosition(leftWall, { x: -250, y: stage.clientHeight / 2 });
+            Matter.Body.setPosition(rightWall, { x: stage.clientWidth + 500, y: stage.clientHeight / 2 });
+            Matter.Body.setPosition(leftWall, { x: -500, y: stage.clientHeight / 2 });
         }
+        
+        floor.positionPrev.x = floor.position.x; floor.positionPrev.y = floor.position.y;
+        rightWall.positionPrev.x = rightWall.position.x; rightWall.positionPrev.y = rightWall.position.y;
+        leftWall.positionPrev.x = leftWall.position.x; leftWall.positionPrev.y = leftWall.position.y;
     });
 }
 
 /* ===========================================================
-   과제 2: 방명록 화면 전용 물리엔진
+   방명록 화면 전용 물리엔진
 =========================================================== */
 function initGuestbookPhysics() {
     const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
@@ -1113,10 +1183,11 @@ function initGuestbookPhysics() {
             width = Math.max(120, availableWidth / columns); 
             left = (currentWidth - (columns * width + (columns - 1) * GAP)) / 2;
         } else {
-            const available = Math.max(160, currentWidth - (columns - 1) * GAP);
-            width = Math.min(CARD_W, available / columns);
+            const sideMargin = 32; 
+            const availableWidth = currentWidth - (sideMargin * 2) - (columns - 1) * GAP;
+            width = Math.min(CARD_W, availableWidth / columns);
             const totalWidth = columns * width + (columns - 1) * GAP;
-            left = Math.max(0, (currentWidth - totalWidth) / 2);
+            left = Math.max(sideMargin, (currentWidth - totalWidth) / 2);
         }
         const scale = width / CARD_W;
         const height = CARD_H * scale;
@@ -1219,13 +1290,24 @@ function initGuestbookPhysics() {
         shape.className = 'gb-content-shape'; shape.src = `guestbook/guestbook${entry.shapeColorIdx}-${entry.shapeIdx}.png`; shape.alt = '방명록 캐릭터';
         character.appendChild(shape);
 
+        const popupCharSize = window.innerWidth <= 768 ? 240 : 360;
+        const popupFaceBase = window.innerWidth <= 768 ? 130 : 190;
+
         (entry.faces || []).forEach(face => {
             const img = document.createElement('img'); img.className = 'gb-content-face'; img.src = `guestbook/gb${face.colorIdx}-${face.faceIdx}.png`;
-            const faceScale = (characterSize / 850);
-            const faceSize = 190 * (Number(face.scale) || 1) * faceScale; 
-            img.style.width = `${faceSize}px`; img.style.height = `${faceSize}px`;
-            img.style.left = `calc(50% + ${(Number(face.x) || 0) * faceScale}px)`; img.style.top = `calc(50% + ${(Number(face.y) || 0) * faceScale}px)`;
+            
+            const pctWidth = (popupFaceBase * (Number(face.scale) || 1) / popupCharSize) * 100;
+            const pctX = ((Number(face.x) || 0) / popupCharSize) * 100;
+            const pctY = ((Number(face.y) || 0) / popupCharSize) * 100;
+
+            img.style.position = 'absolute';
+            img.style.width = `${pctWidth}%`; 
+            img.style.height = `${pctWidth}%`;
+            img.style.left = `calc(50% + ${pctX}%)`; 
+            img.style.top = `calc(50% + ${pctY}%)`;
+            img.style.objectFit = 'contain';
             img.style.transform = `translate(-50%, -50%) rotate(${Number(face.rotation) || 0}deg)`;
+            
             character.appendChild(img);
         });
         contentLayer.appendChild(character);
