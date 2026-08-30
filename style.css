@@ -646,14 +646,11 @@ body.is-main-page .nav-link { color: #000; }
     .archive-year-display { font-size: 13px; padding: 6px 10px; border-radius: 0 !important; margin: 0; align-self: flex-start; z-index: 5; text-align: left; }
     .archive-poster { position: relative; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; aspect-ratio: 1/1.414;}
     .archive-poster-img { width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: filter 0.3s ease; }
-/* 기존 background-color: rgba(...) 제거, 배경이 불투명하므로 뒤쪽 이미지 필터 블러도 제거 */
-    .archive-desc-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; padding: 20px 15px; pointer-events: none; z-index: 2; }
-    .archive-poster.show-desc .archive-poster-img { filter: none; }
+    .archive-desc-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: rgba(0, 0, 0, 0.45); opacity: 0; transition: opacity 0.3s ease; padding: 20px 15px; pointer-events: none; z-index: 2; }
+    .archive-poster.show-desc .archive-poster-img { filter: blur(5px) brightness(30%); }
     .archive-poster.show-desc .archive-desc-overlay { opacity: 1; pointer-events: auto; }
-    
-    /* 글씨 색상을 모두 검정색(#000000)으로 변경 및 가독성을 위해 폰트 굵기/크기 미세조정 */
-    .archive-overlay-desc { font-size: 13px; line-height: 1.6; font-weight: 500; text-align: center; color: #000000; margin: 0 0 12px 0; word-break: keep-all; }
-    .archive-link-text { position: absolute; left: 15px; bottom: 15px; font-size: 10px; font-weight: 800; color: #000000; border-bottom: 1px solid #000000; padding-bottom: 2px; text-transform: uppercase; }
+    .archive-overlay-desc { font-size: 12px; line-height: 1.6; font-weight: 300; text-align: center; color: #ffffff; margin: 0 0 12px 0; word-break: keep-all; }
+    .archive-link-text { position: absolute; left: 15px; bottom: 15px; font-size: 9px; font-weight: 700; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 2px; text-transform: uppercase; }
     .archive-text-area { width: 100%; max-width: min(280px, 100%); text-align: center; padding: 6px 0; }
     .archive-title { font-size: 15px; margin-bottom: 6px; line-height: 1.3; }
     
