@@ -353,13 +353,14 @@ function initArchiveScroll() {
             <div class="archive-visual-area">
                 <div class="archive-poster-wrapper">
                     <p class="archive-year-display" style="background-color: ${data.bgColor};">${data.year}</p>
-                    <figure class="archive-poster" onclick="toggleArchiveDesc(this)">
-                        <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
-                        <div class="archive-desc-overlay">
-                            <p class="archive-overlay-desc">${(data.desc || '').replace(/\n/g, '<br>')}</p>
-                            <span class="archive-link-text" onclick="window.open('${data.link}', '_blank'); event.stopPropagation();">VIEW EXHIBITION →</span>
-                        </div>
-                    </figure>
+                 <figure class="archive-poster" onclick="toggleArchiveDesc(this)">
+    <img src="${data.year}gsdd.${data.format}" alt="${data.year} GSDD Poster" class="archive-poster-img">
+    <!-- 배경색을 연도별 색상과 동일하게 주입합니다 -->
+    <div class="archive-desc-overlay" style="background-color: ${data.bgColor};">
+        <p class="archive-overlay-desc">${(data.desc || '').replace(/\n/g, '<br>')}</p>
+        <span class="archive-link-text" onclick="window.open('${data.link}', '_blank'); event.stopPropagation();">VIEW EXHIBITION →</span>
+    </div>
+</figure>
                 </div>
             </div>
             <div class="archive-text-area"><h2 class="archive-title">${data.title}</h2></div>
