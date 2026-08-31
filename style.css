@@ -227,12 +227,24 @@ body.is-main-page .nav-link { color: #000; }
 .message-inputs input:focus { border-bottom-color: #111; }
 
 .designer-list { grid-column: 1 / 13; list-style: none; padding: 0; margin: 0; border-top: 1px solid #eaeaea; }
-.designer-item { display: grid; grid-template-columns: 80px 120px 1fr 1fr; align-items: center; gap: 24px; padding: 25px 10px; border-bottom: 1px solid #eaeaea; transition: background-color 0.3s ease; }
+.designer-item { 
+    display: grid; 
+    grid-template-columns: 80px 120px 1fr 1fr; /* 👈 다시 80px로 복구 */
+    align-items: center; 
+    gap: 24px; 
+    padding: 25px 10px; 
+    border-bottom: 1px solid #eaeaea; 
+    transition: background-color 0.3s ease; 
+}
 .designer-item:hover { background-color: #fafafa; }
 .designer-item .tag { padding: 4px 8px; font-weight: 800; font-size: 14px; text-align: center; border-radius: 0px; }
 .designer-item .tag.visual { background-color: #FF7CA8; color: #000; }
 .designer-item .tag.space { background-color: #FF9900; color: #000; }
-.designer-item .name { font-size: 18px; font-weight: bold; }
+.designer-item .name { 
+    font-size: 18px; 
+    font-weight: bold; 
+    margin-left: 8px; 
+}
 .designer-item .title { font-size: 16px; color: #000; text-align: left; font-weight: 400; cursor: pointer; transition: color 0.2s; }
 .designer-item .title .title-text { display: inline-block; transform-origin: center; }
 .designer-item .title:hover .title-text { animation: nav-wiggle 0.45s ease-in-out infinite alternate; }

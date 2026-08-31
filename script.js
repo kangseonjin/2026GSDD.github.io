@@ -862,13 +862,17 @@ function initPhysics() {
     Render.run(render);
     const runner = Runner.create({ isFixed: isMobile });
     Runner.run(runner, engine);
-
-    const floorY = (isMobile ? stageHeight : stage.clientHeight) + 250; 
+const floorY = (isMobile ? stageHeight : stage.clientHeight) + 250; 
     const wallOptions = { isStatic: true, restitution: 0.1, friction: 0.8, render: { visible: false } };
-    const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 10, 500, wallOptions);
-    const leftWall = Bodies.rectangle(-500, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
-    const rightWall = Bodies.rectangle(stage.clientWidth + 500, (isMobile ? stageHeight : stage.clientHeight) / 2, 500, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
-    Composite.add(world, [floor, leftWall, rightWall]);
+    
+    // 👇 두께를 500으로 잡고, 화면 테두리에 딱 맞게 보이지 않는 4면의 벽을 생성합니다.
+    const wallThickness = 500;
+    const floor = Bodies.rectangle(stage.clientWidth / 2, floorY, stage.clientWidth * 10, wallThickness, wallOptions);
+    const ceiling = Bodies.rectangle(stage.clientWidth / 2, -2000, stage.clientWidth * 10, wallThickness, wallOptions); // 천장 추가
+    const leftWall = Bodies.rectangle(-wallThickness / 2, (isMobile ? stageHeight : stage.clientHeight) / 2, wallThickness, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
+    const rightWall = Bodies.rectangle(stage.clientWidth + (wallThickness / 2), (isMobile ? stageHeight : stage.clientHeight) / 2, wallThickness, (isMobile ? stageHeight : stage.clientHeight) * 10, wallOptions);
+    
+    Composite.add(world, [floor, ceiling, leftWall, rightWall]); // 천장(ceiling)을 world에 추가
 
     const recentGbEntries = getGuestbookEntries().slice(0, 10); 
     const domPhysicsItems = []; 
@@ -1064,6 +1068,48 @@ function initPhysics() {
         Events.on(mouseConstraint, 'startdrag', () => { render.canvas.style.cursor = 'none'; });
         Events.on(mouseConstraint, 'enddrag', () => { render.canvas.style.cursor = 'none'; });
     }
+
+
+
+// === 추가할 코드 시작 ===
+    // 매 프레임마다 물체들이 화면 밖으로 나갔는지 확인하고 안으로 끌어옴
+    Events.on(engine, 'afterUpdate', function() {
+        const currentWidth = stage.clientWidth;
+        const currentHeight = isMobile ? stageHeight : stage.clientHeight;
+        const padding = 50; // 경계 여유 공간
+
+        scalableBodies.forEach(obj => {
+            const body = obj.type === 'canvas' ? obj.body : obj.item.body;
+            let x = body.position.x;
+            let y = body.position.y;
+            let isOutOfBounds = false;
+
+            // X축 경계 확인
+            if (x < -padding) {
+                x = padding;
+                isOutOfBounds = true;
+            } else if (x > currentWidth + padding) {
+                x = currentWidth - padding;
+                isOutOfBounds = true;
+            }
+
+            // Y축 경계 확인 (위로 튕겨 나간 경우)
+            // 아래로 떨어지는 건 바닥(floor)이 막아주지만, 너무 높이 날아간 경우만 체크
+            if (y < -2000) { 
+                y = -100;
+                isOutOfBounds = true;
+            }
+
+            // 화면 밖으로 나갔다면 강제로 위치를 옮기고 속도를 줄여줌
+            if (isOutOfBounds) {
+                Matter.Body.setPosition(body, { x: x, y: y });
+                Matter.Body.setVelocity(body, { x: 0, y: 0 }); // 튕기는 힘 초기화
+            }
+        });
+    });
+    // === 추가할 코드 끝 ===
+
+
 
     // 윈도우 리사이징 핸들러 (픽셀 배율 및 뷰포트 Bounds 갱신 보정)
     window.addEventListener('resize', () => {
@@ -1277,12 +1323,16 @@ function initGuestbookPhysics() {
             restitution: 0, friction: 0.92, frictionStatic: 1, frictionAir: window.innerWidth <= 768 ? 0.05 : 0.045, density: 0.05,
             sleepThreshold: window.innerWidth <= 768 ? 30 : 45, chamfer: { radius: Math.min(window.innerWidth <= 768 ? 6 : 8, Math.min(w, h) / 4) }, render: { visible: false }
         });
-        const registerContent = (body, element) => {
-            body.plugin = { guestbookContent: true, element, width: body.bounds.max.x - body.bounds.min.x, height: body.bounds.max.y - body.bounds.min.y };
-            contentBodies.push(body); Composite.add(engine.world, body);
-        };
-
-        const characterSize = (window.innerWidth <= 768 ? 200 : 220) * card.scale; 
+   const registerContent = (body, element, customW, customH) => {
+    body.plugin = { 
+        guestbookContent: true, 
+        element, 
+        width: customW || (body.bounds.max.x - body.bounds.min.x), 
+        height: customH || (body.bounds.max.y - body.bounds.min.y) 
+    };
+    contentBodies.push(body); Composite.add(engine.world, body);
+};
+const characterSize = (window.innerWidth <= 768 ? 130 : 160) * card.scale;
         const character = document.createElement('div');
         character.className = 'gb-content-item gb-character-content';
         character.style.width = `${characterSize}px`; character.style.height = `${characterSize}px`;
@@ -1323,8 +1373,8 @@ function initGuestbookPhysics() {
             const characterBodyWidth = characterSize * 0.85; const characterBodyHeight = characterSize * 0.5; 
             characterBody = makeContentBody(card.w / 2 + (Math.random() - 0.5) * card.w * 0.16, 60, characterBodyWidth, characterBodyHeight);
         }
-        registerContent(characterBody, character);
-        Body.setInertia(characterBody, Infinity); Body.setAngularVelocity(characterBody, 0);
+     registerContent(characterBody, character, characterSize, characterSize);
+Body.setInertia(characterBody, Infinity); Body.setAngularVelocity(characterBody, 0);
 
         const name = document.createElement('div');
         name.className = 'gb-content-item gb-content-name';
