@@ -431,7 +431,7 @@ body.is-main-page .nav-link { color: #000; }
     .designer-list { grid-column: span 2; }
     .designer-item { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px 5px; }
     .designer-item .tag { padding: 3px 6px; font-size: 11px; width: fit-content; }
-    .designer-item .name { font-size: 15px; }
+ .designer-item .name { font-size: 15px; margin-left: 0; }
     .designer-item .title { font-size: 13px; width: 100%; }
     .designer-item .title:hover .title-text { animation: none; }
     #floating-preview, #floating-preview.visible { display: none !important; }
