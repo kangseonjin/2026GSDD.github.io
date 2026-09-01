@@ -14,10 +14,48 @@ function preloadPhysicsResources() {
     physicsImagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 }
 
+function isMobileDeviceForIntro() {
+    // 오프닝 영상 분기는 화면 폭이 아니라 '실제 모바일 기기'를 기준으로 합니다.
+    // iPhone/Android뿐 아니라 터치 가능한 iPad도 모바일 영상으로 처리합니다.
+    const ua = navigator.userAgent || '';
+    const isPhoneOrAndroid = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const isIPad = /iPad/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    return isPhoneOrAndroid || isIPad;
+}
+
+function setupIntroVideo() {
+    const introScreen = document.getElementById('intro-screen');
+    const pcVideo = document.getElementById('intro-video-pc');
+    const mobileVideo = document.getElementById('intro-video-mobile');
+
+    if (!introScreen || !pcVideo || !mobileVideo) return { introScreen, introVideo: null };
+
+    const useMobileVideo = isMobileDeviceForIntro();
+    const introVideo = useMobileVideo ? mobileVideo : pcVideo;
+    const inactiveVideo = useMobileVideo ? pcVideo : mobileVideo;
+
+    // CSS 미디어쿼리와 별개로 실제 사용할 영상 하나만 활성화합니다.
+    inactiveVideo.pause();
+    inactiveVideo.removeAttribute('autoplay');
+    inactiveVideo.preload = 'none';
+    inactiveVideo.style.display = 'none';
+
+    introVideo.style.display = 'block';
+    introVideo.setAttribute('autoplay', '');
+    introVideo.preload = 'auto';
+    introVideo.muted = true;
+    introVideo.controls = false;
+    introVideo.setAttribute('disablepictureinpicture', '');
+    introVideo.setAttribute('disableremoteplayback', '');
+    introVideo.playsInline = true;
+    introVideo.currentTime = 0;
+
+    return { introScreen, introVideo };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     preloadPhysicsResources();
-    const introScreen = document.getElementById('intro-screen');
-    const introVideo = document.getElementById('intro-video');
+    const { introScreen, introVideo } = setupIntroVideo();
 
     document.addEventListener('touchstart', (e) => {
         if (!e.target.closest('.works-item')) {
@@ -34,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         if (introVideo) {
             introVideo.currentTime = 0; 
-            introVideo.play();
+            introVideo.play().catch(e => console.log("자동재생 차단됨:", e));
             introVideo.onended = hideIntro;
             introVideo.onerror = hideIntro;
         } else {

@@ -35,18 +35,46 @@ ul, ol { list-style: none; }
 
 .custom-cursor { position: fixed; pointer-events: none; z-index: 99999; display: none; width: 50px; height: 50px; object-fit: contain; transform: translate(-50%, -50%); }
 
-#intro-screen { 
-    position: fixed; top: 0; left: 0; width: 100vw; 
-    height: 100vh; height: 100dvh; /* 모바일 주소창 높이 완벽 대응 */
-    background-color: var(--color-background); z-index: 9999; 
-    display: flex; justify-content: center; align-items: center; 
-    transition: opacity 0.4s ease, visibility 0.4s ease; 
+#intro-screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: var(--color-background);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
 }
-#intro-video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: contain; 
+
+.intro-video {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    background: var(--color-background);
+    border: 0;
+    outline: 0;
+    transform: none;
+    image-rendering: auto;
 }
+
+/* 실제 사용하는 영상만 JS가 display:block으로 켭니다.
+   두 영상의 표시 상태를 CSS media query로 분기하지 않아 기기/뷰포트 오판을 방지합니다. */
+#intro-video-pc,
+#intro-video-mobile {
+    display: none;
+}
+
 #intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 #loading-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #FFFFFF; z-index: 10005; display: flex; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s ease; }
@@ -279,6 +307,7 @@ body.is-main-page .nav-link { color: #000; }
     .custom-cursor { display: none !important; }
 
     /* 인트로 및 페이지 전환 로딩 스크린 */
+    /* 오프닝 영상 종류는 JS의 실제 기기 감지로 결정합니다. */
     #intro-screen { z-index: 25000; }
     #loading-screen { z-index: 10005; }
     .character-loader-wrapper { width: 280px; height: 130px; }

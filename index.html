@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>2026 GSDD</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <link rel="stylesheet" href="https://use.typekit.net/xjx2wtn.css">
@@ -13,11 +13,16 @@
     <img id="custom-cursor" src="mouse/mouse1.png" alt="커서" class="custom-cursor">
     
     <!-- 최초 접속 시 나오는 오프닝 영상 영역 (새로고침 시 항상 재생) -->
-<div id="intro-screen">
-        <!-- 👇 autoplay와 preload="auto" 추가 -->
-        <video id="intro-video" autoplay muted playsinline preload="auto">
-            <source src="op_mobile.mp4" type="video/mp4" media="all and (max-width: 768px)">
+
+    <div id="intro-screen">
+        <!-- 데스크탑용 영상 -->
+        <video id="intro-video-pc" class="intro-video" autoplay muted playsinline preload="auto" disablepictureinpicture>
             <source src="op.mp4" type="video/mp4">
+        </video>
+        
+        <!-- 모바일용 영상 -->
+        <video id="intro-video-mobile" class="intro-video" autoplay muted playsinline preload="auto" disablepictureinpicture>
+            <source src="op_mobile.mp4" type="video/mp4">
         </video>
     </div>
 
